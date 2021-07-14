@@ -27,16 +27,27 @@ export default {
   methods: {
     getVideoInfo: function() {
       let temp = [];
-      axios
-        .get(
-          "https://gist.githubusercontent.com/Joie-Kim/90f0e1e50cfa339db6397efe147dce72/raw/419f130d2b101af4613001869e4204d08e2d0b16/sampleVideo.json"
-        )
+
+      const instance = axios.create({
+        baseURL: "http://localhost:8080",
+        timeout: 1000,
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+
+      instance
+        .get(" /golftok/main?userId=3 ")
         .then(function(response) {
-          const videos = response.data.videos;
+          const videos = response.data.todayPostList;
+          console.log("1");
+          console.log(videos);
           const resLen = videos.length;
           if (resLen > 0) {
             for (let i = 0; i < resLen; i++) {
-              const videoUrl = videos[i].sources[0];
+              const videoUrl = videos[i].videoRoot;
+              console.log(videoUrl);
 
               const videoObj = {
                 autoplay: false,
@@ -58,6 +69,7 @@ export default {
         });
 
       this.videoOptions = temp;
+      console.log(this.videoOptions);
     },
   },
   components: {
