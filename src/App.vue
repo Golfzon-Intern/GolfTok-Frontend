@@ -29,6 +29,10 @@ export default {
 body {
   margin: 0;
 }
+a {
+  text-decoration: none;
+}
+
 .contents {
   display: flex;
   width: 100%;
