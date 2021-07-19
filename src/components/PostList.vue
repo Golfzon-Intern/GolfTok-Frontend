@@ -33,19 +33,17 @@ export default {
     getVideoInfo: function() {
       let tempInfos = [];
 
-      // const instance = axios.create({
-      //   baseURL: 'http://localhost:8080',
-      //   timeout: 1000,
-      //   headers: {
-      //     'Content-Type': 'application/json;charset=utf-8',
-      //     'Access-Control-Allow-Origin': '*',
-      //   },
-      // });
+      const instance = axios.create({
+        baseURL: 'http://localhost:8080',
+        timeout: 1000,
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
 
-      axios
-        .get(
-          'https://gist.githubusercontent.com/dbswl4951/179b8d9d3801f5e9392e5095d305e167/raw/8f4f0f572b65ed2986a0b8534efc913c43d060ae/dummy_todayPostList'
-        )
+      instance
+        .get('/golftok/main?userId=1')
         .then(function(response) {
           const posts = response.data.todayPostList;
           const resLen = posts.length;
