@@ -43,7 +43,7 @@ export default {
       });
 
       instance
-        .get('/golftok/main?userId=1')
+        .get('/golftok/main')
         .then(function(response) {
           const posts = response.data.todayPostList;
           const resLen = posts.length;

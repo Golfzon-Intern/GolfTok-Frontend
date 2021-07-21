@@ -75,7 +75,7 @@ export default {
           localStorage.setItem('accessToken', response.data.accessToken);
           // 헤더 기본값에 access token 포함 시키기
           axios.defaults.headers.common['x-access-token'] =
-            response.data.accessToken;
+            'Bearer' + response.data.accessToken;
         })
         .catch(function(error) {
           console.log(error);
