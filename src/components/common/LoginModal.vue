@@ -76,6 +76,9 @@ export default {
           // 헤더 기본값에 access token 포함 시키기
           axios.defaults.headers.common['x-access-token'] =
             'Bearer' + response.data.accessToken;
+
+          console.log('get token');
+          console.log(instance.headers);
         })
         .catch(function(error) {
           console.log(error);
