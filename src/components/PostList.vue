@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import VideoPlayer from '../components/common/VideoPlayer.vue';
 
 export default {
@@ -33,16 +32,7 @@ export default {
     getVideoInfo: function() {
       let tempInfos = [];
 
-      const instance = axios.create({
-        baseURL: 'http://localhost:8080',
-        timeout: 1000,
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
-
-      instance
+      this.$http
         .get('/golftok/main')
         .then(function(response) {
           const posts = response.data.todayPostList;

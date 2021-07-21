@@ -10,7 +10,10 @@
   "dependencies": {
     "axios": "0.21.1",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "firebase": "8.7.1",
+    "uuid": "3.4.0",
+    "vue": "^2.6.11",
+    "vue-router": "3.5.2"
   },
   "devDependencies": {
     "@types/video.js": "7.3.24",

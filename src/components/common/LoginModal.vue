@@ -41,8 +41,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   data: function() {
     return {
@@ -60,25 +58,17 @@ export default {
         userPassword: this.userPw,
       };
 
-      const instance = axios.create({
-        baseURL: 'http://localhost:8080',
-        timeout: 1000,
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
-
-      instance
+      this.$http
         .post('/golftok/user/login', userObj)
         .then(function(response) {
           localStorage.setItem('accessToken', response.data.accessToken);
+          const accessToken = response.data;
           // 헤더 기본값에 access token 포함 시키기
-          axios.defaults.headers.common['x-access-token'] =
-            'Bearer' + response.data.accessToken;
+          this.$http.defaults.headers.common[
+            'x-access-token'
+          ] = `Bearer ${accessToken.token}`;
 
           console.log('get token');
-          console.log(instance.headers);
         })
         .catch(function(error) {
           console.log(error);

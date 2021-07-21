@@ -4,6 +4,7 @@
       <a href="#">GolfTok</a>
     </div>
     <div class="header-menu">
+      <router-link to="/upload">Upload</router-link>
       <button class="loginBtn" v-on:click="toggleModal">
         Login
       </button>
