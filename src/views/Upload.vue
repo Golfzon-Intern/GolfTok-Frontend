@@ -63,6 +63,7 @@ export default {
       };
 
       console.log(postObj);
+      console.log(this.$http);
 
       this.$http
         .post('/golftok/uploadPost', postObj)
