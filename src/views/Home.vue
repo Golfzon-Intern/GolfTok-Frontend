@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import AppHeader from '../components/AppHeader.vue';
-import SideMenu from '../components/SideMenu.vue';
-import PostList from '../components/PostList.vue';
+import AppHeader from '@/components/AppHeader.vue';
+import SideMenu from '@/components/SideMenu.vue';
+import PostList from '@/components/PostList.vue';
 
 export default {
   components: {

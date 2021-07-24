@@ -13,21 +13,11 @@
           <div class="modal-body">
             <div class="info-input">
               <p>ID</p>
-              <input
-                type="text"
-                class="id field"
-                v-model="userId"
-                placeholder="이메일을 입력해주세요"
-              />
+              <input type="text" class="id field" v-model="userId" placeholder="이메일을 입력해주세요" />
             </div>
             <div class="info-input">
               <p>PW</p>
-              <input
-                type="password"
-                class="pw field"
-                v-model="userPw"
-                placeholder="비밀번호를 입력해주세요"
-              />
+              <input type="password" class="pw field" v-model="userPw" placeholder="비밀번호를 입력해주세요" />
             </div>
           </div>
 
@@ -41,6 +31,8 @@
 </template>
 
 <script>
+// import * as authApi from '@/api/auth';
+
 export default {
   data: function() {
     return {
@@ -52,28 +44,8 @@ export default {
     toggleVisible: function() {
       this.$emit('toggleVisible');
     },
-    login: function() {
-      const userObj = {
-        userName: this.userId,
-        userPassword: this.userPw,
-      };
-
-      this.$http
-        .post('/golftok/user/login', userObj)
-        .then(function(response) {
-          localStorage.setItem('accessToken', response.data.accessToken);
-          const accessToken = response.data;
-          // 헤더 기본값에 access token 포함 시키기
-          this.$http.defaults.headers.common[
-            'x-access-token'
-          ] = `Bearer ${accessToken.token}`;
-
-          console.log('get token');
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-
+    login() {
+      this.$store.dispatch('authStore/login', { userId: this.userId, password: this.userPw });
       this.toggleVisible();
     },
   },

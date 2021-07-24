@@ -1,12 +1,7 @@
 <template>
   <div class="uploadView">
     <form @submit="handleFileSave">
-      <input
-        id="attachment"
-        type="file"
-        accept="video/*"
-        @change="handleFileChange"
-      />
+      <input id="attachment" type="file" accept="video/*" @change="handleFileChange" />
       <input type="submit" />
     </form>
   </div>
@@ -14,7 +9,7 @@
 
 <script>
 import { v4 as uuidv4 } from 'uuid';
-import { storageService } from '../lib/firebase';
+import { storageService } from '@/lib/firebase';
 
 export default {
   data() {
@@ -49,10 +44,7 @@ export default {
 
       if (this.newAttachment !== '') {
         const storageRef = storageService.ref().child(`post-video/${uuidv4()}`);
-        const response = await storageRef.putString(
-          this.newAttachment,
-          'data_url'
-        );
+        const response = await storageRef.putString(this.newAttachment, 'data_url');
         this.newAttachmentUrl = await response.ref.getDownloadURL();
       }
 

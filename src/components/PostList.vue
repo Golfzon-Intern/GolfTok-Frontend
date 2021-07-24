@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import VideoPlayer from '../components/common/VideoPlayer.vue';
+import VideoPlayer from '@/components/common/VideoPlayer.vue';
 
 export default {
   data: function() {
