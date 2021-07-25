@@ -3,14 +3,14 @@
     <div class="header-logo">
       <a href="#">GolfTok</a>
     </div>
-    <!-- <div class="header-menu">
+    <div class="header-menu">
       <button class="loginBtn" v-if="!this.$store.auth.state.userInfo" v-on:click="toggleModal">
         Login
       </button>
       <div v-if="this.$store.auth.state.userInfo">
         <router-link to="/upload">Upload</router-link>
       </div>
-    </div> -->
+    </div>
     <login-modal v-if="isVisibleModal" @close="isVisibleModal = false" v-bind:isVisible="isVisibleModal" v-on:toggleVisible="toggleModal"> </login-modal>
   </header>
 </template>
