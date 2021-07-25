@@ -1,7 +1,10 @@
 <template>
   <div class="uploadView">
+    <AppHeader></AppHeader>
     <form @submit="handleFileSave">
       <input id="attachment" type="file" accept="video/*" @change="handleFileChange" />
+      <!-- <input id="content" type="text" /> -->
+      <textarea id="content" cols="30" rows="10" placeholder="내용을 입력하세요." v-model="newContent"></textarea>
       <input type="submit" />
     </form>
   </div>
@@ -10,12 +13,16 @@
 <script>
 import { v4 as uuidv4 } from 'uuid';
 import { storageService } from '@/lib/firebase';
+import * as postApi from '@/api/post';
+
+import AppHeader from '@/components/AppHeader.vue';
 
 export default {
   data() {
     return {
       newAttachment: '',
       newAttachmentUrl: '',
+      newContent: '',
     };
   },
   methods: {
@@ -42,32 +49,35 @@ export default {
       evnet.preventDefault();
       console.log('handleFileSave');
 
-      if (this.newAttachment !== '') {
-        const storageRef = storageService.ref().child(`post-video/${uuidv4()}`);
-        const response = await storageRef.putString(this.newAttachment, 'data_url');
-        this.newAttachmentUrl = await response.ref.getDownloadURL();
+      try {
+        if (this.newAttachment !== '') {
+          const storageRef = storageService.ref().child(`post-video/${uuidv4()}`);
+          const response = await storageRef.putString(this.newAttachment, 'data_url');
+          this.newAttachmentUrl = await response.ref.getDownloadURL();
+        }
+
+        const postObj = {
+          postContent: this.newContent,
+          videoRoot: this.newAttachmentUrl,
+          locations: '',
+        };
+
+        console.log(postObj);
+
+        const response = await postApi.uploadPost(postObj);
+        console.log(response);
+        // 만약 성공하면 (서버로부터 응답 받으면)
+
+        this.newAttachment = '';
+        this.newAttachmentUrl = '';
+        this.newContent = '';
+      } catch (error) {
+        console.log(error);
       }
-
-      const postObj = {
-        postContent: '',
-        videoRoot: this.newAttachmentUrl,
-        locations: '',
-      };
-
-      console.log(postObj);
-      console.log(this.$http);
-
-      this.$http
-        .post('/golftok/uploadPost', postObj)
-        .then((res) => {
-          console.log(res);
-          this.newAttachment = '';
-          this.newAttachmentUrl = '';
-        })
-        .catch((e) => {
-          console.log(e);
-        });
     },
+  },
+  components: {
+    AppHeader,
   },
 };
 </script>
