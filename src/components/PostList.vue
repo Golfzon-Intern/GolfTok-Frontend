@@ -33,12 +33,10 @@ export default {
     async getVideoInfo() {
       try {
         const response = await postApi.getPost();
-
         const posts = response.data.todayPostList;
-        const resLen = posts.length;
 
-        if (resLen > 0) {
-          for (let i = 0; i < resLen; i++) {
+        if (posts.length > 0) {
+          for (let i = 0; i < posts.length; i++) {
             const postObj = {
               userNickname: posts[i].userNickname,
               userId: posts[i].userId,

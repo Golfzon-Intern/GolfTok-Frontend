@@ -1,5 +1,5 @@
 import axios from 'axios';
-import store from '@/store';
+import { store } from '@/store/index';
 
 const instance = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
