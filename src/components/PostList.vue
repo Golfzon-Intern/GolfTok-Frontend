@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import * as postApi from '@/api/post';
 import VideoPlayer from '@/components/common/VideoPlayer.vue';
 
 export default {
@@ -29,47 +30,41 @@ export default {
     this.getVideoInfo();
   },
   methods: {
-    getVideoInfo: function() {
-      let tempInfos = [];
+    async getVideoInfo() {
+      try {
+        const response = await postApi.getPost();
 
-      this.$http
-        .get('/golftok/main')
-        .then(function(response) {
-          const posts = response.data.todayPostList;
-          const resLen = posts.length;
+        const posts = response.data.todayPostList;
+        const resLen = posts.length;
 
-          if (resLen > 0) {
-            for (let i = 0; i < resLen; i++) {
-              const postObj = {
-                userNickname: posts[i].userNickname,
-                userId: posts[i].userId,
-                postContent: posts[i].postContent,
-                likeCount: posts[i].likeCount,
-                commentCount: posts[i].commentCount,
-                videoOption: {
-                  autoplay: false,
-                  controls: true,
-                  sources: [
-                    {
-                      src: posts[i].videoRoot,
-                      type: 'video/mp4',
-                    },
-                  ],
-                  width: 400,
-                  height: 200,
-                },
-              };
-              tempInfos.push(postObj);
-            }
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-
-      this.postInfos = tempInfos;
-      console.log(this.postInfos);
-    },
+        if (resLen > 0) {
+          for (let i = 0; i < resLen; i++) {
+            const postObj = {
+              userNickname: posts[i].userNickname,
+              userId: posts[i].userId,
+              postContent: posts[i].postContent,
+              likeCount: posts[i].likeCount,
+              commentCount: posts[i].commentCount,
+              videoOption: {
+                autoplay: false,
+                controls: true,
+                sources: [
+                  {
+                    src: posts[i].videoRoot,
+                    type: 'video/mp4',
+                  },
+                ],
+                width: 400,
+                height: 200,
+              },
+            }; // postObj
+            this.postInfos.push(postObj);
+          } // for
+        } // if
+      } catch (error) {
+        console.log(error);
+      }
+    }, // getVideoInfo()
   },
   components: {
     'video-player': VideoPlayer,
