@@ -45,7 +45,7 @@ export default {
       this.$emit('toggleVisible');
     },
     login() {
-      this.$store.dispatch('authStore/login', { userId: this.userId, password: this.userPw });
+      this.$store.dispatch('auth/login', { userId: this.userId, password: this.userPw });
       this.toggleVisible();
     },
   },
