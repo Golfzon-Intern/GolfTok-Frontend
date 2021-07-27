@@ -1,7 +1,7 @@
 import http from '@/api/http';
 
-export function getPost() {
-  return http.get('/golftok/main');
+export function getPost(pageNum) {
+  return http.get('/post/postList', { params: { pageNum: pageNum } });
 }
 
 export function uploadPost(post) {

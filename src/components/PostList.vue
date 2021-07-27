@@ -6,17 +6,19 @@
           <li v-bind:key="index">
             <p>userNicname: {{ post.userNickname }}</p>
             <p>userId: {{ post.userId }}</p>
-            <video-player :options="post.videoOption" />
+            <VideoPlayer :options="post.videoOption" />
             <p>Like: {{ post.likeCount }}</p>
             <p>Comment: {{ post.commentCount }}</p>
           </li>
         </template>
       </ul>
     </div>
+    <InfiniteLoading @infinite="infiniteHandler"></InfiniteLoading>
   </div>
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading';
 import * as postApi from '@/api/post';
 import VideoPlayer from '@/components/common/VideoPlayer.vue';
 
@@ -24,48 +26,52 @@ export default {
   data: function() {
     return {
       postInfos: [],
+      pageNum: 1,
     };
   },
-  created: function() {
-    this.getVideoInfo();
-  },
   methods: {
-    async getVideoInfo() {
+    async infiniteHandler($state) {
       try {
-        const response = await postApi.getPost();
+        const response = await postApi.getPost(this.pageNum);
         const posts = response.data.todayPostList;
 
-        if (posts.length > 0) {
-          for (let i = 0; i < posts.length; i++) {
+        if (posts.length) {
+          for (const post of posts) {
             const postObj = {
-              userNickname: posts[i].userNickname,
-              userId: posts[i].userId,
-              postContent: posts[i].postContent,
-              likeCount: posts[i].likeCount,
-              commentCount: posts[i].commentCount,
+              userNickname: post.userNickname,
+              userId: post.userId,
+              postContent: post.postContent,
+              likeCount: post.likeCount,
+              commentCount: post.commentCount,
               videoOption: {
                 autoplay: false,
                 controls: true,
                 sources: [
                   {
-                    src: posts[i].videoRoot,
+                    src: post.videoRoot,
                     type: 'video/mp4',
                   },
                 ],
                 width: 400,
                 height: 200,
               },
-            }; // postObj
+            };
+
             this.postInfos.push(postObj);
-          } // for
-        } // if
+          }
+          this.pageNum += 1;
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
       } catch (error) {
         console.log(error);
       }
-    }, // getVideoInfo()
+    },
   },
   components: {
-    'video-player': VideoPlayer,
+    VideoPlayer,
+    InfiniteLoading,
   },
 };
 </script>
