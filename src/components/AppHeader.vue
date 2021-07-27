@@ -4,10 +4,14 @@
       <a href="#">GolfTok</a>
     </div>
     <div class="header-menu">
-      <button class="loginBtn" v-on:click="toggleModal">
-        Login
-      </button>
-      <router-link to="/upload">Upload</router-link>
+      <template v-if="this.$store.state.auth.userInfo">
+        <router-link to="/upload">Upload</router-link>
+      </template>
+      <template v-else>
+        <button class="loginBtn" v-on:click="toggleModal">
+          Login
+        </button>
+      </template>
     </div>
     <login-modal v-if="isVisibleModal" @close="isVisibleModal = false" v-bind:isVisible="isVisibleModal" v-on:toggleVisible="toggleModal"> </login-modal>
   </header>
