@@ -1,11 +1,16 @@
 <template>
-  <header class="headerBox">
+  <header class="header-box">
     <div class="header-logo">
-      <a href="#">GolfTok</a>
+      <a href="/">GolfTok</a>
     </div>
     <div class="header-menu">
       <template v-if="this.$store.state.auth.userInfo">
-        <router-link to="/upload">Upload</router-link>
+        <router-link to="/upload" class="upload-btn">
+          <i class="fas fa-cloud-upload-alt"></i>
+        </router-link>
+        <button class="user-btn">
+          <i class="far fa-user-circle"></i>
+        </button>
       </template>
       <template v-else>
         <button class="loginBtn" v-on:click="toggleModal">
@@ -38,22 +43,29 @@ export default {
 </script>
 
 <style>
-.headerBox {
+.header-box {
   display: flex;
   width: 100%;
   height: 80px;
   justify-content: space-between;
-  background-color: lightblue;
+  /* background-color: lightblue; */
 }
 .header-logo {
   display: flex;
   width: 20vw;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
 }
 .header-logo a {
-  color: #7950f2;
+  text-decoration-line: none;
+  font-size: 2.5rem;
+  font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+  color: black;
+  -webkit-text-stroke: 1px #5d5fef;
+}
+.header-logo a:hover {
+  color: black;
 }
 .header-menu {
   display: flex;
@@ -69,5 +81,22 @@ export default {
   background-color: #7950f2;
   color: #f8f9fa;
   cursor: pointer;
+}
+.upload-btn {
+  margin: 0 12px;
+  font-size: 2rem;
+  color: #495057;
+}
+.user-btn {
+  width: 50px;
+  margin: 0 12px;
+  border: 0;
+  background-color: rgba(0, 0, 0, 0);
+  font-size: 2rem;
+  color: #495057;
+}
+.upload-btn:hover,
+.user-btn:hover {
+  color: #5d5fef;
 }
 </style>
