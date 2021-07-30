@@ -1,13 +1,4 @@
 <template>
-  <!-- <div class="uploadView">
-    <AppHeader></AppHeader>
-    <form @submit="handleFileSave">
-      <input id="attachment" type="file" accept="video/*" @change="handleFileChange" /> -->
-  <!-- <input id="content" type="text" /> -->
-  <!-- <textarea id="content" cols="30" rows="10" placeholder="내용을 입력하세요." v-model="newContent"></textarea>
-      <input type="submit" />
-    </form>
-  </div> -->
   <div id="upload-view">
     <AppHeader></AppHeader>
     <div class="post-box">
@@ -17,10 +8,10 @@
       </div>
       <div class="post-body">
         <div class="video-box">
-          <div v-if="newAttachment" class="video-player">
-            <video :src="this.newAttachment" type="video/mp4" autoplay="true" controls="controls"></video>
+          <div v-if="newFile || newVideoUrl" class="video-player">
+            <video :src="this.newFile || this.newVideoUrl" type="video/mp4" autoplay="true" controls="controls"></video>
           </div>
-          <button v-else class="video-selector" @click="openUploaderModal">
+          <button v-else class="video-selector" @click="toggleSelectorVisible">
             <i class="fas fa-cloud-upload-alt"></i>
             <p>업로드할 동영상 선택</p>
             <ul>
@@ -32,11 +23,9 @@
         </div>
 
         <div class="content-box">
-          <!-- <textarea name="content" id="content-input" cols="100" rows="7"></textarea> -->
           <b-form-textarea class="content-input" v-model="newContent" placeholder="문구 입력..." rows="7" no-resize></b-form-textarea>
-          <!-- <input type="text" class="location-input" placeholder="location search ..." style="width: 50%" /> -->
-          <b-form-input class="location-input" :type="'search'" v-model="newLocation" placeholder="location search ..." v-on:keyup.enter="setIsSelectorVisible"></b-form-input>
-          <div class="location-list" v-if="isSelectorVisible">
+          <b-form-input class="location-input" :type="'search'" v-model="newLocation" placeholder="location search ..." v-on:keyup.enter="toggleLocationVisible"></b-form-input>
+          <div class="location-list" v-if="isLocationVisible">
             <b-list-group>
               <b-list-group-item button>Button item</b-list-group-item>
               <b-list-group-item button>I am a button</b-list-group-item>
@@ -48,16 +37,24 @@
               <b-list-group-item button>This is a button too</b-list-group-item>
             </b-list-group>
           </div>
+
           <div class="button-box">
-            <!-- <button>Cancle</button> -->
-            <!-- <button>Upload</button> -->
-            <button class="cancle-btn">Cancle</button>
-            <button class="post-btn">Post</button>
-            <!-- <b-button pill>Button</b-button> -->
+            <button class="cancle-btn">취소</button>
+            <button class="post-btn" @click="submitPost" v-bind:disabled="isDisabled">게시</button>
           </div>
         </div>
       </div>
     </div>
+    <NasmoSelector
+      v-if="isSelectorVisible"
+      @close="isSelectorVisible = false"
+      v-bind:isVisible="isSelectorVisible"
+      v-bind:videoList="nasmoList"
+      v-bind:selected="newVideoIndex"
+      v-on:toggleVisible="toggleSelectorVisible"
+      v-on:onClickFileBtn="openFileSelector"
+      v-on:saveSelected="selectNasmo"
+    ></NasmoSelector>
   </div>
 </template>
 
@@ -67,30 +64,59 @@ import { storageService } from '@/lib/firebase';
 import * as postApi from '@/api/post';
 
 import AppHeader from '@/components/AppHeader.vue';
+import NasmoSelector from '@/components/NasmoSelector.vue';
 // import VideoPlayer from '@/components/common/VideoPlayer.vue';
 
 export default {
   data() {
     return {
-      newAttachment: '',
-      newAttachmentUrl: '',
+      nasmoList: [],
+      newFile: '',
+      newVideoUrl: '',
+      newVideoIndex: 0,
       newContent: '',
       newLocation: '',
+      isLocationVisible: false,
       isSelectorVisible: false,
+      isDisabled: true,
     };
   },
+  created() {
+    this.getNasmoList();
+  },
   methods: {
-    openUploaderModal() {
+    // 나스모 영상 서버로부터 받아옴 (나스모 선택창에 props로 전달)
+    async getNasmoList() {
+      try {
+        const response = await postApi.getNasmos();
+        const videos = response.data.nasmoList;
+
+        this.nasmoList = videos;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    selectNasmo(index) {
+      this.newVideoUrl = this.nasmoList[index].videoRoot;
+      this.newVideoIndex = index;
+      console.log(this.newVideoUrl);
+      console.log(this.newVideoIndex);
+    },
+    // 파일 선택창 열기
+    openFileSelector() {
+      // 나스모 선택창 닫고
+      this.toggleSelectorVisible();
+
+      // 파일 선택창 열기
       let input = document.createElement('input');
       input.type = 'file';
       input.onchange = (event) => {
         // you can use this method to get file and perform respective operations
-        let files = Array.from(input.files);
-        console.log(files);
         this.handleFileChange(event);
       };
       input.click();
     },
+    // 파일 선택창에서 선택한 파일 바꾸기
     handleFileChange(event) {
       const {
         target: { files },
@@ -103,49 +129,64 @@ export default {
           currentTarget: { result },
         } = finishedEvent;
 
-        this.newAttachment = result;
+        this.newFile = result;
         console.log(result);
       };
       if (file) {
         reader.readAsDataURL(file);
       }
     },
-    async handleFileSave(evnet) {
+    // 게시물 업로드 하기
+    async submitPost(evnet) {
+      // 새로고침 방지
       evnet.preventDefault();
-      console.log('handleFileSave');
-
+      console.log('submitPost');
       try {
-        if (this.newAttachment !== '') {
+        // 만약 파일 선택창에서 선택한 파일이 있다면
+        if (this.newFile !== '') {
           const storageRef = storageService.ref().child(`post-video/${uuidv4()}`);
-          const response = await storageRef.putString(this.newAttachment, 'data_url');
-          this.newAttachmentUrl = await response.ref.getDownloadURL();
+          const response = await storageRef.putString(this.newFile, 'data_url');
+          this.newVideoUrl = await response.ref.getDownloadURL();
         }
 
+        // 게시글 obj
         const postObj = {
           postContent: this.newContent,
-          videoRoot: this.newAttachmentUrl,
+          videoRoot: this.newVideoUrl,
           locations: '',
         };
 
         console.log(postObj);
 
+        // 서버로 전달
         const response = await postApi.uploadPost(postObj);
-        console.log(response);
-        // 만약 성공하면 (서버로부터 응답 받으면)
 
-        this.newAttachment = '';
-        this.newAttachmentUrl = '';
+        // 만약 성공하면 (서버로부터 응답 받으면)
+        if (response.status === 201) {
+          // 마이 페이지로 이동. 일단 메인 페이지로 이동하도록 함
+          this.$router.push('/');
+        }
+
+        this.newFile = '';
+        this.newVideoUrl = '';
         this.newContent = '';
       } catch (error) {
         console.log(error);
       }
     },
-    setIsSelectorVisible() {
+    toggleLocationVisible() {
+      this.isLocationVisible = !this.isLocationVisible;
+    },
+    toggleSelectorVisible() {
       this.isSelectorVisible = !this.isSelectorVisible;
+    },
+    toggleDisabled() {
+      this.isDisabled = !this.isDisabled;
     },
   },
   components: {
     AppHeader,
+    NasmoSelector,
     // VideoPlayer,
   },
 };
@@ -265,7 +306,10 @@ export default {
   background-color: #5d5fef;
   color: #f8f9fa;
 }
-.post-btn:hover {
+.post-btn:disabled {
+  background-color: #868e96;
+}
+.post-btn:enabled:hover {
   background-color: #5557ec;
 }
 </style>

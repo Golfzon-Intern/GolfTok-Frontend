@@ -18,7 +18,7 @@
         </button>
       </template>
     </div>
-    <login-modal v-if="isVisibleModal" @close="isVisibleModal = false" v-bind:isVisible="isVisibleModal" v-on:toggleVisible="toggleModal"> </login-modal>
+    <LoginModal v-if="isVisibleModal" @close="isVisibleModal = false" v-bind:isVisible="isVisibleModal" v-on:toggleVisible="toggleModal"> </LoginModal>
   </header>
 </template>
 
@@ -37,7 +37,7 @@ export default {
     },
   },
   components: {
-    'login-modal': LoginModal,
+    LoginModal,
   },
 };
 </script>

@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import videojs from "video.js";
+import videojs from 'video.js';
 
 export default {
-  name: "VideoPlayer",
+  name: 'VideoPlayer',
   props: {
     options: {
       type: Object,
@@ -23,13 +23,9 @@ export default {
     };
   },
   mounted() {
-    this.player = videojs(
-      this.$refs.videoPlayer,
-      this.options,
-      function onPlayerReady() {
-        console.log("onPlayerReady", this);
-      }
-    );
+    this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady() {
+      // console.log("onPlayerReady", this);
+    });
   },
   beforeUnmount() {
     if (this.player) {

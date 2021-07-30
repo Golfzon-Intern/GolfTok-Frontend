@@ -32,8 +32,8 @@ export default {
   methods: {
     async infiniteHandler($state) {
       try {
-        const response = await postApi.getPost(this.pageNum);
-        const posts = response.data.todayPostList;
+        const response = await postApi.getPosts(this.pageNum);
+        const posts = response.data.allPostList;
 
         if (posts.length) {
           for (const post of posts) {
