@@ -9,7 +9,11 @@
       <div class="post-body">
         <div class="video-box">
           <div v-if="newFile || newVideoUrl" class="video-player">
-            <video :src="this.newFile || this.newVideoUrl" type="video/mp4" autoplay="true" controls="controls"></video>
+            <button class="delete-video-btn" @click="deleteVideo">
+              <i class="fas fa-times-circle"></i>
+            </button>
+            <video :src="this.newVideoUrl" type="video/mp4" autoplay="true" controls="controls"></video>
+            <!-- <VideoPlayer :options="videoOptions" /> -->
           </div>
           <button v-else class="video-selector" @click="toggleSelectorVisible">
             <i class="fas fa-cloud-upload-alt"></i>
@@ -39,7 +43,7 @@
           </div>
 
           <div class="button-box">
-            <button class="cancle-btn">취소</button>
+            <button class="cancel-btn" @click="deleteAll">취소</button>
             <button class="post-btn" @click="submitPost" v-bind:disabled="isDisabled">게시</button>
           </div>
         </div>
@@ -50,7 +54,6 @@
       @close="isSelectorVisible = false"
       v-bind:isVisible="isSelectorVisible"
       v-bind:videoList="nasmoList"
-      v-bind:selected="newVideoIndex"
       v-on:toggleVisible="toggleSelectorVisible"
       v-on:onClickFileBtn="openFileSelector"
       v-on:saveSelected="selectNasmo"
@@ -73,9 +76,10 @@ export default {
       nasmoList: [],
       newFile: '',
       newVideoUrl: '',
-      newVideoIndex: 0,
+      // newVideoIndex: 0,
       newContent: '',
       newLocation: '',
+      videoOptions: {},
       isLocationVisible: false,
       isSelectorVisible: false,
       isDisabled: true,
@@ -98,9 +102,12 @@ export default {
     },
     selectNasmo(index) {
       this.newVideoUrl = this.nasmoList[index].videoRoot;
-      this.newVideoIndex = index;
+      // this.newVideoIndex = index;
+
       console.log(this.newVideoUrl);
-      console.log(this.newVideoIndex);
+
+      this.setVideoOptions(this.newVideoUrl);
+      this.toggleDisabled();
     },
     // 파일 선택창 열기
     openFileSelector() {
@@ -131,10 +138,25 @@ export default {
 
         this.newFile = result;
         console.log(result);
+
+        this.setVideoOptions(this.newFile);
+        this.toggleDisabled();
       };
       if (file) {
         reader.readAsDataURL(file);
       }
+    },
+    setVideoOptions(videoRoot) {
+      this.videoOptions = {
+        autoplay: true,
+        controls: true,
+        sources: [
+          {
+            src: videoRoot,
+            type: 'video/mp4',
+          },
+        ],
+      };
     },
     // 게시물 업로드 하기
     async submitPost(evnet) {
@@ -167,12 +189,22 @@ export default {
           this.$router.push('/');
         }
 
-        this.newFile = '';
-        this.newVideoUrl = '';
-        this.newContent = '';
+        this.deleteAll();
       } catch (error) {
         console.log(error);
       }
+    },
+    deleteAll() {
+      this.newFile = '';
+      this.newVideoUrl = '';
+      this.newContent = '';
+      this.newLocation = '';
+      this.toggleDisabled();
+    },
+    deleteVideo() {
+      this.newFile = '';
+      this.newVideoUrl = '';
+      this.toggleDisabled();
     },
     toggleLocationVisible() {
       this.isLocationVisible = !this.isLocationVisible;
@@ -256,11 +288,23 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 3rem;
   background-color: #212529;
 }
 .video-player video {
   width: 26vw;
   min-width: 300px;
+}
+.delete-video-btn {
+  position: absolute;
+  left: -20px;
+  top: 60px;
+  border: none;
+  background: rgba(0, 0, 0, 0);
+}
+.delete-video-btn i {
+  font-size: 2rem;
+  color: #c92a2a;
 }
 .content-box {
   width: 65%;
@@ -288,13 +332,13 @@ export default {
   display: flex;
   align-self: flex-end;
 }
-.cancle-btn {
+.cancel-btn {
   margin-right: 12px;
   border: none;
   background-color: rgba(0, 0, 0, 0);
   color: #868e96;
 }
-.cancle-btn:hover {
+.cancel-btn:hover {
   color: #495057;
 }
 .post-btn {

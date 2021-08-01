@@ -34,11 +34,11 @@
 export default {
   data: function() {
     return {
-      selectedIndex: this.selected,
+      selectedIndex: 0,
     };
   },
   props: {
-    selected: Number,
+    // selected: Number,
     videoList: [],
   },
   methods: {
