@@ -1,14 +1,30 @@
 <template>
   <div>
-    <div class="listBox">
+    <div class="list-box">
       <ul v-if="postInfos" style="list-style:none">
         <template v-for="(post, index) in postInfos">
           <li v-bind:key="index">
-            <p>userNicname: {{ post.userNickname }}</p>
-            <p>userId: {{ post.userId }}</p>
-            <VideoPlayer :options="post.videoOption" />
-            <p>Like: {{ post.likeCount }}</p>
-            <p>Comment: {{ post.commentCount }}</p>
+            <div class="post-header">
+              <div class="user-infos">
+                <b-avatar class="user-pic" v-bind:src="post.userPic" size="4rem"></b-avatar>
+                <div class="user-text">
+                  <h3>{{ post.userNickname }}</h3>
+                  <p>@{{ post.userName }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="post-body">
+              <p style="width: 50%">{{ post.postContent }}</p>
+              <div class="media-box">
+                <VideoPlayer :options="post.videoOption" />
+                <div class="reaction-box">
+                  <i class="far fa-heart"></i>
+                  <p>{{ post.likeCount }}</p>
+                  <i class="far fa-comment"></i>
+                  <p>{{ post.commentCount }}</p>
+                </div>
+              </div>
+            </div>
           </li>
         </template>
       </ul>
@@ -38,13 +54,14 @@ export default {
         if (posts.length) {
           for (const post of posts) {
             const postObj = {
+              userPic: post.userIcon,
               userNickname: post.userNickname,
-              userId: post.userId,
+              userName: post.userName,
               postContent: post.postContent,
               likeCount: post.likeCount,
               commentCount: post.commentCount,
               videoOption: {
-                autoplay: false,
+                autoplay: true,
                 controls: true,
                 sources: [
                   {
@@ -52,12 +69,13 @@ export default {
                     type: 'video/mp4',
                   },
                 ],
-                width: 400,
-                height: 200,
+                width: 450,
+                height: 250,
               },
             };
 
             this.postInfos.push(postObj);
+            console.log(postObj);
           }
           this.pageNum += 1;
           $state.loaded();
@@ -76,17 +94,62 @@ export default {
 };
 </script>
 
-<style>
-.listBox {
+<style scoped>
+.list-box {
   width: 80vw;
 }
-.listBox ul,
-p {
+.list-box ul {
   margin-top: 0;
   padding: 8px 12px;
 }
-.listBox li {
-  margin-bottom: 8px;
-  border: 2px solid black;
+.list-box li {
+  padding: 8px 12px;
+  height: 430px;
+  border-bottom: 1px solid;
+}
+.user-infos {
+  display: flex;
+}
+.user-pic {
+  margin-right: 12px;
+}
+h3,
+p {
+  font-family: Helvetica, Arial, sans-serif;
+}
+.user-text h3 {
+  margin-top: 8px;
+  margin-bottom: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.user-text p {
+  margin: 0;
+}
+.post-body {
+  display: block;
+}
+.post-body p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+.media-box {
+  display: flex;
+  margin: 30px 0;
+}
+.reaction-box {
+  margin-left: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.reaction-box i {
+  font-size: 1.75rem;
+}
+.reaction-box p {
+  text-align: center;
 }
 </style>
