@@ -4,25 +4,41 @@
       <ul v-if="postInfos" style="list-style:none">
         <template v-for="(post, index) in postInfos">
           <li v-bind:key="index">
-            <div class="post-header">
-              <div class="user-infos">
-                <b-avatar class="user-pic" v-bind:src="post.userPic" size="4rem"></b-avatar>
-                <div class="user-text">
-                  <h3>{{ post.userNickname }}</h3>
-                  <p>@{{ post.userName }}</p>
-                </div>
+            <div class="video-feed-item">
+              <div class="feed-item-avatar">
+                <b-avatar class="user-pic" v-bind:src="post.userPic" size="4rem" />
               </div>
-            </div>
-            <div class="post-body">
-              <p style="width: 50%">{{ post.postContent }}</p>
-              <div class="media-box">
-                <VideoPlayer :options="post.videoOption" />
-                <div class="reaction-box">
-                  <i class="far fa-heart"></i>
-                  <p>{{ post.likeCount }}</p>
-                  <i class="far fa-comment"></i>
-                  <p>{{ post.commentCount }}</p>
+              <div class="feed-item-content">
+                <div class="auth-info-content">
+                  <h3>{{ post.userNickname }}</h3>
+                  <h4>@{{ post.userName }}</h4>
                 </div>
+                <div class="video-meta-caption">
+                  <p>{{ post.postContent }}</p>
+                </div>
+                <div class="item-video-container">
+                  <div class="video-card-wrapper">
+                    <VideoPlayer :options="post.videoOption" />
+                    <!-- <router-link :to="{ name: 'testModal', params: { index: index, postId: post.postId } }"> -->
+                    <div class="video-modal-btn" @click="openModal(index, post.postId)">...</div>
+                    <!-- </router-link> -->
+                  </div>
+                  <div class="item-action-bar">
+                    <div class="bar-item-wrapper">
+                      <!-- <div class="bar-item-img">
+                        <i class="far fa-heart"></i>
+                      </div>
+                      <div class="bar-item-text">
+                        <strong>{{ post.likeCount }}</strong>
+                      </div> -->
+                      <LikeBtn :postId="post.postId"></LikeBtn>
+                    </div>
+                    <div class="bar-item-wrapper" @click="openModal(index, post.postId)">
+                      <CommentBtn></CommentBtn>
+                    </div>
+                  </div>
+                </div>
+                <div class="item-follow-wrapper"></div>
               </div>
             </div>
           </li>
@@ -30,6 +46,9 @@
       </ul>
     </div>
     <InfiniteLoading @infinite="infiniteHandler"></InfiniteLoading>
+    <router-view>
+      <PostDetailModal />
+    </router-view>
   </div>
 </template>
 
@@ -37,15 +56,43 @@
 import InfiniteLoading from 'vue-infinite-loading';
 import * as postApi from '@/api/post';
 import VideoPlayer from '@/components/common/VideoPlayer.vue';
+import PostDetailModal from '@/components/common/PostDetailModal.vue';
+import LikeBtn from '@/components/common/LikeBtn.vue';
+import CommentBtn from '@/components/common/CommentBtn.vue';
 
 export default {
   data: function() {
     return {
       postInfos: [],
       pageNum: 1,
+      curIndex: 0,
+      isOpened: false,
     };
   },
   methods: {
+    openModal(index, postId) {
+      const postsLen = this.postInfos.length;
+      let isFirst = false;
+      let isLast = false;
+
+      if (index === 0) {
+        isFirst = true;
+      } else if (index === postsLen) {
+        isLast = true;
+      }
+
+      this.$router.push({
+        name: 'testModal',
+        params: {
+          postId: postId,
+          isFirst: isFirst,
+          isLast: isLast,
+        },
+      });
+
+      this.curIndex = index;
+      this.isOpened = true;
+    },
     async infiniteHandler($state) {
       try {
         const response = await postApi.getPosts(this.pageNum);
@@ -54,14 +101,16 @@ export default {
         if (posts.length) {
           for (const post of posts) {
             const postObj = {
+              postId: post.postId,
               userPic: post.userIcon,
               userNickname: post.userNickname,
               userName: post.userName,
               postContent: post.postContent,
+              location: post.location,
               likeCount: post.likeCount,
               commentCount: post.commentCount,
               videoOption: {
-                autoplay: true,
+                autoplay: false,
                 controls: true,
                 sources: [
                   {
@@ -69,13 +118,13 @@ export default {
                     type: 'video/mp4',
                   },
                 ],
-                width: 450,
+                width: 440,
                 height: 250,
               },
             };
 
             this.postInfos.push(postObj);
-            console.log(postObj);
+            // console.log(postObj);
           }
           this.pageNum += 1;
           $state.loaded();
@@ -90,11 +139,18 @@ export default {
   components: {
     VideoPlayer,
     InfiniteLoading,
+    PostDetailModal,
+    LikeBtn,
+    CommentBtn,
   },
 };
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+}
+
 .list-box {
   width: 80vw;
 }
@@ -102,54 +158,71 @@ export default {
   margin-top: 0;
   padding: 8px 12px;
 }
-.list-box li {
+.list-box .video-feed-item {
   padding: 8px 12px;
-  height: 430px;
+  margin-bottom: 12px;
+  width: 100%;
+  height: 450px;
+  display: flex;
   border-bottom: 1px solid;
 }
-.user-infos {
+
+.feed-item-content {
+  width: 100%;
+}
+
+.auth-info-content {
   display: flex;
-}
-.user-pic {
-  margin-right: 12px;
-}
-h3,
-p {
   font-family: Helvetica, Arial, sans-serif;
 }
-.user-text h3 {
-  margin-top: 8px;
-  margin-bottom: 0;
+.auth-info-content h3 {
+  margin-right: 0.5rem;
   font-size: 1.5rem;
   font-weight: 600;
 }
-.user-text p {
-  margin: 0;
+.auth-info-content h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 2;
 }
-.post-body {
-  display: block;
+
+.video-meta-caption {
+  width: 60%;
 }
-.post-body p {
+.video-meta-caption p {
+  margin-bottom: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2; /* number of lines to show */
   -webkit-box-orient: vertical;
 }
-.media-box {
+
+.item-video-container {
+  position: relative;
+  bottom: -30px;
+  width: 60%;
   display: flex;
-  margin: 30px 0;
+  align-items: flex-end;
 }
-.reaction-box {
-  margin-left: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+.item-video-container .video-card-wrapper {
+  width: 440px;
+  height: 250px;
+  border-radius: 30px;
+  overflow: hidden;
 }
-.reaction-box i {
-  font-size: 1.75rem;
+.item-video-container .video-card-wrapper .video-modal-btn {
+  position: relative;
+  bottom: 190px;
+  width: 100%;
+  height: 160px;
+  background: rgba(0, 0, 0, 0);
+  z-index: 3;
+  cursor: pointer;
 }
-.reaction-box p {
-  text-align: center;
+.bar-item-wrapper {
+  width: 56px;
+  margin-bottom: 12px;
+  cursor: pointer;
 }
 </style>
