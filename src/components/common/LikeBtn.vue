@@ -33,9 +33,10 @@ export default {
   },
   methods: {
     async getLiked() {
-      const response = await likeApi.getIsLiked(this.postId);
+      const response = await likeApi.getPostLike(this.postId);
 
-      if (response.data.flag) {
+      // 0: 좋아요 되어있는 상태, 1: 좋아요 안 되어 있는 상태
+      if (!response.data.flag) {
         this.isLiked = true;
       } else {
         this.isLiked = false;
@@ -44,10 +45,28 @@ export default {
       this.numOfLike = response.data.likeCount;
     },
     async updateLiked() {
-      this.isLiked = !this.isLiked;
+      let likeCount = this.numOfLike;
 
-      const response = await likeApi.updateIsLiked(this.postId, this.postId);
-      this.numOfLike = response.data.likeCount;
+      if (likeCount && this.isLiked) {
+        // 좋아요 취소
+        likeCount -= 1;
+        if (likeCount < 0) likeCount = 0;
+
+        console.log(await likeApi.deletePostLiked(this.postId));
+      } else {
+        // 좋아요 추가
+        likeCount += 1;
+
+        const likeObj = {
+          postId: this.postId,
+          likeCount: likeCount,
+        };
+
+        console.log(await likeApi.addPostLiked(likeObj));
+      }
+
+      this.isLiked = !this.isLiked;
+      this.numOfLike = likeCount;
     },
   },
 };
