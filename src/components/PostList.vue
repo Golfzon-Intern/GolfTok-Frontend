@@ -82,7 +82,7 @@ export default {
       }
 
       this.$router.push({
-        name: 'testModal',
+        name: 'PostDetailModal',
         params: {
           postId: postId,
           isFirst: isFirst,

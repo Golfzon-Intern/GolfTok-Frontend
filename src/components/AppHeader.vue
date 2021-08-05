@@ -5,15 +5,15 @@
     </div>
     <div class="header-menu">
       <template v-if="this.$store.state.auth.userInfo">
-        <router-link to="/upload" class="upload-btn">
+        <button class="upload-btn" @click="clickUploadBtn">
           <i class="fas fa-cloud-upload-alt"></i>
-        </router-link>
+        </button>
         <button class="user-btn">
           <i class="far fa-user-circle"></i>
         </button>
       </template>
       <template v-else>
-        <button class="loginBtn" v-on:click="toggleModal">
+        <button class="login-btn" v-on:click="toggleModal">
           Login
         </button>
       </template>
@@ -34,6 +34,11 @@ export default {
   methods: {
     toggleModal: function() {
       this.isVisibleModal = !this.isVisibleModal;
+    },
+    clickUploadBtn() {
+      this.$router.push({
+        name: 'Upload',
+      });
     },
   },
   components: {
@@ -73,10 +78,12 @@ export default {
   align-items: center;
   justify-content: center;
 }
-.loginBtn {
+.header-menu button {
+  border: none;
+}
+.login-btn {
   width: 150px;
   height: 50px;
-  border: none;
   border-radius: 2rem;
   background-color: #7950f2;
   color: #f8f9fa;
@@ -86,12 +93,12 @@ export default {
   margin: 0 12px;
   font-size: 2rem;
   color: #495057;
+  background: none;
 }
 .user-btn {
   width: 50px;
   margin: 0 12px;
-  border: 0;
-  background-color: rgba(0, 0, 0, 0);
+  background: none;
   font-size: 2rem;
   color: #495057;
 }

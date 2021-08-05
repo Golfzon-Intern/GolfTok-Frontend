@@ -7,10 +7,10 @@
       <button class="close-btn" @click="closeModal">
         <i class="far fa-times-circle"></i>
       </button>
-      <button v-if="!isFirst" class="arrow-left-btn" @click="goToPrev">
+      <button v-if="!isFirst" class="arrow-left-btn">
         <i class="fas fa-chevron-left"></i>
       </button>
-      <button v-if="!isLast" class="arrow-right-btn" @click="goToNext">
+      <button v-if="!isLast" class="arrow-right-btn">
         <i class="fas fa-chevron-right"></i>
       </button>
     </div>
@@ -71,7 +71,9 @@ export default {
       this.postInfo = response.data.postList[0];
     },
     closeModal() {
-      this.$router.push('/');
+      this.$router.push({
+        name: 'Home',
+      });
     },
   },
   components: {
