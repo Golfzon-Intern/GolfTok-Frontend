@@ -1,5 +1,5 @@
 <template>
-  <header class="header-box">
+  <div class="header-box">
     <div class="header-logo">
       <a href="/">GolfTok</a>
     </div>
@@ -19,7 +19,7 @@
       </template>
     </div>
     <LoginModal v-if="isVisibleModal" @close="isVisibleModal = false" v-bind:isVisible="isVisibleModal" v-on:toggleVisible="toggleModal"> </LoginModal>
-  </header>
+  </div>
 </template>
 
 <script>
@@ -50,10 +50,11 @@ export default {
 <style>
 .header-box {
   display: flex;
+  justify-content: space-between;
   width: 100%;
   height: 80px;
-  justify-content: space-between;
-  /* background-color: lightblue; */
+  padding: 8px;
+  background: #f8f9fa;
 }
 .header-logo {
   display: flex;

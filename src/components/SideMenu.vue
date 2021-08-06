@@ -13,7 +13,7 @@ export default {};
 <style>
 .sideBox {
   width: 20vw;
-  height: 800px;
+  height: 85vh;
   background-color: lightcoral;
 }
 </style>

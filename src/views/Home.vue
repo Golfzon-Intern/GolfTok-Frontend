@@ -1,30 +1,54 @@
 <template>
-  <div id="homeView">
-    <AppHeader></AppHeader>
-    <div class="contents">
-      <SideMenu></SideMenu>
-      <PostList></PostList>
+  <div id="home-view">
+    <div class="home-header-wrap">
+      <AppHeader></AppHeader>
+    </div>
+    <div class="home-contents-wrap">
+      <div class="side-menu-wrap">
+        <SideMenu></SideMenu>
+      </div>
+      <div class="post-list-wrap">
+        <PostList></PostList>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import AppHeader from '@/components/AppHeader.vue';
+import AppHeader from '@/components/common/AppHeader.vue';
 import SideMenu from '@/components/SideMenu.vue';
 import PostList from '@/components/PostList.vue';
 
 export default {
+  data() {
+    return {
+      isOpenedPage: false,
+    };
+  },
   components: {
-    AppHeader: AppHeader,
-    SideMenu: SideMenu,
-    PostList: PostList,
+    AppHeader,
+    SideMenu,
+    PostList,
   },
 };
 </script>
 
 <style>
-.contents {
+.home-header-wrap {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+.home-contents-wrap {
   display: flex;
   width: 100%;
+}
+
+.side-menu-wrap {
+  position: sticky;
+  top: 80px;
+  left: 0;
 }
 </style>
