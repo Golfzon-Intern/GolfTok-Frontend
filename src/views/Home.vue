@@ -22,7 +22,7 @@ import PostList from '@/components/PostList.vue';
 export default {
   data() {
     return {
-      isOpenedPage: false,
+      isOpenedPage: true,
     };
   },
   components: {
@@ -50,5 +50,6 @@ export default {
   position: sticky;
   top: 80px;
   left: 0;
+  height: 85vh;
 }
 </style>
