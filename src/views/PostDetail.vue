@@ -2,7 +2,7 @@
   <div class="background-container">
     <div class="video-card-container">
       <div class="video-card">
-        <video v-bind:src="postInfo.videoRoot"></video>
+        <video :src="postInfo.videoRoot" type="video/mp4" autoplay="true" controls="controls"></video>
       </div>
       <button class="close-btn" @click="closeModal">
         <i class="far fa-times-circle"></i>
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="comment-container">
-        comment list
+        <CommentList />
       </div>
       <div class="comment-input-container">comment input</div>
     </div>
@@ -53,6 +53,7 @@ import * as postApi from '@/api/post';
 
 import LikeBtn from '@/components/common/LikeBtn.vue';
 import CommentBtn from '@/components/common/CommentBtn.vue';
+import CommentList from '@/components/CommentList.vue';
 
 export default {
   data: function() {
@@ -79,6 +80,7 @@ export default {
   components: {
     LikeBtn,
     CommentBtn,
+    CommentList,
   },
 };
 </script>

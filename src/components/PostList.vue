@@ -20,7 +20,7 @@
                   <div class="video-card-wrapper">
                     <VideoPlayer :options="post.videoOption" />
                     <!-- <router-link :to="{ name: 'testModal', params: { index: index, postId: post.postId } }"> -->
-                    <div class="video-modal-btn" @click="openModal(index, post.postId)">...</div>
+                    <div class="video-modal-btn" @click="openPostDetail(index, post.postId)">...</div>
                     <!-- </router-link> -->
                   </div>
                   <div class="item-action-bar">
@@ -33,7 +33,7 @@
                       </div> -->
                       <LikeBtn :postId="post.postId"></LikeBtn>
                     </div>
-                    <div class="bar-item-wrapper" @click="openModal(index, post.postId)">
+                    <div class="bar-item-wrapper" @click="openPostDetail(index, post.postId)">
                       <CommentBtn></CommentBtn>
                     </div>
                   </div>
@@ -47,7 +47,7 @@
     </div>
     <InfiniteLoading @infinite="infiniteHandler"></InfiniteLoading>
     <router-view>
-      <PostDetailModal />
+      <PostDetail />
     </router-view>
   </div>
 </template>
@@ -56,7 +56,6 @@
 import InfiniteLoading from 'vue-infinite-loading';
 import * as postApi from '@/api/post';
 import VideoPlayer from '@/components/common/VideoPlayer.vue';
-import PostDetailModal from '@/components/common/PostDetailModal.vue';
 import LikeBtn from '@/components/common/LikeBtn.vue';
 import CommentBtn from '@/components/common/CommentBtn.vue';
 
@@ -66,33 +65,10 @@ export default {
       postInfos: [],
       pageNum: 1,
       curIndex: 0,
-      isOpened: false,
+      // isOpened: false,
     };
   },
   methods: {
-    openModal(index, postId) {
-      const postsLen = this.postInfos.length;
-      let isFirst = false;
-      let isLast = false;
-
-      if (index === 0) {
-        isFirst = true;
-      } else if (index === postsLen) {
-        isLast = true;
-      }
-
-      this.$router.push({
-        name: 'PostDetailModal',
-        params: {
-          postId: postId,
-          isFirst: isFirst,
-          isLast: isLast,
-        },
-      });
-
-      this.curIndex = index;
-      this.isOpened = true;
-    },
     async infiniteHandler($state) {
       try {
         const response = await postApi.getPosts(this.pageNum);
@@ -135,11 +111,32 @@ export default {
         console.log(error);
       }
     },
+    openPostDetail(index, postId) {
+      const postsLen = this.postInfos.length;
+      let isFirst = false;
+      let isLast = false;
+
+      if (index === 0) {
+        isFirst = true;
+      } else if (index === postsLen) {
+        isLast = true;
+      }
+
+      this.$router.push({
+        name: 'PostDetail',
+        params: {
+          postId: postId,
+          isFirst: isFirst,
+          isLast: isLast,
+        },
+      });
+
+      this.curIndex = index;
+    },
   },
   components: {
     VideoPlayer,
     InfiniteLoading,
-    PostDetailModal,
     LikeBtn,
     CommentBtn,
   },
@@ -225,4 +222,10 @@ a {
   margin-bottom: 12px;
   cursor: pointer;
 }
+/* 
+.feed-item-avatar,
+.video-card-wrapper,
+.item-action-bar {
+  z-index: 0;
+} */
 </style>

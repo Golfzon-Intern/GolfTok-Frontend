@@ -1,5 +1,5 @@
 <template>
-  <div id="home-view">
+  <div id="home-view" :style="styleObj">
     <div class="home-header-wrap">
       <AppHeader></AppHeader>
     </div>
@@ -22,8 +22,27 @@ import PostList from '@/components/PostList.vue';
 export default {
   data() {
     return {
-      isOpenedPage: true,
+      isOpenedPage: false,
+      styleObj: {},
     };
+  },
+  watch: {
+    // 라우트가 변경되면 메소드를 다시 호출됩니다.
+    $route: 'checkIsOpenedPage',
+  },
+  methods: {
+    checkIsOpenedPage() {
+      this.isOpenedPage = !this.isOpenedPage;
+
+      if (this.isOpenedPage) {
+        this.styleObj = {
+          position: 'fixed',
+          overflow: 'hidden',
+        };
+      } else {
+        this.styleObj = {};
+      }
+    },
   },
   components: {
     AppHeader,
@@ -34,6 +53,11 @@ export default {
 </script>
 
 <style>
+/* #home-view {
+  position: fixed;
+  overflow: hidden;
+} */
+
 .home-header-wrap {
   position: sticky;
   top: 0;
