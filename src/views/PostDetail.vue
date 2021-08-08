@@ -4,8 +4,8 @@
       <div class="video-card">
         <video :src="postInfo.videoRoot" type="video/mp4" autoplay="true" controls="controls"></video>
       </div>
-      <button class="close-btn" @click="closeModal">
-        <i class="far fa-times-circle"></i>
+      <button class="close-btn" @click="closePage">
+        <i class="fas fa-times"></i>
       </button>
       <button v-if="!isFirst" class="arrow-left-btn">
         <i class="fas fa-chevron-left"></i>
@@ -17,33 +17,39 @@
     <div class="content-container">
       <div class="user-info-container">
         <div class="user-avatar">
-          <!-- <b-avatar class="user-pic" v-bind:src="" size="4rem" /> -->
+          <b-avatar
+            class="user-pic"
+            src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E"
+            size="3rem"
+          />
         </div>
         <div class="user-text-container">
-          <h2 class="username">joie.huiju</h2>
-          <h2 class="user-nickname">joie kim</h2>
+          <p class="username">joie.huiju</p>
+          <p class="user-nickname">joie kim</p>
         </div>
         <div class="follow-btn-wrap">
           <button class="follow-btn">follow</button>
         </div>
       </div>
       <div class="video-info-container">
-        <h1 class="video-meta-title">{{ postInfo.postContent }}</h1>
+        <p class="video-meta-title">{{ postInfo.postContent }}</p>
         <div class="action-container">
           <div class="action-wrap">
             <!-- <i class="far fa-heart"></i>
             <strong>{{ postInfo.likeCount }}</strong> -->
-            <LikeBtn></LikeBtn>
+            <LikeButton :targetType="'post'" :targetId="postInfo.postId" :styleType="1" />
           </div>
           <div class="action-wrap">
-            <CommentBtn></CommentBtn>
+            <CommentButton :styleType="1" />
           </div>
         </div>
       </div>
       <div class="comment-container">
         <CommentList />
       </div>
-      <div class="comment-input-container">comment input</div>
+      <div class="comment-input-container">
+        <CommentInput />
+      </div>
     </div>
   </div>
 </template>
@@ -51,9 +57,10 @@
 <script>
 import * as postApi from '@/api/post';
 
-import LikeBtn from '@/components/common/LikeBtn.vue';
-import CommentBtn from '@/components/common/CommentBtn.vue';
+import LikeButton from '@/components/common/LikeButton.vue';
+import CommentButton from '@/components/common/CommentButton.vue';
 import CommentList from '@/components/CommentList.vue';
+import CommentInput from '@/components/CommentInput.vue';
 
 export default {
   data: function() {
@@ -71,16 +78,17 @@ export default {
       const response = await postApi.getPostDetail(this.$route.params.postId);
       this.postInfo = response.data.postList[0];
     },
-    closeModal() {
+    closePage() {
       this.$router.push({
         name: 'Home',
       });
     },
   },
   components: {
-    LikeBtn,
-    CommentBtn,
+    LikeButton,
+    CommentButton,
     CommentList,
+    CommentInput,
   },
 };
 </script>
@@ -111,198 +119,107 @@ export default {
   width: 100%;
   height: 100%;
 }
-button {
+.video-card-container button {
   position: absolute;
+  width: 45px;
+  height: 45px;
+  margin: 8px 12px;
+  border: none;
+  background: #343a40;
+  border-radius: 40px;
+}
+.video-card-container i {
+  font-size: 1.5rem;
+  color: #f8f9fa;
 }
 .close-btn {
   top: 0;
   left: 0;
-  margin: 8px 12px;
-  border: none;
-  background: none;
-}
-.close-btn i {
-  font-size: 2rem;
-  color: #dee2e6;
 }
 .arrow-left-btn {
   top: 50%;
   left: 0;
-  margin: 8px 12px;
-  border: none;
-  background: none;
-}
-.arrow-left-btn i {
-  font-size: 2rem;
-  color: #dee2e6;
 }
 .arrow-right-btn {
   top: 50%;
   right: 40%;
-  margin: 8px 12px;
-  border: none;
-  background: none;
-}
-.arrow-right-btn i {
-  font-size: 2rem;
-  color: #dee2e6;
 }
 
 .content-container {
   width: 40%;
-  padding: 8px 12px;
+  /* padding: 8px 12px; */
   background: #f8f9fa;
+}
+.content-container p {
+  font-family: Helvetica, Arial, sans-serif;
+  margin-bottom: 0;
 }
 .user-info-container {
   height: 10%;
+  padding: 4% 4% 4% 0;
   display: flex;
 }
 .user-avatar {
   width: 20%;
+  text-align: center;
 }
 .user-text-container {
   width: 50%;
 }
-.user-text-container h1,
-h2,
-p {
-  font-family: Helvetica, Arial, sans-serif;
-}
 .username {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
 }
 .user-nickname {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 500;
 }
 .follow-btn-wrap {
   width: 30%;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .follow-btn-wrap .follow-btn {
   position: inherit;
+  width: 150px;
+  height: 100%;
+  border-radius: 50px;
+  border: none;
+  background-color: #5d5fef;
+  color: #f8f9fa;
 }
 
 .video-info-container {
   height: 20%;
+  padding: 3%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 .video-meta-title {
-  font-size: 1.75rem;
+  font-size: 1.25rem;
 }
 .action-container {
   height: 30%;
+  margin-bottom: 4px;
   display: flex;
   align-items: center;
+}
+.action-wrap {
+  margin-right: 16px;
 }
 
 .comment-container {
   height: 60%;
-  background: cornflowerblue;
+  background: #f1f3f5;
+  border-top: 1px solid #ced4da;
+  border-bottom: 1px solid #ced4da;
 }
 .comment-input-container {
   height: 10%;
-  background: chartreuse;
+  margin: 0 32px;
+  padding: 21px 0;
 }
-
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  /* display: table; */
-  transition: opacity 0.3s ease;
-}
-
-.modal-wrapper {
-  /* display: table-cell; */
-  /* vertical-align: middle; */
-  display: flex;
-}
-
-/* .modal-container {
-  width: 300px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.3s ease;
-  font-family: Helvetica, Arial, sans-serif;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-}
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
-.close-btn {
-  cursor: pointer;
-}
-
-.modal-body {
-  margin: 20px 0;
-}
-.info-input {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.info-input p {
-  margin-bottom: 0;
-  padding-left: 0;
-  width: 10vw;
-  font-size: 0.8rem;
-}
-.info-input input {
-  width: 70vw;
-}
-
-.modal-footer {
-  padding: 8px 12px;
-}
-.login-btn {
-  margin: 0 0 0 8px;
-  width: 200px;
-  height: 50px;
-  border: none;
-  border-radius: 2rem;
-  background-color: #7950f2;
-  color: #f8f9fa;
-  cursor: pointer;
-} */
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
-
-/* .modal-enter {
-  opacity: 0;
-}
-
-.modal-leave-active {
-  opacity: 0;
-}
-
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-} */
 </style>

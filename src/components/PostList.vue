@@ -31,10 +31,10 @@
                       <div class="bar-item-text">
                         <strong>{{ post.likeCount }}</strong>
                       </div> -->
-                      <LikeBtn :postId="post.postId"></LikeBtn>
+                      <LikeButton :targetType="'post'" :targetId="post.postId" :styleType="0"></LikeButton>
                     </div>
                     <div class="bar-item-wrapper" @click="openPostDetail(index, post.postId)">
-                      <CommentBtn></CommentBtn>
+                      <CommentButton :styleType="0"></CommentButton>
                     </div>
                   </div>
                 </div>
@@ -56,8 +56,8 @@
 import InfiniteLoading from 'vue-infinite-loading';
 import * as postApi from '@/api/post';
 import VideoPlayer from '@/components/common/VideoPlayer.vue';
-import LikeBtn from '@/components/common/LikeBtn.vue';
-import CommentBtn from '@/components/common/CommentBtn.vue';
+import LikeButton from '@/components/common/LikeButton.vue';
+import CommentButton from '@/components/common/CommentButton.vue';
 
 export default {
   data: function() {
@@ -137,8 +137,8 @@ export default {
   components: {
     VideoPlayer,
     InfiniteLoading,
-    LikeBtn,
-    CommentBtn,
+    LikeButton,
+    CommentButton,
   },
 };
 </script>

@@ -66,7 +66,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { storageService } from '@/lib/firebase';
 import * as postApi from '@/api/post';
 
-import AppHeader from '@/components/AppHeader.vue';
+import AppHeader from '@/components/common/AppHeader.vue';
 import NasmoSelector from '@/components/NasmoSelector.vue';
 // import VideoPlayer from '@/components/common/VideoPlayer.vue';
 
