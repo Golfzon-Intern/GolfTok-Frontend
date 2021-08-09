@@ -1,6 +1,6 @@
 <template>
   <div id="home-view" :style="styleObj">
-    <div class="home-header-wrap">
+    <div class="home-header-container">
       <AppHeader></AppHeader>
     </div>
     <div class="home-contents-wrap">
@@ -58,11 +58,18 @@ export default {
   overflow: hidden;
 } */
 
-.home-header-wrap {
-  position: sticky;
-  top: 0;
+.home-header-container {
+  position: fixed;
   left: 0;
-  z-index: 999;
+  top: 0;
+  right: 0;
+  height: 60px;
+  background: #fff;
+  border-bottom: 1px solid #ced4da;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-around;
 }
 
 .home-contents-wrap {
