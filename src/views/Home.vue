@@ -77,19 +77,18 @@ export default {
 }
 
 .home-contents-wrap {
-  display: flex;
   width: 100%;
   max-width: 1100px;
   margin-top: 60px;
   display: flex;
   flex: 1 1 auto;
+  flex-direction: row;
   justify-content: space-between;
 }
 
 .side-bar-container {
   position: fixed;
   top: 60px;
-  left: unset;
   bottom: 0;
   width: 25vw;
   padding: 0 8px;
@@ -99,11 +98,15 @@ export default {
   perspective: 1px;
   perspective-origin: right top;
   z-index: 11;
-
-  /* height: 100%; */
   background: #fff;
-  /* top: 80px;
-  left: 0;
-  height: 85vh; */
+}
+
+.trending-container {
+  position: relative;
+  left: 26vw;
+  width: 50vw;
+  padding: 24px 0;
+  margin-right: 24px;
+  background: #fff;
 }
 </style>

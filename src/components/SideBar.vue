@@ -14,7 +14,8 @@
         </div>
         <div v-if="!this.$store.state.auth.userInfo" class="login-wrap">
           <span>Log in to follow creators, like videos, and view comments.</span>
-          <button type="button" class="login-btn">Log in</button>
+          <!-- <button type="button" class="login-btn">Log in</button> -->
+          <LoginButton :styleType="1" />
         </div>
         <div class="user-list">
           <div class="user-list-header">
@@ -71,7 +72,13 @@
 </template>
 
 <script>
-export default {};
+import LoginButton from '@/components/common/LoginButton.vue';
+
+export default {
+  components: {
+    LoginButton,
+  },
+};
 </script>
 
 <style>
@@ -82,6 +89,7 @@ export default {};
   align-items: stretch;
   justify-content: space-between;
   height: 100%;
+  padding-top: 20px;
 }
 
 .nav-wrap {
@@ -126,33 +134,16 @@ export default {};
   padding: 20px 8px 24px 8px;
   margin: 0;
 }
-/* .login-wrap ::before {
-  content: '';
-  position: absolute;
-  height: 1px;
-  left: 8px;
-  right: 8px;
-  background: #ced4da;
-  transform: scaleY(0.5);
-  top: 0;
-} */
 .login-wrap span {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 1rem;
   line-height: 22px;
   color: #868e96;
-  /* position: relative;
-  padding: 20px 8px 24px 8px;
-  margin: 0; */
 }
-.login-wrap .login-btn {
-  width: 100%;
-  height: 40px;
+.login-wrap button {
   margin-top: 20px;
   margin-left: 0;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 1rem;
 }
 
 .user-list {

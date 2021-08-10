@@ -27,9 +27,10 @@
           <p class="username">joie.huiju</p>
           <p class="user-nickname">joie kim</p>
         </div>
-        <div class="follow-btn-wrap">
+        <!-- <div class="follow-btn-wrap">
           <button class="follow-btn">follow</button>
-        </div>
+        </div> -->
+        <FollowButton />
       </div>
       <div class="video-info-container">
         <p class="video-meta-title">{{ postInfo.postContent }}</p>
@@ -57,6 +58,7 @@
 <script>
 import * as postApi from '@/api/post';
 
+import FollowButton from '@/components/common/FollowButton.vue';
 import LikeButton from '@/components/common/LikeButton.vue';
 import CommentButton from '@/components/common/CommentButton.vue';
 import CommentList from '@/components/CommentList.vue';
@@ -89,6 +91,7 @@ export default {
     CommentButton,
     CommentList,
     CommentInput,
+    FollowButton,
   },
 };
 </script>
@@ -174,7 +177,7 @@ export default {
   font-size: 1rem;
   font-weight: 500;
 }
-.follow-btn-wrap {
+/* .follow-btn-wrap {
   width: 30%;
   height: 50px;
   display: flex;
@@ -189,7 +192,7 @@ export default {
   border: none;
   background-color: #5d5fef;
   color: #f8f9fa;
-}
+} */
 
 .video-info-container {
   height: 20%;

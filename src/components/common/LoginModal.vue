@@ -114,7 +114,7 @@ export default {
 .modal-footer {
   padding: 8px 12px;
 }
-.login-btn {
+/* .login-btn {
   margin: 0 0 0 8px;
   width: 200px;
   height: 50px;
@@ -123,7 +123,7 @@ export default {
   background-color: #7950f2;
   color: #f8f9fa;
   cursor: pointer;
-}
+} */
 
 /*
  * The following styles are auto-applied to elements with

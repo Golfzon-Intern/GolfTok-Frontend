@@ -24,9 +24,10 @@
         </button>
       </div>
       <div class="login-container" v-else>
-        <button class="login-btn" v-on:click="toggleModal">
+        <!-- <button class="login-btn" v-on:click="toggleModal">
           Log in
-        </button>
+        </button> -->
+        <LoginButton :styleType="0" />
       </div>
     </div>
     <LoginModal v-if="isVisibleModal" @close="isVisibleModal = false" v-bind:isVisible="isVisibleModal" v-on:toggleVisible="toggleModal"> </LoginModal>
@@ -35,6 +36,7 @@
 
 <script>
 import LoginModal from '@/components/common/LoginModal.vue';
+import LoginButton from '@/components/common/LoginButton.vue';
 
 export default {
   data: function() {
@@ -54,6 +56,7 @@ export default {
   },
   components: {
     LoginModal,
+    LoginButton,
   },
 };
 </script>
@@ -145,21 +148,6 @@ export default {
   display: flex;
   align-items: center;
 }
-.header-menu button {
-  border: none;
-  cursor: pointer;
-}
-.header-menu .login-btn {
-  width: 100px;
-  height: 36px;
-  margin-left: 16px;
-  font-weight: 700;
-  font-size: 1rem;
-  line-height: 22px;
-  border-radius: 2rem;
-  background-color: #7950f2;
-  color: #fff;
-}
 .header-menu .upload-btn,
 .header-menu .user-btn {
   position: relative;
@@ -167,6 +155,8 @@ export default {
   height: 42px;
   font-size: 1.5rem;
   background: transparent;
+  border: none;
+  cursor: pointer;
 }
 .header-menu .user-btn {
   margin-left: 24px;
@@ -174,5 +164,9 @@ export default {
 .upload-btn:hover,
 .user-btn:hover {
   color: #5d5fef;
+}
+
+.login-container button {
+  margin-left: 16px;
 }
 </style>
