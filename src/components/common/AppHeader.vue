@@ -25,7 +25,7 @@
       </div>
       <div class="login-container" v-else>
         <button class="login-btn" v-on:click="toggleModal">
-          Login
+          Log in
         </button>
       </div>
     </div>
