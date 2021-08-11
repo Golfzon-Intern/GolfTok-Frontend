@@ -2,9 +2,7 @@
   <div class="like-wrapper" :style="boxStyleObj">
     <div class="like-icon" @click="updateLiked" :style="iconStyleObj">
       <i class="fas fa-heart full-heart" :style="[isLiked ? { color: '#f03e3e', textShadow: '1px 1px 2px #868e96' } : { color: 'inherit' }]"></i>
-      <!-- <i v-else class="far fa-heart empty-heart"></i> -->
     </div>
-    <!-- <strong :style="textStyleObj">{{ numOfLike }}</strong> -->
   </div>
 </template>
 
@@ -18,7 +16,6 @@ export default {
       numOfLike: 0,
       boxStyleObj: {},
       iconStyleObj: {},
-      textStyleObj: {},
     };
   },
   props: {
@@ -45,13 +42,13 @@ export default {
     switch (this.styleType) {
       case 0: // post-list
         this.boxStyleObj = {
-          marginTop: '8px',
-          background: '#dee2e6',
-          padding: '11px 0',
-          borderRadius: '100%',
-          cursor: 'pointer',
           width: '50px',
           height: '50px',
+          marginTop: '8px',
+          padding: '11px 0',
+          background: '#dee2e6',
+          borderRadius: '100%',
+          cursor: 'pointer',
         };
         this.iconStyleObj = {
           width: '100%',
@@ -60,42 +57,30 @@ export default {
           fontSize: '1.5rem',
           textAlign: 'center',
         };
-        // this.textStyleObj = {
-        //   width: '100%',
-        //   display: 'inline-block',
-        //   textAlign: 'center',
-        //   marginTop: '20px',
-        //   color: 'rgba(22, 24, 35, 0.75)',
-        //   fontWeight: '600',
-        //   fontSize: '0.875rem',
-        //   lineHeight: '17px',
-        //   padding: '0px 7px 0px 8px',
-        // };
         break;
       case 1: // post-detail
         this.boxStyleObj = {
-          display: 'flex',
+          width: '32px',
+          height: '32px',
+          marginRight: '6px',
+          background: '#dee2e6',
+          borderRadius: '100%',
+          cursor: 'pointer',
         };
         this.iconStyleObj = {
-          width: '40px',
-          height: '40px',
-          marginRight: '8px',
-          fontSize: '1.5rem',
-          paddingTop: '0.25rem',
-          borderRadius: '40px',
-          background: '#dee2e6',
-        };
-        this.textStyleObj = {
-          fontSize: '1rem',
-          paddingTop: '0.5rem',
+          position: 'relative',
+          bottom: '2px',
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden',
+          fontSize: '1.25rem',
+          textAlign: 'center',
+          color: 'black',
         };
         break;
       case 2: // comment
         this.iconStyleObj = {
           fontSize: '1.25rem',
-        };
-        this.textStyleObj = {
-          fontSize: '0.75rem',
         };
         break;
       default:

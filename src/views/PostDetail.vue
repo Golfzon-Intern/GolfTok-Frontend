@@ -1,11 +1,21 @@
 <template>
-  <div class="background-container">
+  <div class="post-detail-wrapper">
     <div class="video-card-container">
-      <div class="video-card">
-        <video :src="postInfo.videoRoot" type="video/mp4" autoplay="true" controls="controls"></video>
+      <div class="background-image">
+        <img :src="postInfo.postThumbnail" />
+      </div>
+      <div class="video-card-big">
+        <video ref="videoRef" :src="postInfo.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="postInfo.postThumbnail"></video>
+        <div v-if="!isPlaying" class="play-btn">
+          <i class="fas fa-play"></i>
+        </div>
       </div>
       <button class="close-btn" @click="closePage">
         <i class="fas fa-times"></i>
+      </button>
+      <button class="mute-btn" @click="closePage">
+        <i v-if="isMuted" class="fas fa-volume-mute"></i>
+        <i v-else class="fas fa-volume-up"></i>
       </button>
       <!-- <button v-if="!isFirst" class="arrow-left-btn">
         <i class="fas fa-chevron-left"></i>
@@ -17,15 +27,11 @@
     <div class="content-container">
       <div class="user-info-container">
         <div class="user-avatar">
-          <b-avatar
-            class="user-pic"
-            src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E"
-            size="3rem"
-          />
+          <b-avatar class="user-pic" :src="postInfo.userIcon" size="3rem" />
         </div>
         <div class="user-text-container">
-          <p class="username">joie.huiju</p>
-          <p class="user-nickname">joie kim</p>
+          <p class="username">{{ postInfo.userName }}</p>
+          <p class="user-nickname">{{ postInfo.userNickname }}</p>
         </div>
         <!-- <div class="follow-btn-wrapper">
           <button class="follow-btn">follow</button>
@@ -33,15 +39,28 @@
         <FollowButton />
       </div>
       <div class="video-info-container">
-        <p class="video-meta-title">{{ postInfo.postContent }}</p>
+        <div class="location-info">
+          <h4>
+            <div class="location-decoration">
+              <i class="fas fa-map-marker-alt"></i>
+              {{ postInfo.locations }}
+            </div>
+          </h4>
+        </div>
+        <div class="video-meta-title">
+          <strong>{{ postInfo.postContent }}</strong>
+        </div>
+        <!-- <p class="video-meta-title">{{ postInfo.postContent }}</p> -->
         <div class="action-container">
           <div class="action-wrapper">
             <!-- <i class="far fa-heart"></i>
             <strong>{{ postInfo.likeCount }}</strong> -->
             <LikeButton :targetType="'post'" :targetId="postInfo.postId" :styleType="1" />
+            <strong>{{ postInfo.likeCount }}</strong>
           </div>
           <div class="action-wrapper">
             <CommentButton :styleType="1" />
+            <strong>{{ postInfo.commentCount }}</strong>
           </div>
         </div>
       </div>
@@ -68,6 +87,8 @@ export default {
   data: function() {
     return {
       postInfo: {},
+      isMuted: true,
+      isPlaying: true,
       // isFirst: this.$route.params.isFirst,
       // isLast: this.$route.params.isLast,
     };
@@ -77,7 +98,7 @@ export default {
   },
   methods: {
     async getPostInfo() {
-      const response = await postApi.getPostDetail(this.$route.params.postId);
+      const response = await postApi.getPostDetail(this.$route.params.postId, 0);
       this.postInfo = response.data.postList[0];
     },
     closePage() {
@@ -94,33 +115,72 @@ export default {
 };
 </script>
 
-<style scoped>
-.background-container {
+<style>
+.post-detail-wrapper {
   position: fixed;
-  z-index: 9998;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 1000;
   display: flex;
+  flex-direction: row;
   background-color: #212529;
 }
 
 .video-card-container {
-  width: 60%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0 80px;
+  position: relative;
+  flex: 1 1 auto;
+  /* width: 60%; */
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
 }
-.video-card {
-  width: 100%;
-  height: 40%;
+
+.background-image {
+  position: absolute;
+  width: 10%;
+  height: 10%;
+  filter: blur(2px);
+  left: 50%;
+  top: 50%;
+  transform: scale(11);
+  opacity: 0.3;
 }
-.video-card video {
+.background-image img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
-.video-card-container button {
+
+.video-card-big {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.video-card-big video {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0px;
+  transform: none;
+  object-fit: contain;
+}
+.video-card-big .play-btn {
+  height: 100%;
+}
+.video-card-big .play-btn i {
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  width: 70px;
+  height: 70px;
+  font-size: 4rem;
+  color: #fff;
+}
+
+/* .video-card-container button {
   position: absolute;
   width: 45px;
   height: 45px;
@@ -132,48 +192,100 @@ export default {
 .video-card-container i {
   font-size: 1.5rem;
   color: #f8f9fa;
+} */
+.video-card-container button {
+  cursor: pointer;
+  border: none;
+  background: #343a40;
+  border-radius: 100%;
 }
-.close-btn {
-  top: 0;
-  left: 0;
+.video-card-container .close-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
 }
-.arrow-left-btn {
-  top: 50%;
-  left: 0;
+.video-card-container .mute-btn {
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  opacity: 1;
+  position: absolute;
+  transition: opacity 0.3s ease 0s;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.arrow-right-btn {
-  top: 50%;
-  right: 40%;
+.video-card-container .close-btn i,
+.video-card-container .mute-btn i {
+  font-size: 1.25rem;
+  color: #fff;
 }
 
 .content-container {
+  flex: 0 0 auto;
   width: 40%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  z-index: 15;
   /* padding: 8px 12px; */
-  background: #f8f9fa;
+  /* background: #f8f9fa; */
 }
 .content-container p {
   font-family: Helvetica, Arial, sans-serif;
   margin-bottom: 0;
 }
 .user-info-container {
-  height: 10%;
-  padding: 4% 4% 4% 0;
+  position: relative;
   display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  padding: 32px 32px 0;
+  color: rgb(22, 24, 35);
+  /* height: 10%;
+  padding: 4% 4% 4% 0;
+  display: flex; */
 }
 .user-avatar {
-  width: 20%;
-  text-align: center;
+  margin-right: 12px;
+  flex: 0 0 auto;
+  position: relative;
+  cursor: pointer;
+
+  /* width: 20%;
+  text-align: center; */
 }
 .user-text-container {
-  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 1 auto;
+  overflow: hidden;
+  margin-right: 12px;
+  /* width: 50%; */
 }
 .username {
-  font-size: 1.25rem;
+  font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 25px;
+  margin-bottom: 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
 }
 .user-nickname {
-  font-size: 1rem;
-  font-weight: 500;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 20px;
+  margin-bottom: 0px;
 }
 /* .follow-btn-wrapper {
   width: 30%;
@@ -193,22 +305,55 @@ export default {
 } */
 
 .video-info-container {
-  height: 20%;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 32px;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  /* height: 20%;
   padding: 3%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between; */
 }
+
 .video-meta-title {
-  font-size: 1.25rem;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 24px;
+  color: rgb(18, 18, 18);
+  flex: 0 0 auto;
+  font-weight: normal;
+  margin-bottom: 0px;
+  word-break: break-word;
+
+  /* font-size: 1.25rem; */
 }
+
 .action-container {
-  height: 30%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 16px 0px;
+  position: relative;
+  flex: 0 0 auto;
+
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  height: 40px;
+  line-height: 40px;
+
+  /* height: 30%;
   margin-bottom: 4px;
   display: flex;
-  align-items: center;
+  align-items: center; */
 }
 .action-wrapper {
+  display: flex;
+  align-items: center;
   margin-right: 16px;
 }
 

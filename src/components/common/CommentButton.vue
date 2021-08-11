@@ -1,7 +1,6 @@
 <template>
   <div class="comment-wrapper" :style="boxStyleObj">
     <i class="fas fa-comment" :style="iconStyleObj"></i>
-    <!-- <strong :style="textStyleObj">{{ numOfComments }}</strong> -->
   </div>
 </template>
 
@@ -28,13 +27,13 @@ export default {
     switch (this.styleType) {
       case 0: // post-list
         this.boxStyleObj = {
+          width: '50px',
+          height: '50px',
           marginTop: '8px',
           background: '#dee2e6',
           padding: '13px 0',
           borderRadius: '100%',
           cursor: 'pointer',
-          width: '50px',
-          height: '50px',
         };
         this.iconStyleObj = {
           width: '100%',
@@ -43,34 +42,25 @@ export default {
           fontSize: '1.5rem',
           textAlign: 'center',
         };
-        // this.textStyleObj = {
-        //   width: '100%',
-        //   display: 'inline-block',
-        //   textAlign: 'center',
-        //   marginTop: '12px',
-        //   color: 'rgba(22, 24, 35, 0.75)',
-        //   fontWeight: '600',
-        //   fontSize: '0.875rem',
-        //   lineHeight: '17px',
-        //   padding: '0px 7px 0px 8px',
-        // };
         break;
       case 1: // post-detail
         this.boxStyleObj = {
-          display: 'flex',
+          width: '32px',
+          height: '32px',
+          marginRight: '6px',
+          background: '#dee2e6',
+          borderRadius: '100%',
+          cursor: 'pointer',
         };
         this.iconStyleObj = {
-          width: '40px',
-          height: '40px',
-          marginRight: '8px',
-          fontSize: '1.5rem',
-          paddingTop: '0.2rem',
-          borderRadius: '40px',
-          background: '#dee2e6',
-        };
-        this.textStyleObj = {
-          fontSize: '1rem',
-          paddingTop: '0.5rem',
+          position: 'relative',
+          top: '5px',
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden',
+          fontSize: '1.25rem',
+          textAlign: 'center',
+          color: 'black',
         };
         break;
       default:
