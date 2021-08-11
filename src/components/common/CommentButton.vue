@@ -4,7 +4,7 @@
       <i class="far fa-comment"></i>
     </div>
     <div class="comment-text" :style="textStyleObj">
-      <p>33</p>
+      <p>{{ numOfComments }}</p>
     </div>
   </div>
 </template>
@@ -19,6 +19,10 @@ export default {
     };
   },
   props: {
+    numOfComments: {
+      type: Number,
+      default: 0,
+    },
     styleType: {
       type: Number,
       default: 0,

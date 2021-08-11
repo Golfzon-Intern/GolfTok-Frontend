@@ -3,15 +3,15 @@
     <div v-if="postInfos" class="video-feed-container">
       <div class="video-feed-item" v-for="(post, index) in postInfos" v-bind:key="index">
         <a href="#" class="feed-item-avatar">
-          <b-avatar class="user-pic" v-bind:src="post.userPic" size="3.5rem" />
+          <b-avatar class="user-pic" v-bind:src="post.authorAvatar" size="3.5rem" />
         </a>
         <div class="feed-item-content">
           <div class="author-info-content">
             <a href="#">
-              <h3 class="author-uniqueId">{{ post.userNickname }}</h3>
+              <h3 class="author-uniqueId">{{ post.authorNick }}</h3>
             </a>
             <a href="#">
-              <h4 class="author-nickname">@{{ post.userName }}</h4>
+              <h4 class="author-nickname">@{{ post.authorName }}</h4>
             </a>
           </div>
           <div class="video-meta-caption">
@@ -23,25 +23,17 @@
           <div class="item-video-container">
             <div class="item-video-wrapper">
               <a href="#" class="video-card-wrapper">
-                <div class="image-card">
-                  <div class="video-card" @mouseenter="setIsHover(true)" @mouseleave="setIsHover(false)">
-                    <video
-                      ref="videoRef"
-                      src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/sample_video%2Fproduction%20ID_4128811.mp4?alt=media&token=58a91ac0-9899-48bb-8864-e15c84118d28"
-                      type="video/mp4"
-                      autoplay
-                      loop
-                      muted
-                      preload="metadata"
-                    ></video>
+                <div class="video-card-bg">
+                  <div class="video-card" @mouseenter="setIsHover(true, index)" @mouseleave="setIsHover(false, index)">
+                    <video ref="videoRef" :src="post.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="post.Thumbnail"></video>
                     <span class="style-layer-mask"></span>
-                    <div class="volume-btn" :style="volumnBtnStyle">
-                      <i v-if="isMuted" class="fas fa-volume-up"></i>
-                      <i v-else class="fas fa-volume-mute"></i>
+                    <div class="volume-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setIsMuted(index)">
+                      <i v-if="post.isMuted" class="fas fa-volume-mute"></i>
+                      <i v-else class="fas fa-volume-up"></i>
                     </div>
-                    <div class="play-btn" :style="playBtnStyle">
-                      <i v-if="isPlayed" class="fas fa-play"></i>
-                      <i v-else class="fas fa-pause"></i>
+                    <div class="play-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setIsPlayed(index)">
+                      <i v-if="post.isPlayed" class="fas fa-pause"></i>
+                      <i v-else class="fas fa-play"></i>
                     </div>
                   </div>
                 </div>
@@ -62,7 +54,7 @@
                 <LikeButton :targetType="'post'" :targetId="post.postId" :styleType="0"></LikeButton>
               </div>
               <div class="bar-item-wrapper" @click="openPostDetail(index, post.postId)">
-                <CommentButton :styleType="0"></CommentButton>
+                <CommentButton :numOfComments="post.commentCount" :styleType="0"></CommentButton>
               </div>
             </div>
           </div>
@@ -92,9 +84,9 @@ export default {
       pageNum: 1,
       curIndex: 0,
       videos: [],
-      isVideoHover: false,
-      isMuted: false,
-      isPlayed: false,
+      // isVideoHover: false,
+      // isMuted: false,
+      // isPlayed: false,
       // volumnBtnStyle: {},
       // playBtnStyle: {},
       // isOpened: false,
@@ -141,25 +133,19 @@ export default {
           for (const post of posts) {
             const postObj = {
               postId: post.postId,
-              userPic: post.userIcon,
-              userNickname: post.userNickname,
-              userName: post.userName,
               postContent: post.postContent,
+              videoRoot: post.videoRoot,
+              Thumbnail: post.postThumbnail,
               location: post.location,
               likeCount: post.likeCount,
               commentCount: post.commentCount,
-              videoOption: {
-                autoplay: false,
-                controls: true,
-                sources: [
-                  {
-                    src: post.videoRoot,
-                    type: 'video/mp4',
-                  },
-                ],
-                width: 440,
-                height: 250,
-              },
+              authorId: post.userId,
+              authorName: post.userName,
+              authorNick: post.userNickname,
+              authorAvatar: post.userIcon,
+              isHover: false,
+              isMuted: true,
+              isPlayed: true,
             };
 
             this.postInfos.push(postObj);
@@ -234,15 +220,36 @@ export default {
         if (visible > fraction) {
           // console.log(this.$refs.videoRef[i]);
           this.$refs.videoRef[i].play();
+          this.postInfos[i].isPlayed = true;
         } else {
           // console.log('pausevideo');
           this.$refs.videoRef[i].pause();
+          this.postInfos[i].isPlayed = false;
         }
       }
     },
-    setIsHover(state) {
-      this.isVideoHover = state;
-      console.log('hover');
+    setIsHover(state, index) {
+      this.postInfos[index].isHover = state;
+    },
+    setIsPlayed(index) {
+      event.preventDefault();
+      this.postInfos[index].isPlayed = !this.postInfos[index].isPlayed;
+
+      if (this.postInfos[index].isPlayed) {
+        this.$refs.videoRef[index].play();
+      } else {
+        this.$refs.videoRef[index].pause();
+      }
+    },
+    setIsMuted(index) {
+      event.preventDefault();
+      this.postInfos[index].isMuted = !this.postInfos[index].isMuted;
+
+      if (this.postInfos[index].isMuted) {
+        this.$refs.videoRef[index].muted = true;
+      } else {
+        this.$refs.videoRef[index].muted = false;
+      }
     },
   },
   components: {
@@ -376,7 +383,7 @@ a {
   border-radius: 8px;
   justify-content: center;
 }
-.image-card {
+.video-card-bg {
   width: 100%;
   height: 100%;
   position: relative;
@@ -385,7 +392,7 @@ a {
   cursor: pointer;
   overflow: hidden;
   border-radius: 4px;
-  background-image: url(https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/sample_video%2Fsample-stamp-grunge-texture-vector-260nw-1389188336.jpeg?alt=media&token=733fe998-be3e-45e6-b62a-92352a8888c3);
+  /* background-image: url(https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/sample_video%2Fsample-stamp-grunge-texture-vector-260nw-1389188336.jpeg?alt=media&token=733fe998-be3e-45e6-b62a-92352a8888c3); */
   background-color: black;
   background-size: 35vw;
 }
@@ -411,26 +418,10 @@ a {
   pointer-events: none;
   background: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
 }
-.volume-btn {
-  opacity: 1;
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.25rem;
-  background-color: blue;
-}
+.volume-btn,
 .play-btn {
   opacity: 1;
   position: absolute;
-  bottom: 12px;
-  left: 12px;
   width: 40px;
   height: 40px;
   cursor: pointer;
@@ -438,7 +429,16 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: blue;
+  color: #fff;
+}
+.volume-btn {
+  bottom: 12px;
+  right: 12px;
+  font-size: 1.25rem;
+}
+.play-btn {
+  bottom: 12px;
+  left: 12px;
 }
 /* .item-video-container .item-video-wrapper .video-modal-btn {
   position: relative;
