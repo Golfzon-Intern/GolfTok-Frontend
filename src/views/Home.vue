@@ -107,6 +107,9 @@ export default {
   z-index: 11;
   background: #fff;
 }
+.side-bar-container::-webkit-scrollbar {
+  display: none;
+}
 
 .trending-container {
   position: relative;
@@ -115,5 +118,21 @@ export default {
   padding: 24px 0;
   margin-right: 24px;
   background: #fff;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #e9ecef;
+  border-radius: 8px;
 }
 </style>

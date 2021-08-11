@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="side-bar-wrapper">
+  <div class="side-bar-wrapper">
+    <div class="side-scroll-wrapper" @mouseenter="setIsHover(true)" @mouseleave="setIsHover(false)" :class="{ sidebarHover: isHover === true }">
       <div class="upper-contents">
         <div class="nav-wrapper">
           <div class="nav-item" :class="{ navActive: isActive === 0 }" @click="movePage(0)">
@@ -20,48 +20,40 @@
         <div class="user-list">
           <div class="user-list-header">
             <span>Suggested accounts</span>
-            <a href="#" class="see-all">
-              <span>See all</span>
-            </a>
           </div>
-          <a href="#" class="user-item">
+          <a href="#" class="user-item" v-for="(user, index) in recommendations" :key="index">
             <span class="user-item-inner">
               <div class="user-avatar">
-                <b-avatar
-                  class="user-pic"
-                  src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E"
-                  size="2rem"
-                />
+                <b-avatar class="user-pic" :src="user.userIcon" size="2rem" />
               </div>
               <div class="user-infos">
-                <h4 class="user-title">joie_kim</h4>
-                <p class="user-desc">김희주 joie</p>
+                <h4 class="user-title">{{ user.userName }}</h4>
+                <p class="user-desc">{{ user.userNickname }}</p>
               </div>
             </span>
           </a>
+          <div class="see-all">
+            <p>See all</p>
+          </div>
         </div>
         <div v-if="this.$store.state.auth.userInfo" class="user-list">
           <div class="user-list-header">
             <span>Following accounts</span>
-            <a href="#" class="see-all">
-              <span>See all</span>
-            </a>
           </div>
-          <a href="#" class="user-item">
+          <a href="#" class="user-item" v-for="(user, index) in followings" :key="index">
             <span class="user-item-inner">
               <div class="user-avatar">
-                <b-avatar
-                  class="user-pic"
-                  src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E"
-                  size="2rem"
-                />
+                <b-avatar class="user-pic" :src="user.userIcon" size="2rem" />
               </div>
               <div class="user-infos">
-                <h4 class="user-title">joie_kim</h4>
-                <p class="user-desc">김희주 joie</p>
+                <h4 class="user-title">{{ user.userName }}</h4>
+                <p class="user-desc">{{ user.userNickname }}</p>
               </div>
             </span>
           </a>
+          <div class="see-all">
+            <p>See all</p>
+          </div>
         </div>
       </div>
       <div class="bottom-wrapper">
@@ -72,14 +64,27 @@
 </template>
 
 <script>
+import * as friendApi from '@/api/friend';
+
 import LoginButton from '@/components/common/LoginButton.vue';
 
 export default {
+  data() {
+    return {
+      recommendations: [],
+      followings: [],
+      isHover: false,
+    };
+  },
   props: {
     isActive: {
       type: Number,
       default: 0,
     },
+  },
+  created() {
+    this.getRecommended();
+    this.getFollowing();
   },
   methods: {
     movePage(state) {
@@ -92,6 +97,17 @@ export default {
           name: 'Home',
         });
       }
+    },
+    async getRecommended() {
+      const response = await friendApi.getRecFriendShort();
+      this.recommendations = response.data.recommendList;
+    },
+    async getFollowing() {
+      const response = await friendApi.getFowFriendShort();
+      this.followings = response.data.followingList;
+    },
+    setIsHover(state) {
+      this.isHover = state;
     },
   },
   components: {
@@ -191,18 +207,6 @@ export default {
   text-align: left;
   color: #495057;
 }
-.user-list-header .see-all {
-  height: 20px;
-  margin-top: 8px;
-  margin-bottom: 0;
-  padding-left: 8px;
-  padding-right: 8px;
-  text-decoration: none;
-  cursor: pointer;
-}
-.user-list-header .see-all span {
-  color: #fa5252;
-}
 .user-list .user-item {
   color: inherit;
   text-decoration: none;
@@ -255,6 +259,18 @@ export default {
   line-height: 15px;
   max-width: 260px;
 }
+.see-all {
+  height: 20px;
+  margin-top: 8px;
+  margin-bottom: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.see-all p {
+  color: #fa5252;
+}
 
 .bottom-wrapper {
   position: relative;
@@ -284,5 +300,29 @@ export default {
   background: #ced4da;
   transform: scaleY(0.5);
   top: 0;
+}
+
+/* .side-bar-wrapper::-webkit-scrollbar {
+  display: none;
+} */
+
+.sidebarHover {
+  display: block;
+  overflow: scroll;
+}
+/* width */
+.sidebarHover::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+.sidebarHover::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+/* Handle */
+.sidebarHover::-webkit-scrollbar-thumb {
+  background: #f1f3f5;
+  border-radius: 8px;
 }
 </style>

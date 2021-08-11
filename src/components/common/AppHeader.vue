@@ -24,10 +24,7 @@
         </button>
       </div>
       <div class="login-container" v-else>
-        <!-- <button class="login-btn" v-on:click="toggleModal">
-          Log in
-        </button> -->
-        <LoginButton :styleType="0" />
+        <LoginButton :styleType="0" @clickButton="toggleModal" />
       </div>
     </div>
     <LoginModal v-if="isVisibleModal" @close="isVisibleModal = false" v-bind:isVisible="isVisibleModal" v-on:toggleVisible="toggleModal"> </LoginModal>

@@ -1,5 +1,5 @@
 <template>
-  <button class="login-btn" :style="styleObj" @mouseenter="setIsHover(true)" @mouseleave="setIsHover(false)">Log in</button>
+  <button class="login-btn" :style="styleObj" @mouseenter="setIsHover(true)" @mouseleave="setIsHover(false)" @click="onClick">Log in</button>
 </template>
 
 <script>
@@ -60,6 +60,9 @@ export default {
   methods: {
     setIsHover(state) {
       this.isHover = state;
+    },
+    onClick() {
+      this.$emit('clickButton');
     },
   },
 };
