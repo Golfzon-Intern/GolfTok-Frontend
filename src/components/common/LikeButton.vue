@@ -1,12 +1,10 @@
 <template>
   <div class="like-wrapper" :style="boxStyleObj">
     <div class="like-icon" @click="updateLiked" :style="iconStyleObj">
-      <i v-if="isLiked" class="fas fa-heart full-heart"></i>
-      <i v-else class="far fa-heart empty-heart"></i>
+      <i class="fas fa-heart full-heart" :style="[isLiked ? { color: '#f03e3e', textShadow: '1px 1px 2px #868e96' } : { color: 'inherit' }]"></i>
+      <!-- <i v-else class="far fa-heart empty-heart"></i> -->
     </div>
-    <div class="like-text" :style="textStyleObj">
-      <p>{{ numOfLike }}</p>
-    </div>
+    <!-- <strong :style="textStyleObj">{{ numOfLike }}</strong> -->
   </div>
 </template>
 
@@ -32,6 +30,10 @@ export default {
       type: Number,
       default: 0,
     },
+    targetOrder: {
+      type: Number,
+      default: 0,
+    },
     styleType: {
       type: Number,
       default: 0,
@@ -42,20 +44,33 @@ export default {
 
     switch (this.styleType) {
       case 0: // post-list
-        this.iconStyleObj = {
-          width: '60px',
-          height: '60px',
-          marginLeft: '8px',
-          fontSize: '1.75rem',
-          paddingTop: '0.6rem',
-          borderRadius: '60px',
+        this.boxStyleObj = {
+          marginTop: '8px',
           background: '#dee2e6',
+          padding: '11px 0',
+          borderRadius: '100%',
+          cursor: 'pointer',
+          width: '50px',
+          height: '50px',
         };
-        this.textStyleObj = {
-          width: '60px',
-          marginLeft: '8px',
-          fontSize: '1rem',
+        this.iconStyleObj = {
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden',
+          fontSize: '1.5rem',
+          textAlign: 'center',
         };
+        // this.textStyleObj = {
+        //   width: '100%',
+        //   display: 'inline-block',
+        //   textAlign: 'center',
+        //   marginTop: '20px',
+        //   color: 'rgba(22, 24, 35, 0.75)',
+        //   fontWeight: '600',
+        //   fontSize: '0.875rem',
+        //   lineHeight: '17px',
+        //   padding: '0px 7px 0px 8px',
+        // };
         break;
       case 1: // post-detail
         this.boxStyleObj = {
@@ -110,6 +125,7 @@ export default {
     },
     async updateLiked() {
       let likeCount = this.numOfLike;
+      console.log('btn:' + likeCount);
 
       if (likeCount && this.isLiked) {
         // 좋아요 취소
@@ -120,6 +136,7 @@ export default {
           // 게시물 좋아요 삭제
           // await likeApi.deletePostLiked(this.targetId);
           console.log('delete like of post');
+          this.$emit('updateLiked', false, this.targetOrder);
         } else {
           // this.targetType === 'comment'
           // 댓글 좋아요 삭제
@@ -134,6 +151,7 @@ export default {
           // 게시물 좋아요 추가
           // await likeApi.addPostLiked(this.targetId);
           console.log('add like of post');
+          this.$emit('updateLiked', true, this.targetOrder);
         } else {
           // this.targetType === 'comment'
           // 댓글 좋아요 추가
@@ -151,7 +169,8 @@ export default {
 
 <style scoped>
 .like-wrapper {
-  width: 100%;
-  text-align: center;
+  /* width: 100%;
+  text-align: center; */
+  font-family: Helvetica, Arial, sans-serif;
 }
 </style>

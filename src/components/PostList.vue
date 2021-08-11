@@ -14,6 +14,14 @@
               <h4 class="author-nickname">@{{ post.authorName }}</h4>
             </a>
           </div>
+          <div class="item-location-info">
+            <h4>
+              <div class="location-decoration">
+                <i class="fas fa-map-marker-alt"></i>
+                {{ post.location }}
+              </div>
+            </h4>
+          </div>
           <div class="video-meta-caption">
             <strong>{{ post.postContent }}</strong>
           </div>
@@ -45,16 +53,12 @@
             </div>
             <div class="item-action-bar">
               <div class="bar-item-wrapper">
-                <!-- <div class="bar-item-img">
-                        <i class="far fa-heart"></i>
-                      </div>
-                      <div class="bar-item-text">
-                        <strong>{{ post.likeCount }}</strong>
-                      </div> -->
-                <LikeButton :targetType="'post'" :targetId="post.postId" :styleType="0"></LikeButton>
+                <LikeButton :targetType="'post'" :targetId="post.postId" :targetOrder="index" :styleType="0" @updateLiked="setLikeCount"></LikeButton>
+                <strong>{{ post.likeCount }}</strong>
               </div>
               <div class="bar-item-wrapper" @click="openPostDetail(index, post.postId)">
-                <CommentButton :numOfComments="post.commentCount" :styleType="0"></CommentButton>
+                <CommentButton :styleType="0"></CommentButton>
+                <strong>{{ post.commentCount }}</strong>
               </div>
             </div>
           </div>
@@ -84,12 +88,6 @@ export default {
       pageNum: 1,
       curIndex: 0,
       videos: [],
-      // isVideoHover: false,
-      // isMuted: false,
-      // isPlayed: false,
-      // volumnBtnStyle: {},
-      // playBtnStyle: {},
-      // isOpened: false,
     };
   },
   created() {
@@ -136,7 +134,7 @@ export default {
               postContent: post.postContent,
               videoRoot: post.videoRoot,
               Thumbnail: post.postThumbnail,
-              location: post.location,
+              location: post.locations,
               likeCount: post.likeCount,
               commentCount: post.commentCount,
               authorId: post.userId,
@@ -251,6 +249,24 @@ export default {
         this.$refs.videoRef[index].muted = false;
       }
     },
+    setLikeCount(state, index) {
+      if (state) {
+        this.postInfos[index].likeCount += 1;
+      } else {
+        this.postInfos[index].likeCount -= 1;
+      }
+
+      console.log(this.postInfos[index].likeCount);
+    },
+    setCommentCount(state, index) {
+      if (state) {
+        this.postInfos[index].commentCount += 1;
+      } else {
+        this.postInfos[index].commentCount -= 1;
+      }
+
+      console.log(this.postInfos[index].commentCount);
+    },
   },
   components: {
     // VideoPlayer,
@@ -280,7 +296,6 @@ a {
   position: relative;
   padding: 20px 0;
   border-bottom: 0.5px solid #ced4da;
-  background: forestgreen;
 
   /* padding: 8px 12px;
   margin-bottom: 12px;
@@ -332,16 +347,41 @@ a {
   margin-bottom: 0;
 }
 
+.location-decoration {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  display: inline-block;
+  font-size: 0.875rem;
+  line-height: 22px;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #495057;
+  /* margin-bottom: 0; */
+}
+.location-decoration i {
+  /* margin-right: 5px; */
+  width: 18px;
+  height: 18px;
+  position: relative;
+  left: 4px;
+}
+
 .video-meta-caption {
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 1rem;
+  font-size: 1.1rem;
   line-height: 22px;
   color: #343a40;
   flex: 0 0 auto;
-  margin-bottom: 0;
+  margin-bottom: 8px;
   margin-right: 150px;
   word-break: break-word;
 }
+/* .video-meta-caption p {
+  font-weight: normal;
+  font-size: 0.875rem;
+} */
 .video-meta-caption strong {
   font-weight: normal;
 
@@ -356,6 +396,17 @@ a {
   position: absolute;
   right: 0;
   top: 8px;
+}
+
+.item-location-info {
+  margin-top: 4px;
+  margin-bottom: 12px;
+  max-width: 45vw;
+  position: relative;
+  overflow: hidden;
+}
+.item-location-info h4 {
+  margin: 0;
 }
 
 .item-video-container {
@@ -440,24 +491,32 @@ a {
   bottom: 12px;
   left: 12px;
 }
-/* .item-video-container .item-video-wrapper .video-modal-btn {
-  position: relative;
-  bottom: 190px;
-  width: 100%;
-  height: 160px;
-  background: rgba(0, 0, 0, 0);
-  z-index: 3;
-  cursor: pointer;
+
+.item-action-bar {
+  position: absolute;
+  right: -13%;
+  bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
 }
 .bar-item-wrapper {
-  width: 56px;
-  margin-bottom: 12px;
-  cursor: pointer;
-} */
-/* 
-.feed-item-avatar,
-.item-video-wrapper,
-.item-action-bar {
-  z-index: 0;
-} */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50px;
+  margin-top: 4px;
+}
+.bar-item-wrapper strong {
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  margin-top: 4px;
+  color: #343a40;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 17px;
+  padding: 0 7px 0 8px;
+}
 </style>

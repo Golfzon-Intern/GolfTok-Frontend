@@ -1,11 +1,7 @@
 <template>
   <div class="comment-wrapper" :style="boxStyleObj">
-    <div class="comment-icon" :style="iconStyleObj">
-      <i class="far fa-comment"></i>
-    </div>
-    <div class="comment-text" :style="textStyleObj">
-      <p>{{ numOfComments }}</p>
-    </div>
+    <i class="fas fa-comment" :style="iconStyleObj"></i>
+    <!-- <strong :style="textStyleObj">{{ numOfComments }}</strong> -->
   </div>
 </template>
 
@@ -31,20 +27,33 @@ export default {
   created() {
     switch (this.styleType) {
       case 0: // post-list
-        this.iconStyleObj = {
-          width: '60px',
-          height: '60px',
-          marginLeft: '8px',
-          fontSize: '1.75rem',
-          paddingTop: '0.6rem',
-          borderRadius: '60px',
+        this.boxStyleObj = {
+          marginTop: '8px',
           background: '#dee2e6',
+          padding: '13px 0',
+          borderRadius: '100%',
+          cursor: 'pointer',
+          width: '50px',
+          height: '50px',
         };
-        this.textStyleObj = {
-          width: '60px',
-          marginLeft: '8px',
-          fontSize: '1rem',
+        this.iconStyleObj = {
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden',
+          fontSize: '1.5rem',
+          textAlign: 'center',
         };
+        // this.textStyleObj = {
+        //   width: '100%',
+        //   display: 'inline-block',
+        //   textAlign: 'center',
+        //   marginTop: '12px',
+        //   color: 'rgba(22, 24, 35, 0.75)',
+        //   fontWeight: '600',
+        //   fontSize: '0.875rem',
+        //   lineHeight: '17px',
+        //   padding: '0px 7px 0px 8px',
+        // };
         break;
       case 1: // post-detail
         this.boxStyleObj = {
@@ -72,7 +81,8 @@ export default {
 
 <style>
 .comment-wrapper {
-  width: 100%;
-  text-align: center;
+  /* width: 100%;
+  text-align: center; */
+  font-family: Helvetica, Arial, sans-serif;
 }
 </style>
