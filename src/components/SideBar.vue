@@ -3,14 +3,14 @@
     <div class="side-bar-wrapper">
       <div class="upper-contents">
         <div class="nav-wrapper">
-          <a href="/" class="nav-item">
+          <div class="nav-item" :class="{ navActive: isActive === 0 }" @click="movePage(0)">
             <i class="fas fa-home"></i>
             <h2 class="nav-name">For You</h2>
-          </a>
-          <a href="/" class="nav-item">
+          </div>
+          <div class="nav-item" :class="{ navActive: isActive === 1 }" @click="movePage(1)">
             <i class="fas fa-user-friends"></i>
             <h2 class="nav-name">Following</h2>
-          </a>
+          </div>
         </div>
         <div v-if="!this.$store.state.auth.userInfo" class="login-wrapper">
           <span>Log in to follow creators, like videos, and view comments.</span>
@@ -75,6 +75,25 @@
 import LoginButton from '@/components/common/LoginButton.vue';
 
 export default {
+  props: {
+    isActive: {
+      type: Number,
+      default: 0,
+    },
+  },
+  methods: {
+    movePage(state) {
+      if (state) {
+        this.$router.push({
+          name: 'Following',
+        });
+      } else {
+        this.$router.push({
+          name: 'Home',
+        });
+      }
+    },
+  },
   components: {
     LoginButton,
   },
@@ -110,7 +129,11 @@ export default {
   color: #212529;
 }
 .nav-item:hover {
-  color: #5d5fef;
+  /* color: #fa5252; */
+  background-color: #f8f9fa;
+}
+.navActive {
+  color: #fa5252;
 }
 .nav-item i {
   flex: 0 0 32px;
@@ -178,7 +201,7 @@ export default {
   cursor: pointer;
 }
 .user-list-header .see-all span {
-  color: #7950f2;
+  color: #fa5252;
 }
 .user-list .user-item {
   color: inherit;

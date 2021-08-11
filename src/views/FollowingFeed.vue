@@ -24,7 +24,7 @@ export default {
     return {
       isOpenedPage: false,
       styleObj: {},
-      navIndex: 0,
+      navIndex: 1,
     };
   },
   watch: {
