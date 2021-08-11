@@ -1,5 +1,5 @@
 <template>
-  <div class="like-wrap" :style="wrapStyleObj">
+  <div class="like-wrapper" :style="boxStyleObj">
     <div class="like-icon" @click="updateLiked" :style="iconStyleObj">
       <i v-if="isLiked" class="fas fa-heart full-heart"></i>
       <i v-else class="far fa-heart empty-heart"></i>
@@ -18,7 +18,7 @@ export default {
     return {
       isLiked: false,
       numOfLike: 0,
-      wrapStyleObj: {},
+      boxStyleObj: {},
       iconStyleObj: {},
       textStyleObj: {},
     };
@@ -58,7 +58,7 @@ export default {
         };
         break;
       case 1: // post-detail
-        this.wrapStyleObj = {
+        this.boxStyleObj = {
           display: 'flex',
         };
         this.iconStyleObj = {
@@ -150,7 +150,7 @@ export default {
 </script>
 
 <style scoped>
-.like-wrap {
+.like-wrapper {
   width: 100%;
   text-align: center;
 }

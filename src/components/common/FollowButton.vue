@@ -1,5 +1,5 @@
 <template>
-  <div class="follow-btn-wrap">
+  <div class="follow-btn-wrapper">
     <button class="follow-btn">follow</button>
   </div>
 </template>
@@ -9,7 +9,7 @@ export default {};
 </script>
 
 <style>
-.follow-btn-wrap {
+.follow-btn-wrapper {
   overflow: hidden;
   /* width: 30%;
   height: 50px;
@@ -17,7 +17,7 @@ export default {};
   align-items: center;
   justify-content: center; */
 }
-.follow-btn-wrap .follow-btn {
+.follow-btn-wrapper .follow-btn {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   font-size: 1rem;

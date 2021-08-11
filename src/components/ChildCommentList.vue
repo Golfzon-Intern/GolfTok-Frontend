@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-list-wrap">
+  <div class="comment-list-wrapper">
     <div class="comment-item">
       <div class="comment-content">
         <div class="comment-avatar">
@@ -51,7 +51,7 @@ export default {
 </script>
 
 <style scoped>
-.comment-list-wrap {
+.comment-list-wrapper {
   width: 100%;
   padding-top: 16px;
   font-family: Helvetica, Arial, sans-serif;

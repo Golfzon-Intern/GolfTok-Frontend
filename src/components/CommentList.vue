@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-list-wrap">
+  <div class="comment-list-wrapper">
     <div class="comment-item">
       <div class="comment-content">
         <div class="comment-avatar">
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style>
-.comment-list-wrap {
+.comment-list-wrapper {
   width: 100%;
   min-height: 100%;
   max-height: 100%;

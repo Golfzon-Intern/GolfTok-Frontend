@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-wrap" :style="wrapStyleObj">
+  <div class="comment-wrapper" :style="boxStyleObj">
     <div class="comment-icon" :style="iconStyleObj">
       <i class="far fa-comment"></i>
     </div>
@@ -13,7 +13,7 @@
 export default {
   data() {
     return {
-      wrapStyleObj: {},
+      boxStyleObj: {},
       iconStyleObj: {},
       textStyleObj: {},
     };
@@ -43,7 +43,7 @@ export default {
         };
         break;
       case 1: // post-detail
-        this.wrapStyleObj = {
+        this.boxStyleObj = {
           display: 'flex',
         };
         this.iconStyleObj = {
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style>
-.comment-wrap {
+.comment-wrapper {
   width: 100%;
   text-align: center;
 }

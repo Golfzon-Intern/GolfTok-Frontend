@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="side-bar-wrap">
+    <div class="side-bar-wrapper">
       <div class="upper-contents">
-        <div class="nav-wrap">
+        <div class="nav-wrapper">
           <a href="/" class="nav-item">
             <i class="fas fa-home"></i>
             <h2 class="nav-name">For You</h2>
@@ -12,7 +12,7 @@
             <h2 class="nav-name">Following</h2>
           </a>
         </div>
-        <div v-if="!this.$store.state.auth.userInfo" class="login-wrap">
+        <div v-if="!this.$store.state.auth.userInfo" class="login-wrapper">
           <span>Log in to follow creators, like videos, and view comments.</span>
           <!-- <button type="button" class="login-btn">Log in</button> -->
           <LoginButton :styleType="1" />
@@ -64,7 +64,7 @@
           </a>
         </div>
       </div>
-      <div class="bottom-wrap">
+      <div class="bottom-wrapper">
         <span class="copyright">&copy; 2021 GolfTok</span>
       </div>
     </div>
@@ -82,7 +82,7 @@ export default {
 </script>
 
 <style>
-.side-bar-wrap {
+.side-bar-wrapper {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -92,7 +92,7 @@ export default {
   padding-top: 20px;
 }
 
-.nav-wrap {
+.nav-wrapper {
   padding: 0;
   margin-bottom: 8px;
 }
@@ -129,19 +129,19 @@ export default {
   line-height: 32px;
 }
 
-.login-wrap {
+.login-wrapper {
   position: relative;
   padding: 20px 8px 24px 8px;
   margin: 0;
 }
-.login-wrap span {
+.login-wrapper span {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 1rem;
   line-height: 22px;
   color: #868e96;
 }
-.login-wrap button {
+.login-wrapper button {
   margin-top: 20px;
   margin-left: 0;
 }
@@ -233,13 +233,13 @@ export default {
   max-width: 260px;
 }
 
-.bottom-wrap {
+.bottom-wrapper {
   position: relative;
   padding: 16px 8px 24px 8px;
   width: auto;
   box-sizing: border-box;
 }
-.bottom-wrap span {
+.bottom-wrapper span {
   color: #868e96;
   font-family: Helvetica, Arial, sans-serif;
   margin-bottom: 12px;
@@ -250,9 +250,9 @@ export default {
   line-height: 12px;
 }
 
-.upper-contents .login-wrap::before,
+.upper-contents .login-wrapper::before,
 .user-list::before,
-.bottom-wrap::before {
+.bottom-wrapper::before {
   content: '';
   position: absolute;
   height: 1px;

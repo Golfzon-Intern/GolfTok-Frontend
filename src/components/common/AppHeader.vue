@@ -1,5 +1,5 @@
 <template>
-  <div class="header-content-wrap">
+  <div class="header-content-wrapper">
     <div class="header-logo">
       <a href="/">
         <img src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/assets%2Flogo-1.png?alt=media&token=c34366aa-9387-4d86-b9bc-9d2a992c7549" alt="logo" />
@@ -15,7 +15,7 @@
       </form>
     </div>
     <div class="header-menu">
-      <div class="menu-wrap" v-if="this.$store.state.auth.userInfo">
+      <div class="menu-wrapper" v-if="this.$store.state.auth.userInfo">
         <button class="upload-btn" @click="clickUploadBtn">
           <i class="fas fa-cloud-upload-alt"></i>
         </button>
@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style>
-.header-content-wrap {
+.header-content-wrapper {
   width: 100%;
   height: 100%;
   padding: 0;

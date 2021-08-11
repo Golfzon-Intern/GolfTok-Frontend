@@ -3,7 +3,7 @@
     <div class="home-header-container">
       <AppHeader></AppHeader>
     </div>
-    <div class="home-contents-wrap">
+    <div class="home-contents-wrapper">
       <div class="side-bar-container">
         <SideBar></SideBar>
       </div>
@@ -76,7 +76,7 @@ export default {
   justify-content: space-around;
 }
 
-.home-contents-wrap {
+.home-contents-wrapper {
   width: 100%;
   max-width: 1100px;
   margin-top: 60px;

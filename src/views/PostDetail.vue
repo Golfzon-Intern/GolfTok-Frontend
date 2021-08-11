@@ -27,7 +27,7 @@
           <p class="username">joie.huiju</p>
           <p class="user-nickname">joie kim</p>
         </div>
-        <!-- <div class="follow-btn-wrap">
+        <!-- <div class="follow-btn-wrapper">
           <button class="follow-btn">follow</button>
         </div> -->
         <FollowButton />
@@ -35,12 +35,12 @@
       <div class="video-info-container">
         <p class="video-meta-title">{{ postInfo.postContent }}</p>
         <div class="action-container">
-          <div class="action-wrap">
+          <div class="action-wrapper">
             <!-- <i class="far fa-heart"></i>
             <strong>{{ postInfo.likeCount }}</strong> -->
             <LikeButton :targetType="'post'" :targetId="postInfo.postId" :styleType="1" />
           </div>
-          <div class="action-wrap">
+          <div class="action-wrapper">
             <CommentButton :styleType="1" />
           </div>
         </div>
@@ -177,14 +177,14 @@ export default {
   font-size: 1rem;
   font-weight: 500;
 }
-/* .follow-btn-wrap {
+/* .follow-btn-wrapper {
   width: 30%;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.follow-btn-wrap .follow-btn {
+.follow-btn-wrapper .follow-btn {
   position: inherit;
   width: 150px;
   height: 100%;
@@ -210,7 +210,7 @@ export default {
   display: flex;
   align-items: center;
 }
-.action-wrap {
+.action-wrapper {
   margin-right: 16px;
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-input-wrap">
+  <div class="comment-input-wrapper">
     <div class="comment-text-input">
       <input type="text" placeholder="Add comment..." />
     </div>
@@ -14,7 +14,7 @@ export default {};
 </script>
 
 <style>
-.comment-input-wrap {
+.comment-input-wrapper {
   position: relative;
   z-index: 2;
   display: flex;
