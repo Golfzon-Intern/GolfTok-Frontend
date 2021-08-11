@@ -14,7 +14,7 @@ const router = new VueRouter({
       path: '/',
       name: 'Home',
       component: Home,
-      children: [{ path: ':postId', component: PostDetail, name: 'PostDetail' }],
+      // children: [{ path: ':postId', component: PostDetail, name: 'PostDetail' }],
     },
     {
       path: '/upload',
@@ -25,6 +25,12 @@ const router = new VueRouter({
       path: '/following',
       name: 'Following',
       component: FollowingFeed,
+      // children: [{ path: ':postId', component: PostDetail, name: 'PostDetail' }],
+    },
+    {
+      path: '/post/:postId',
+      name: 'PostDetail',
+      component: PostDetail,
     },
   ],
 });

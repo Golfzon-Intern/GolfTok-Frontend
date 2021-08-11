@@ -8,7 +8,7 @@
         <SideBar :isActive="this.navIndex"></SideBar>
       </div>
       <div class="trending-container">
-        <PostList></PostList>
+        <PostList :postType="0" @openPage="openDetailPage"></PostList>
       </div>
     </div>
   </div>
@@ -32,6 +32,12 @@ export default {
     $route: 'checkIsOpenedPage',
   },
   methods: {
+    openDetailPage(postId) {
+      this.$router.push({
+        name: 'PostDetail',
+        params: { postId: postId },
+      });
+    },
     checkIsOpenedPage() {
       console.log(this.$route.path);
 

@@ -7,12 +7,12 @@
       <button class="close-btn" @click="closePage">
         <i class="fas fa-times"></i>
       </button>
-      <button v-if="!isFirst" class="arrow-left-btn">
+      <!-- <button v-if="!isFirst" class="arrow-left-btn">
         <i class="fas fa-chevron-left"></i>
       </button>
       <button v-if="!isLast" class="arrow-right-btn">
         <i class="fas fa-chevron-right"></i>
-      </button>
+      </button> -->
     </div>
     <div class="content-container">
       <div class="user-info-container">
@@ -46,7 +46,7 @@
         </div>
       </div>
       <div class="comment-container">
-        <CommentList />
+        <CommentList :postId="postInfo.postId" />
       </div>
       <div class="comment-input-container">
         <CommentInput />
@@ -68,8 +68,8 @@ export default {
   data: function() {
     return {
       postInfo: {},
-      isFirst: this.$route.params.isFirst,
-      isLast: this.$route.params.isLast,
+      // isFirst: this.$route.params.isFirst,
+      // isLast: this.$route.params.isLast,
     };
   },
   created() {
@@ -81,9 +81,7 @@ export default {
       this.postInfo = response.data.postList[0];
     },
     closePage() {
-      this.$router.push({
-        name: 'Home',
-      });
+      this.$router.back();
     },
   },
   components: {
@@ -215,10 +213,21 @@ export default {
 }
 
 .comment-container {
-  height: 60%;
+  width: 100%;
+  flex: 1 1 auto;
+  position: relative;
+  display: flex;
+  background-color: rgb(248, 248, 248);
+  padding: 0px 32px;
+  border-top: 0.5px solid rgba(18, 18, 18, 0.12);
+  border-bottom: 0.5px solid rgba(18, 18, 18, 0.12);
+  box-sizing: border-box;
+  overflow-y: scroll;
+
+  /* height: 60%;
   background: #f1f3f5;
   border-top: 1px solid #ced4da;
-  border-bottom: 1px solid #ced4da;
+  border-bottom: 1px solid #ced4da; */
 }
 .comment-input-container {
   height: 10%;

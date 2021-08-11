@@ -9,6 +9,12 @@ export function getPosts(pageNum) {
   });
 }
 
+export function getFowPosts(pageNum) {
+  return axios.get('https://gist.githubusercontent.com/Joie-Kim/90aae4738bc252787db51929fdc43a53/raw/63fa12e3e43e6cdce94717196228d8d8ca409def/dummy_videoList.json', {
+    params: { currentPageNo: pageNum },
+  });
+}
+
 // 게시물 상세 조회
 export function getPostDetail(postId) {
   //return http.get('/post/detail', { params: { postId: postId } });

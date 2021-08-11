@@ -90,6 +90,12 @@ export default {
       videos: [],
     };
   },
+  props: {
+    postType: {
+      type: Number,
+      default: 0,
+    },
+  },
   created() {
     window.addEventListener('scroll', this.handleScroll);
   },
@@ -124,7 +130,14 @@ export default {
     // 무한 스크롤링
     async infiniteHandler($state) {
       try {
-        const response = await postApi.getPosts(this.pageNum);
+        let response;
+
+        if (this.postType === 0) {
+          response = await postApi.getPosts(this.pageNum);
+        } else {
+          response = await postApi.getFowPosts(this.pageNum);
+        }
+
         const posts = response.data.allPostList;
 
         if (posts.length) {
@@ -162,24 +175,26 @@ export default {
     },
     // 게시물 상세보기
     openPostDetail(index, postId) {
-      const postsLen = this.postInfos.length;
-      let isFirst = false;
-      let isLast = false;
+      // const postsLen = this.postInfos.length;
+      // let isFirst = false;
+      // let isLast = false;
 
-      if (index === 0) {
-        isFirst = true;
-      } else if (index === postsLen) {
-        isLast = true;
-      }
+      // if (index === 0) {
+      //   isFirst = true;
+      // } else if (index === postsLen) {
+      //   isLast = true;
+      // }
 
-      this.$router.push({
-        name: 'PostDetail',
-        params: {
-          postId: postId,
-          isFirst: isFirst,
-          isLast: isLast,
-        },
-      });
+      // this.$router.push({
+      //   name: 'PostDetail',
+      //   params: {
+      //     postId: postId,
+      //     isFirst: isFirst,
+      //     isLast: isLast,
+      //   },
+      // });
+
+      this.$emit('openPage', postId);
 
       this.curIndex = index;
     },

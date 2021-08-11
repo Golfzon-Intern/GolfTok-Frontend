@@ -1,14 +1,14 @@
 <template>
-  <div id="home-view" :style="styleObj">
-    <div class="home-header-container">
+  <div id="following-feed-view" :style="styleObj">
+    <div class="feed-header-container">
       <AppHeader></AppHeader>
     </div>
-    <div class="home-contents-wrapper">
+    <div class="feed-contents-wrapper">
       <div class="side-bar-container">
         <SideBar :isActive="this.navIndex"></SideBar>
       </div>
       <div class="trending-container">
-        <PostList></PostList>
+        <PostList :postType="1" @openPage="openDetailPage"></PostList>
       </div>
     </div>
   </div>
@@ -32,10 +32,16 @@ export default {
     $route: 'checkIsOpenedPage',
   },
   methods: {
+    openDetailPage(postId) {
+      this.$router.push({
+        name: 'PostDetail',
+        params: { postId: postId },
+      });
+    },
     checkIsOpenedPage() {
       console.log(this.$route.path);
 
-      if (this.$route.path === '/') {
+      if (this.$route.path === '/following') {
         this.isOpenedPage = false;
       } else {
         this.isOpenedPage = true;
@@ -60,7 +66,7 @@ export default {
 </script>
 
 <style>
-#home-view {
+#following-feed-view {
   width: 100%;
   height: 100%;
   display: flex;
@@ -69,7 +75,7 @@ export default {
   justify-content: space-between;
 }
 
-.home-header-container {
+.feed-header-container {
   position: fixed;
   left: 0;
   top: 0;
@@ -83,7 +89,7 @@ export default {
   justify-content: space-around;
 }
 
-.home-contents-wrapper {
+.feed-contents-wrapper {
   width: 100%;
   max-width: 1100px;
   margin-top: 60px;
