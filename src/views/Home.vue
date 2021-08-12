@@ -35,6 +35,7 @@ export default {
   watch: {
     // 라우트가 변경되면 메소드를 다시 호출
     $route: 'checkIsOpenedPage',
+    isVisibleModal: 'checkIsOpenedPage',
   },
   methods: {
     openDetailPage(postId) {
@@ -52,7 +53,7 @@ export default {
         this.isOpenedPage = true;
       }
 
-      if (this.isOpenedPage) {
+      if (this.isOpenedPage || this.isVisibleModal) {
         this.styleObj = {
           position: 'fixed',
           overflow: 'hidden',

@@ -44,6 +44,9 @@ export default {
       } else if (this.styleType === 1) {
         colorType = 'empty';
         sizeType = 'large';
+      } else if (this.styleType === 2) {
+        colorType = 'full';
+        sizeType = 'large';
       }
 
       if (this.isHover) state = 'Hover';
