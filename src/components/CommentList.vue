@@ -35,6 +35,7 @@
 
 <script>
 import * as commentApi from '@/api/comment';
+import * as likeApi from '@/api/like';
 
 import LikeButton from '@/components/common/LikeButton.vue';
 import ChildCommentList from '@/components/ChildCommentList.vue';
@@ -77,13 +78,13 @@ export default {
     toggleReply(index) {
       this.comments[index].isOpenedReply = !this.comments[index].isOpenedReply;
     },
-    setLikeCount(state, index) {
+    async setLikeCount(state, index) {
       if (state) {
-        // await likeApi.addCommentLike(this.targetId);
         this.comments[index].likeCount += 1;
+        await likeApi.addCommentLike(this.targetId);
       } else {
-        // await likeApi.deleteCommentLiked(this.targetId);
         this.comments[index].likeCount -= 1;
+        await likeApi.deleteCommentLiked(this.targetId);
       }
     },
     setCommentCount(state, index) {

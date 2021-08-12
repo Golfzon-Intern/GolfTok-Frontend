@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import * as likeApi from '@/api/like';
+// import * as likeApi from '@/api/like';
 
 export default {
   data() {
@@ -39,7 +39,7 @@ export default {
     },
   },
   created() {
-    this.getLiked();
+    // this.getLiked();
 
     switch (this.styleType) {
       case 0: // post-list
@@ -89,27 +89,27 @@ export default {
     }
   },
   methods: {
-    async getLiked() {
-      let response = null;
+    // async getLiked() {
+    //   let response = null;
 
-      if (response && this.targetType === 'post') {
-        // 게시물 좋아요 수 조회
-        response = await likeApi.getPostLike(this.targetId);
-      } else {
-        // this.targetType === 'comment'
-        // 댓글 좋아요 수 조회
-        response = await likeApi.getCommentLike(this.targetId);
-      }
+    //   if (response && this.targetType === 'post') {
+    //     // 게시물 좋아요 수 조회
+    //     response = await likeApi.getPostLike(this.targetId);
+    //   } else {
+    //     // this.targetType === 'comment'
+    //     // 댓글 좋아요 수 조회
+    //     response = await likeApi.getCommentLike(this.targetId);
+    //   }
 
-      // 0: 좋아요 되어있는 상태, 1: 좋아요 안 되어 있는 상태
-      if (!response.data.flag) {
-        this.isLiked = true;
-      } else {
-        this.isLiked = false;
-      }
+    //   // 0: 좋아요 되어있는 상태, 1: 좋아요 안 되어 있는 상태
+    //   if (!response.data.flag) {
+    //     this.isLiked = true;
+    //   } else {
+    //     this.isLiked = false;
+    //   }
 
-      this.numOfLike = response.data.likeCount;
-    },
+    //   this.numOfLike = response.data.likeCount;
+    // },
     async updateLiked() {
       let likeCount = this.numOfLike;
 

@@ -71,6 +71,7 @@
 
 <script>
 import * as postApi from '@/api/post';
+import * as likeApi from '@/api/like';
 
 import FollowButton from '@/components/common/FollowButton.vue';
 import LikeButton from '@/components/common/LikeButton.vue';
@@ -131,13 +132,13 @@ export default {
         this.$refs.videoRef.muted = false;
       }
     },
-    setLikeCount(state) {
+    async setLikeCount(state) {
       if (state) {
-        // await likeApi.addPostLiked(this.targetId);
         this.postInfo.likeCount += 1;
+        await likeApi.addPostLiked(this.targetId);
       } else {
-        // await likeApi.deletePostLiked(this.targetId);
         this.postInfo.likeCount -= 1;
+        await likeApi.deletePostLiked(this.targetId);
       }
     },
     setCommentCount(state) {

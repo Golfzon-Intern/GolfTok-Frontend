@@ -31,8 +31,6 @@
 </template>
 
 <script>
-// import * as authApi from '@/api/auth';
-
 export default {
   data: function() {
     return {

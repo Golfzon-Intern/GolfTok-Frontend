@@ -75,6 +75,7 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading';
 import * as postApi from '@/api/post';
+import * as likeApi from '@/api/like';
 
 // import VideoPlayer from '@/components/common/VideoPlayer.vue';
 import LikeButton from '@/components/common/LikeButton.vue';
@@ -264,13 +265,13 @@ export default {
         this.$refs.videoRef[index].muted = false;
       }
     },
-    setLikeCount(state, index) {
+    async setLikeCount(state, index) {
       if (state) {
-        // await likeApi.addPostLiked(this.targetId);
         this.postInfos[index].likeCount += 1;
+        await likeApi.addPostLiked(this.targetId);
       } else {
-        // await likeApi.deletePostLiked(this.targetId);
         this.postInfos[index].likeCount -= 1;
+        await likeApi.deletePostLiked(this.targetId);
       }
     },
     setCommentCount(state, index) {
