@@ -9,27 +9,26 @@
         <i v-else class="fas fa-heart full-heart"></i>
       </div>
     </div>
+    <strong :style="textStyleObj">{{ this.numOfLike }}</strong>
   </div>
 </template>
 
 <script>
-// import * as likeApi from '@/api/like';
+import * as likeApi from '@/api/like';
 
 export default {
   data() {
     return {
       isLiked: false,
       numOfLike: 0,
-      boxStyleObj: {},
-      iconStyleObj: {},
     };
   },
   props: {
-    targetId: {
-      type: Number,
-      default: 0,
+    targetType: {
+      type: String,
+      default: '',
     },
-    targetOrder: {
+    targetId: {
       type: Number,
       default: 0,
     },
@@ -39,77 +38,30 @@ export default {
     },
   },
   created() {
-    // this.getLiked();
-
-    switch (this.styleType) {
-      case 0: // post-list
-        this.boxStyleObj = {
-          width: '50px',
-          height: '50px',
-          marginTop: '8px',
-          padding: '11px 0',
-          background: '#dee2e6',
-          borderRadius: '100%',
-          cursor: 'pointer',
-        };
-        this.iconStyleObj = {
-          width: '100%',
-          height: '100%',
-          overflow: 'hidden',
-          fontSize: '1.5rem',
-          textAlign: 'center',
-        };
-        break;
-      case 1: // post-detail
-        this.boxStyleObj = {
-          width: '32px',
-          height: '32px',
-          marginRight: '6px',
-          background: '#dee2e6',
-          borderRadius: '100%',
-          cursor: 'pointer',
-        };
-        this.iconStyleObj = {
-          position: 'relative',
-          bottom: '2px',
-          width: '100%',
-          height: '100%',
-          overflow: 'hidden',
-          fontSize: '1.25rem',
-          textAlign: 'center',
-          color: 'black',
-        };
-        break;
-      case 2: // comment
-        this.iconStyleObj = {
-          fontSize: '1.25rem',
-        };
-        break;
-      default:
-    }
+    this.getLiked();
   },
   methods: {
-    // async getLiked() {
-    //   let response = null;
+    async getLiked() {
+      let response = null;
 
-    //   if (response && this.targetType === 'post') {
-    //     // 게시물 좋아요 수 조회
-    //     response = await likeApi.getPostLike(this.targetId);
-    //   } else {
-    //     // this.targetType === 'comment'
-    //     // 댓글 좋아요 수 조회
-    //     response = await likeApi.getCommentLike(this.targetId);
-    //   }
+      if (response && this.targetType === 'post') {
+        // 게시물 좋아요 수 조회
+        response = await likeApi.getPostLike(this.targetId);
+      } else {
+        // this.targetType === 'comment'
+        // 댓글 좋아요 수 조회
+        response = await likeApi.getCommentLike(this.targetId);
+      }
 
-    //   // 0: 좋아요 되어있는 상태, 1: 좋아요 안 되어 있는 상태
-    //   if (!response.data.flag) {
-    //     this.isLiked = true;
-    //   } else {
-    //     this.isLiked = false;
-    //   }
+      // 0: 좋아요 되어있는 상태, 1: 좋아요 안 되어 있는 상태
+      if (!response.data.flag) {
+        this.isLiked = true;
+      } else {
+        this.isLiked = false;
+      }
 
-    //   this.numOfLike = response.data.likeCount;
-    // },
+      this.numOfLike = response.data.likeCount;
+    },
     async updateLiked() {
       let likeCount = this.numOfLike;
 
@@ -117,15 +69,102 @@ export default {
         // 좋아요 취소
         likeCount -= 1;
         if (likeCount < 0) likeCount = 0;
-        this.$emit('updateLiked', false, this.targetOrder);
+        if (this.targetType === 'post') {
+          // 게시물 좋아요 삭제
+          await likeApi.deletePostLiked(this.targetId);
+          console.log('delete like of post');
+        } else {
+          // this.targetType === 'comment'
+          // 댓글 좋아요 삭제
+          await likeApi.deleteCommentLiked(this.targetId);
+          console.log('delete like of comment');
+        }
       } else {
         // 좋아요 추가
         likeCount += 1;
-        this.$emit('updateLiked', true, this.targetOrder);
+        if (this.targetType === 'post') {
+          // 게시물 좋아요 추가
+          await likeApi.addPostLiked(this.targetId);
+          console.log('add like of post');
+        } else {
+          // this.targetType === 'comment'
+          // 댓글 좋아요 추가
+          await likeApi.addCommentLike(this.targetId);
+          console.log('add like of comment');
+        }
       }
 
       this.isLiked = !this.isLiked;
       this.numOfLike = likeCount;
+    },
+  },
+  computed: {
+    boxStyleObj() {
+      if (this.styleType === 1) {
+        return {
+          display: 'flex',
+          alignItems: 'center',
+        };
+      } else {
+        return {};
+      }
+    },
+    iconStyleObj() {
+      if (this.styleType === 0) {
+        return {
+          width: '50px',
+          height: '50px',
+          marginTop: '8px',
+          paddingTop: '8px',
+          fontSize: '1.5rem',
+          textAlign: 'center',
+          overflow: 'hidden',
+          background: '#dee2e6',
+          borderRadius: '100%',
+        };
+      } else if (this.styleType === 1) {
+        return {
+          width: '32px',
+          height: '32px',
+          marginRight: '6px',
+          fontSize: '1.25rem',
+          textAlign: 'center',
+          overflow: 'hidden',
+          background: '#dee2e6',
+          borderRadius: '100%',
+        };
+      } else if (this.styleType === 2) {
+        return {
+          fontSize: '1.25rem',
+          textAlign: 'center',
+        };
+      } else {
+        return {};
+      }
+    },
+    textStyleObj() {
+      if (this.styleType === 0) {
+        return {
+          width: '100%',
+          display: 'inline-block',
+          marginTop: '4px',
+          fontSize: '0.875rem',
+          lineHeight: '17px',
+          padding: '0 7px 0 8px',
+        };
+      } else if (this.styleType === 1) {
+        return {};
+      } else if (this.styleType === 2) {
+        return {
+          width: '100%',
+          display: 'inline-block',
+          fontSize: '0.875rem',
+          lineHeight: '17px',
+          padding: '0 7px 0 8px',
+        };
+      } else {
+        return {};
+      }
     },
   },
 };
@@ -133,8 +172,12 @@ export default {
 
 <style scoped>
 .like-wrapper {
-  /* width: 100%;
-  text-align: center; */
+  cursor: pointer;
+}
+.like-wrapper strong {
+  text-align: center;
+  color: #343a40;
+  font-weight: 500;
   font-family: Helvetica, Arial, sans-serif;
 }
 </style>

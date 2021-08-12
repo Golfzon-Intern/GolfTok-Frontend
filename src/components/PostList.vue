@@ -53,8 +53,7 @@
             </div>
             <div class="item-action-bar">
               <div class="bar-item-wrapper">
-                <LikeButton :targetId="post.postId" :targetOrder="index" :styleType="0" @updateLiked="setLikeCount"></LikeButton>
-                <strong>{{ post.likeCount }}</strong>
+                <LikeButton :targetId="post.postId" :styleType="0"></LikeButton>
               </div>
               <div class="bar-item-wrapper" @click="openPostDetail(index, post.postId)">
                 <CommentButton :styleType="0"></CommentButton>
@@ -75,7 +74,6 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading';
 import * as postApi from '@/api/post';
-import * as likeApi from '@/api/like';
 
 // import VideoPlayer from '@/components/common/VideoPlayer.vue';
 import LikeButton from '@/components/common/LikeButton.vue';
@@ -264,22 +262,6 @@ export default {
         this.$refs.videoRef[index].muted = true;
       } else {
         this.$refs.videoRef[index].muted = false;
-      }
-    },
-    async setLikeCount(state, index) {
-      if (state) {
-        this.postInfos[index].likeCount += 1;
-        await likeApi.addPostLiked(this.targetId);
-      } else {
-        this.postInfos[index].likeCount -= 1;
-        await likeApi.deletePostLiked(this.targetId);
-      }
-    },
-    setCommentCount(state, index) {
-      if (state) {
-        this.postInfos[index].commentCount += 1;
-      } else {
-        this.postInfos[index].commentCount -= 1;
       }
     },
   },
@@ -509,16 +491,5 @@ a {
   align-items: center;
   width: 50px;
   margin-top: 4px;
-}
-.bar-item-wrapper strong {
-  width: 100%;
-  display: inline-block;
-  text-align: center;
-  margin-top: 4px;
-  color: #343a40;
-  font-weight: 600;
-  font-size: 0.875rem;
-  line-height: 17px;
-  padding: 0 7px 0 8px;
 }
 </style>

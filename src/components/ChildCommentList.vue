@@ -15,8 +15,7 @@
         </div>
       </div>
       <div class="like-container">
-        <LikeButton :targetType="'comment'" :targetId="18" :styleType="2" />
-        <p>{{ comment.likeCount }}</p>
+        <LikeButton :targetType="'comment'" :targetId="comment.commentId" :styleType="2" />
       </div>
     </div>
 
@@ -70,14 +69,6 @@ export default {
 </script>
 
 <style scoped>
-#child-comments {
-  display: block;
-
-  /* width: 100%;
-  padding-top: 16px;
-  font-family: Helvetica, Arial, sans-serif; */
-}
-
 #child-comments .hide-btn {
   margin-top: 14px;
   font-family: Helvetica, Arial, sans-serif;

@@ -16,8 +16,7 @@
           </div>
         </div>
         <div class="like-container">
-          <LikeButton :targetId="comment.commentId" :targetOrder="index" :styleType="2" @updateLiked="setLikeCount" />
-          <p>{{ comment.likeCount }}</p>
+          <LikeButton :targetId="comment.commentId" :styleType="2" />
         </div>
       </div>
       <div class="more-contents">
@@ -35,7 +34,6 @@
 
 <script>
 import * as commentApi from '@/api/comment';
-import * as likeApi from '@/api/like';
 
 import LikeButton from '@/components/common/LikeButton.vue';
 import ChildCommentList from '@/components/ChildCommentList.vue';
@@ -77,22 +75,6 @@ export default {
     },
     toggleReply(index) {
       this.comments[index].isOpenedReply = !this.comments[index].isOpenedReply;
-    },
-    async setLikeCount(state, index) {
-      if (state) {
-        this.comments[index].likeCount += 1;
-        await likeApi.addCommentLike(this.targetId);
-      } else {
-        this.comments[index].likeCount -= 1;
-        await likeApi.deleteCommentLiked(this.targetId);
-      }
-    },
-    setCommentCount(state, index) {
-      if (state) {
-        this.comments[index].commentCount += 1;
-      } else {
-        this.comments[index].commentCount -= 1;
-      }
     },
   },
   components: {

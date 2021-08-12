@@ -33,9 +33,6 @@
           <p class="username">{{ postInfo.userName }}</p>
           <p class="user-nickname">{{ postInfo.userNickname }}</p>
         </div>
-        <!-- <div class="follow-btn-wrapper">
-          <button class="follow-btn">follow</button>
-        </div> -->
         <FollowButton />
       </div>
       <div class="video-info-container">
@@ -48,14 +45,10 @@
         <h1 class="video-meta-title">{{ postInfo.postContent }}</h1>
         <div class="action-container">
           <div class="action-wrapper">
-            <!-- <i class="far fa-heart"></i>
-            <strong>{{ postInfo.likeCount }}</strong> -->
-            <LikeButton :targetId="postInfo.postId" :styleType="1" @updateLiked="setLikeCount" />
-            <strong>{{ postInfo.likeCount }}</strong>
+            <LikeButton :targetId="postInfo.postId" :styleType="1" />
           </div>
           <div class="action-wrapper">
             <CommentButton :styleType="1" />
-            <strong>{{ postInfo.commentCount }}</strong>
           </div>
         </div>
       </div>
@@ -72,7 +65,6 @@
 <script>
 import * as postApi from '@/api/post';
 import * as commentApi from '@/api/comment';
-import * as likeApi from '@/api/like';
 
 import FollowButton from '@/components/common/FollowButton.vue';
 import LikeButton from '@/components/common/LikeButton.vue';
@@ -143,27 +135,11 @@ export default {
         this.$refs.videoRef.muted = false;
       }
     },
-    async setLikeCount(state) {
-      if (state) {
-        this.postInfo.likeCount += 1;
-        await likeApi.addPostLiked(this.targetId);
-      } else {
-        this.postInfo.likeCount -= 1;
-        await likeApi.deletePostLiked(this.targetId);
-      }
-    },
     addComment(text) {
       const tmp = [text, ...this.comments];
       console.log(tmp);
       // this.comments = tmp;
     },
-    // setCommentCount(state) {
-    //   if (state) {
-    //     this.postInfo.commentCount += 1;
-    //   } else {
-    //     this.postInfo.commentCount -= 1;
-    //   }
-    // },
   },
   components: {
     LikeButton,
@@ -382,7 +358,7 @@ export default {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   display: inline-block;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   line-height: 22px;
   width: 100%;
   text-overflow: ellipsis;
@@ -393,7 +369,7 @@ export default {
 }
 .video-info-container .video-meta-title {
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 1.25rem;
+  font-size: 1rem;
   line-height: 24px;
   color: rgb(18, 18, 18);
   flex: 0 0 auto;
