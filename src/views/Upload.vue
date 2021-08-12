@@ -1,7 +1,46 @@
 <template>
   <div id="upload-view">
-    <AppHeader></AppHeader>
-    <div class="post-box">
+    <div class="header-container">
+      <AppHeader></AppHeader>
+    </div>
+    <div class="body-container">
+      <!-- <div class="upload-container">
+        <div class="upload-title">
+          Upload Video
+          <div class="upload-sub-title">This video will be published to @{{ this.$store.state.auth.userInfo.userName }}</div>
+        </div>
+        <div class="upload-contents">
+          <div class="upload-operation">
+            <div class="upload-video-btn">
+              <div class="upload-video-card">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h2>Select video to upload</h2>
+                <br />
+                <ul>
+                  <li>MP4 or WebM</li>
+                  <li>1280x720 resolution or heigher</li>
+                  <li>Up to 180 seconds</li>
+                </ul>
+              </div>
+              <input type="file" name="upload-file-btn" accept="video/mp4,video/x-m4v,video/*" class="upload-btn-input" />
+            </div>
+          </div>
+          <div class="upload-form">
+            <div class="upload-cption-container">
+              <h3 class="caption-title-container">Caption</h3>
+              <div class="caption-text-container">
+                <b-form-textarea class="content-input" v-model="newContent" placeholder="문구 입력..." rows="7" no-resize></b-form-textarea>
+                <div class="hash-icon">
+                  <i class="fas fa-hashtag"></i>
+                </div>
+              </div>
+            </div>
+            <div class="upload-location-container"></div>
+            <div class="form-bottom-container"></div>
+          </div>
+        </div>
+      </div> -->
+
       <div class="post-header">
         <h2>동영상 업로드</h2>
         <p>@{{ this.$store.state.auth.userInfo.userName }}님의 골프 영상이 게시됩니다.</p>
@@ -12,8 +51,7 @@
             <button class="delete-video-btn" @click="deleteVideo">
               <i class="fas fa-times-circle"></i>
             </button>
-            <video :src="this.newVideoUrl" type="video/mp4" autoplay="true" controls="controls"></video>
-            <!-- <VideoPlayer :options="videoOptions" /> -->
+            <video :src="this.newVideoUrl || this.newFile" type="video/mp4" autoplay="true" controls="controls"></video>
           </div>
           <button v-else class="video-selector" @click="toggleSelectorVisible">
             <i class="fas fa-cloud-upload-alt"></i>
@@ -104,8 +142,6 @@ export default {
       this.newVideoUrl = this.nasmoList[index].videoRoot;
       // this.newVideoIndex = index;
 
-      console.log(this.newVideoUrl);
-
       this.setVideoOptions(this.newVideoUrl);
       this.toggleDisabled();
     },
@@ -137,7 +173,6 @@ export default {
         } = finishedEvent;
 
         this.newFile = result;
-        console.log(result);
 
         this.setVideoOptions(this.newFile);
         this.toggleDisabled();
@@ -226,14 +261,119 @@ export default {
 
 <style>
 #upload-view {
-  padding: 5px;
-  font-family: 'Nunito', sans-serif;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
-.post-box {
-  position: relative;
-  left: 4rem;
-  width: 90%;
+
+#upload-view .body-container {
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  flex: 1 1 auto;
 }
+
+.upload-container {
+  max-width: 1200px;
+  margin: 0px auto;
+  padding-top: 11px;
+  box-sizing: inherit;
+}
+
+.upload-title {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 3.5rem;
+  line-height: 1;
+  margin-top: 60px;
+}
+.upload-sub-title {
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 24px;
+  color: #495057;
+  margin-top: 2px;
+}
+
+.upload-contents {
+  display: flex;
+  margin-top: 40px;
+  box-sizing: inherit;
+}
+
+.upload-operation {
+  height: 100%;
+}
+
+.upload-video-btn {
+  cursor: pointer;
+  text-align: center;
+}
+
+.upload-video-card {
+  width: 306px;
+  height: 544px;
+  background: rgba(22, 24, 35, 0.03);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+  transition: 0.15s ease-in-out 0s;
+}
+.upload-video-card i {
+  width: 40px;
+  height: 40px;
+  font-size: 2.5rem;
+  text-align: center;
+}
+.upload-video-card h2 {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  color: rgba(22, 24, 35, 0.34);
+  margin-top: 29px;
+}
+.upload-video-card ul {
+  margin: 0px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+  color: rgba(22, 24, 35, 0.34);
+  text-align: left;
+}
+
+.upload-btn-input {
+  height: 0px;
+  width: 0px;
+  opacity: 0;
+  position: absolute;
+  appearance: none;
+  background-color: inherit;
+  cursor: default;
+  align-items: baseline;
+  color: inherit;
+  text-overflow: ellipsis;
+  white-space: pre;
+  text-align: start;
+  padding: initial;
+  border: initial;
+  overflow: hidden;
+}
+
+.upload-form {
+  margin-left: 60px;
+  margin-bottom: 111px;
+}
+
 .post-header {
   display: flex;
 }

@@ -1,9 +1,9 @@
 <template>
   <div id="following-feed-view" :style="styleObj">
-    <div class="feed-header-container">
+    <div class="header-container">
       <AppHeader></AppHeader>
     </div>
-    <div class="feed-contents-wrapper">
+    <div class="body-container">
       <div class="side-bar-container">
         <SideBar :isActive="this.navIndex"></SideBar>
       </div>
@@ -73,53 +73,5 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-}
-
-.feed-header-container {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  height: 60px;
-  background: #fff;
-  border-bottom: 1px solid #ced4da;
-  box-sizing: border-box;
-  z-index: 1000;
-  display: flex;
-  justify-content: space-around;
-}
-
-.feed-contents-wrapper {
-  width: 100%;
-  max-width: 1100px;
-  margin-top: 60px;
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.side-bar-container {
-  position: fixed;
-  top: 60px;
-  bottom: 0;
-  width: 25vw;
-  padding: 0 8px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  perspective: 1px;
-  perspective-origin: right top;
-  z-index: 11;
-  background: #fff;
-}
-
-.trending-container {
-  position: relative;
-  left: 26vw;
-  width: 50vw;
-  padding: 24px 0;
-  margin-right: 24px;
-  background: #fff;
 }
 </style>

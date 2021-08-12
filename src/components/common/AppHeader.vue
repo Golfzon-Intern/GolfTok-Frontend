@@ -160,7 +160,7 @@ export default {
 }
 .upload-btn:hover,
 .user-btn:hover {
-  color: #5d5fef;
+  color: #fa5252;
 }
 
 .login-container button {

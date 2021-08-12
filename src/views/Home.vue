@@ -1,9 +1,9 @@
 <template>
   <div id="home-view" :style="styleObj">
-    <div class="home-header-container">
+    <div class="header-container">
       <AppHeader></AppHeader>
     </div>
-    <div class="home-contents-wrapper">
+    <div class="body-container">
       <div class="side-bar-container">
         <SideBar :isActive="this.navIndex"></SideBar>
       </div>
@@ -75,7 +75,7 @@ export default {
   justify-content: space-between;
 }
 
-.home-header-container {
+.header-container {
   position: fixed;
   left: 0;
   top: 0;
@@ -89,7 +89,7 @@ export default {
   justify-content: space-around;
 }
 
-.home-contents-wrapper {
+.body-container {
   width: 100%;
   max-width: 1100px;
   margin-top: 60px;
