@@ -1,6 +1,6 @@
 <template>
   <div id="child-comments">
-    <div class="comment-content" v-for="(comment, index) in propData" v-bind:key="index">
+    <div class="comment-content" v-for="(comment, index) in childcomments" v-bind:key="index">
       <div class="comment-avatar">
         <b-avatar class="user-pic" :src="comment.userIcon" size="1.5rem" />
       </div>
@@ -14,12 +14,16 @@
           </div>
         </div>
       </div>
-      <div class="like-container">
-        <LikeButton :targetType="'comment'" :targetId="comment.commentId" :styleType="2" />
+      <div class="action-container">
+        <div v-if="loginUser === comment.userName" class="delete-btn" @click="clickDel(comment.commentId, index)">
+          <i class="fas fa-trash"></i>
+          <strong>del</strong>
+        </div>
+        <LikeButton :targetId="comment.commentId" :styleType="2" />
       </div>
     </div>
 
-    <div class="hide-btn" @click="hideReply">
+    <div class="hide-btn" @click="clickHide">
       <span class="hide-text">Hide</span>
       <span class="hide-icon">
         <i class="fas fa-chevron-up"></i>
@@ -29,14 +33,12 @@
 </template>
 
 <script>
-import * as commentApi from '@/api/comment';
-
 import LikeButton from '@/components/common/LikeButton.vue';
 
 export default {
   data() {
     return {
-      comments: [],
+      loginUser: this.$store.state.auth.userInfo.userName,
     };
   },
   props: {
@@ -44,25 +46,17 @@ export default {
       type: Number,
       default: 0,
     },
-    propData: [],
-  },
-  created() {
-    this.getComments();
+    childcomments: [],
   },
   methods: {
-    async getComments() {
-      try {
-        const response = await commentApi.getChildComments(this.postId);
-        this.comments = response.data.childrenList;
-      } catch (error) {
-        console.log(error);
-      }
-    },
     clickReply(userName, group) {
       this.$emit('clickReplyChild', userName, group);
     },
-    hideReply() {
-      this.$emit('hideList', this.targetOrder, false);
+    clickDel(commentId, index) {
+      this.$emit('clickDelete', commentId, this.targetOrder, index);
+    },
+    clickHide() {
+      this.$emit('clickHideList', this.targetOrder, false);
     },
   },
   components: {

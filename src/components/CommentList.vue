@@ -1,47 +1,51 @@
 <template>
   <div id="parent-comments">
-    <div class="comment-item" v-for="(comment, index) in propData" v-bind:key="index">
-      <div class="comment-content">
-        <div class="comment-avatar">
-          <b-avatar class="user-pic" :src="comment.userIcon" size="2.5rem" />
-        </div>
-        <div class="content-container">
-          <div class="user-info">{{ comment.userNickname }}</div>
-          <div class="comment-text">
-            <span>{{ comment.commentText }}</span>
-            <div class="bottom-container">
-              <span class="comment-time">{{ comment.commentGroup }}</span>
-              <span class="reply-btn" @click="clickReply(comment.userName, comment.commentGroup)">reply</span>
+    <transition-group name="list" tag="div">
+      <div class="comment-item" v-for="(comment, index) in comments" v-bind:key="index">
+        <div class="comment-content">
+          <div class="comment-avatar">
+            <b-avatar class="user-pic" :src="comment.userIcon" size="2.5rem" />
+          </div>
+          <div class="content-container">
+            <div class="user-info">{{ comment.userNickname }}</div>
+            <div class="comment-text">
+              <span>{{ comment.commentText }}</span>
+              <div class="bottom-container">
+                <span class="comment-time">{{ comment.commentGroup }}</span>
+                <span class="reply-btn" @click="clickReply(comment.userName, comment.commentGroup)">reply</span>
+              </div>
             </div>
           </div>
+          <div class="action-container">
+            <div v-if="loginUser === comment.userName" class="delete-btn" @click="clickDeleteBtn(comment.commentId, null, index)">
+              <i class="fas fa-trash"></i>
+              <strong>del</strong>
+            </div>
+            <LikeButton :targetId="comment.commentId" :styleType="2" />
+          </div>
         </div>
-        <div class="like-container">
-          <LikeButton :targetId="comment.commentId" :styleType="2" />
+        <div class="more-contents">
+          <div class="more-btn" v-if="!comment.isOpened" @click="toggleChildList(index, true)">
+            <span class="more-text">View more replies ({{ comment.childrenCount }})</span>
+            <span class="more-icon">
+              <i class="fas fa-chevron-down"></i>
+            </span>
+          </div>
+          <childCommentList v-else :targetOrder="index" :childcomments="comment.children" @clickReplyChild="clickReply" @clickDelete="clickDeleteBtn" @clickHideList="toggleChildList" />
         </div>
       </div>
-      <div class="more-contents">
-        <div class="more-btn" v-if="!comment.isOpened" @click="toggleChildList(index, true)">
-          <span class="more-text">View more replies ({{ comment.childrenCount }})</span>
-          <span class="more-icon">
-            <i class="fas fa-chevron-down"></i>
-          </span>
-        </div>
-        <childCommentList v-else :targetOrder="index" :propData="comment.children" @clickReplyChild="clickReply" @hideList="toggleChildList" />
-      </div>
-    </div>
+    </transition-group>
   </div>
 </template>
 
 <script>
-import * as commentApi from '@/api/comment';
-
 import LikeButton from '@/components/common/LikeButton.vue';
 import ChildCommentList from '@/components/ChildCommentList.vue';
 
 export default {
   data() {
     return {
-      comments: [],
+      loginUser: this.$store.state.auth.userInfo.userName,
     };
   },
   props: {
@@ -49,36 +53,17 @@ export default {
       type: Number,
       default: 0,
     },
-    propData: [],
-  },
-  created() {
-    this.getComments();
+    comments: [],
   },
   methods: {
-    async getComments() {
-      try {
-        const response = await commentApi.getParentComments(this.postId);
-        const data = response.data.parentList;
-
-        if (data.length) {
-          for (const item of data) {
-            const commentObj = {
-              ...item,
-              isOpenedReply: false,
-            };
-
-            this.comments.push(commentObj);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
     toggleChildList(index, state) {
       this.$emit('toggleChildList', index, state);
     },
     clickReply(userName, group) {
       this.$emit('clickReplyParent', userName, group);
+    },
+    clickDeleteBtn(commentId, parentIndex, index) {
+      this.$emit('clickDeleteBtn', commentId, parentIndex, index);
     },
   },
   components: {
@@ -175,17 +160,38 @@ export default {
   cursor: pointer;
 }
 
-#parent-comments .like-container {
+#parent-comments .action-container {
   position: absolute;
   top: 24px;
   right: 2px;
   display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+#parent-comments .action-container .delete-btn {
+  margin-right: 8px;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  width: 20px;
+  cursor: pointer;
 }
-#parent-comments .like-container p {
-  font-size: 0.75rem;
+#parent-comments .action-container .delete-btn i {
+  position: relative;
+  top: 10px;
+  width: 32px;
+  height: 32px;
+  font-size: 1.15rem;
+  text-align: center;
+}
+#parent-comments .action-container .delete-btn strong {
+  width: 100%;
+  margin-top: 2px;
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #343a40;
+  line-height: 17px;
+  padding: 0 7px 0 8px;
 }
 
 #parent-comments .more-contents {
@@ -212,5 +218,15 @@ export default {
   height: 1rem;
   font-size: 1rem;
   margin-left: 6px;
+}
+
+/* 리스트 아이템 트렌지션 효과 */
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>

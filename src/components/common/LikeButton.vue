@@ -105,6 +105,12 @@ export default {
           display: 'flex',
           alignItems: 'center',
         };
+      } else if (this.styleType === 2) {
+        return {
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        };
       } else {
         return {};
       }
@@ -135,6 +141,8 @@ export default {
         };
       } else if (this.styleType === 2) {
         return {
+          width: '32px',
+          height: '32px',
           fontSize: '1.25rem',
           textAlign: 'center',
         };

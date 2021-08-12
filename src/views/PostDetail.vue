@@ -53,7 +53,7 @@
         </div>
       </div>
       <div class="comment-container">
-        <CommentList :postId="postInfo.postId" :propData="comments" @toggleChildList="setIsOpened" @clickReplyParent="setReplyTo" />
+        <CommentList :postId="postInfo.postId" :comments="comments" @toggleChildList="setIsOpened" @clickReplyParent="setReplyTo" @clickDeleteBtn="removeComment" />
       </div>
       <div class="comment-input-container">
         <CommentInput :replyTo="replyTo" @submitComment="addComment" />
@@ -172,6 +172,16 @@ export default {
         userName: userName,
         group: group,
       };
+    },
+    removeComment(commentId, parentIndex, index) {
+      if (parentIndex) {
+        // 부모 댓글 삭제
+        this.comments.splice(index, 1);
+      } else {
+        // 자식 댓글 삭제
+        this.comments[parentIndex].children.splice(index, 1);
+      }
+      commentApi.deleteComment(commentId);
     },
   },
   components: {
