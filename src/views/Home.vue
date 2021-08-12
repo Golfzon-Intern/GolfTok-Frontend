@@ -5,7 +5,9 @@
     </div>
     <div class="body-container">
       <div class="side-bar-container">
-        <SideBar :isActive="this.navIndex"></SideBar>
+        <div class="scroll-container">
+          <SideBar :isActive="this.navIndex"></SideBar>
+        </div>
       </div>
       <div class="trending-container">
         <PostList :postType="0" @openPage="openDetailPage"></PostList>
@@ -92,18 +94,21 @@ export default {
 .body-container {
   width: 100%;
   max-width: 1100px;
-  margin-top: 60px;
+  padding-top: 60px;
   display: flex;
   flex: 1 1 auto;
-  flex-direction: row;
   justify-content: space-between;
 }
 
 .side-bar-container {
+  position: relative;
+  flex: 0 0 356px;
+}
+.side-bar-container .scroll-container {
   position: fixed;
   top: 60px;
   bottom: 0;
-  width: 25vw;
+  width: 340px;
   padding: 0 8px;
   overflow-x: hidden;
   overflow-y: auto;
@@ -111,19 +116,16 @@ export default {
   perspective: 1px;
   perspective-origin: right top;
   z-index: 11;
-  background: #fff;
 }
-.side-bar-container::-webkit-scrollbar {
+.side-bar-container .scroll-container::-webkit-scrollbar {
   display: none;
 }
 
 .trending-container {
-  position: relative;
-  left: 26vw;
-  width: 50vw;
+  width: 692px;
+  max-width: 692px;
   padding: 24px 0;
   margin-right: 24px;
-  background: #fff;
 }
 
 /* width */

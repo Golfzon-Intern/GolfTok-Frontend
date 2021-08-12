@@ -132,14 +132,15 @@ export default {
     async infiniteHandler($state) {
       try {
         let response;
+        let posts;
 
         if (this.postType === 0) {
           response = await postApi.getPosts(this.pageNum);
+          posts = response.data.allPostList;
         } else {
           response = await postApi.getFowPosts(this.pageNum);
+          posts = response.data.postList;
         }
-
-        const posts = response.data.allPostList;
 
         if (posts.length) {
           for (const post of posts) {
@@ -305,35 +306,28 @@ a {
 }
 
 .video-feed-item {
-  width: 50vw;
-  max-width: 50vw;
+  width: 692px;
+  max-width: 692px;
   position: relative;
   padding: 20px 0;
   border-bottom: 0.5px solid #ced4da;
-
-  /* padding: 8px 12px;
-  margin-bottom: 12px;
-  width: 100%;
-  height: 450px;
-  display: flex;
-  border-bottom: 1px solid; */
 }
 
 .feed-item-avatar {
   float: left;
   position: relative;
   cursor: pointer;
-  color: inherit;
+}
+.feed-item-avatar .user-pic {
   width: 56px;
   height: 56px;
-  border-color: #ced4da 0.12;
   z-index: 10;
 }
 
 .feed-item-content {
   position: relative;
   margin-left: 68px;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .author-info-content {
@@ -341,7 +335,7 @@ a {
   text-overflow: ellipsis;
   white-space: nowrap;
   flex-flow: row wrap;
-  cursor: pointer;
+  cursor: default;
   display: flex;
   align-items: flex-start;
   margin-right: 150px;
@@ -426,16 +420,10 @@ a {
 .item-video-container {
   position: relative;
   display: inline-block;
-
-  /*   
-  bottom: -30px;
-  width: 60%;
-  display: flex;
-  align-items: flex-end; */
 }
 .item-video-wrapper {
-  width: 35vw;
-  height: 40vh;
+  width: 550px;
+  height: 340px;
   position: relative;
 }
 .video-card-wrapper {

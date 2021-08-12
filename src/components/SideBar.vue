@@ -118,6 +118,18 @@ export default {
 
 <style>
 .side-bar-wrapper {
+  height: 100%;
+  width: 340px;
+  box-sizing: border-box;
+  padding-top: 20px;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.side-scroll-wrapper {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
