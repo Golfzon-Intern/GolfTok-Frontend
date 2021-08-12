@@ -32,6 +32,14 @@ export default {
       default: 0,
     },
   },
+  methods: {
+    setIsHover(state) {
+      this.isHover = state;
+    },
+    onClick() {
+      this.$emit('clickButton');
+    },
+  },
   computed: {
     styleObj() {
       let colorType = '';
@@ -58,14 +66,6 @@ export default {
         border: this.buttonColor[colorType + 'Border'],
         color: this.buttonColor[colorType + 'Text'],
       };
-    },
-  },
-  methods: {
-    setIsHover(state) {
-      this.isHover = state;
-    },
-    onClick() {
-      this.$emit('clickButton');
     },
   },
 };

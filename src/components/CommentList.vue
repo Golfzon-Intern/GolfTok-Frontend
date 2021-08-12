@@ -1,6 +1,6 @@
 <template>
   <div id="parent-comments">
-    <div class="comment-item" v-for="(comment, index) in comments" v-bind:key="index">
+    <div class="comment-item" v-for="(comment, index) in propData" v-bind:key="index">
       <div class="comment-content">
         <div class="comment-avatar">
           <b-avatar class="user-pic" :src="comment.userIcon" size="2.5rem" />
@@ -11,7 +11,7 @@
             <span>{{ comment.commentText }}</span>
             <div class="bottom-container">
               <span class="comment-time">{{ comment.commentGroup }}</span>
-              <span class="reply-btn">reply</span>
+              <span class="reply-btn" @click="clickReply(comment.userName, comment.commentGroup)">reply</span>
             </div>
           </div>
         </div>
@@ -20,13 +20,13 @@
         </div>
       </div>
       <div class="more-contents">
-        <div class="more-btn" v-if="!comment.isOpenedReply" @click="toggleReply(index)">
+        <div class="more-btn" v-if="!comment.isOpened" @click="toggleChildList(index, true)">
           <span class="more-text">View more replies ({{ comment.childrenCount }})</span>
           <span class="more-icon">
             <i class="fas fa-chevron-down"></i>
           </span>
         </div>
-        <childCommentList v-else :targetOrder="index" @hideReply="toggleReply" />
+        <childCommentList v-else :targetOrder="index" :propData="comment.children" @clickReplyChild="clickReply" @hideList="toggleChildList" />
       </div>
     </div>
   </div>
@@ -49,6 +49,7 @@ export default {
       type: Number,
       default: 0,
     },
+    propData: [],
   },
   created() {
     this.getComments();
@@ -73,8 +74,11 @@ export default {
         console.log(error);
       }
     },
-    toggleReply(index) {
-      this.comments[index].isOpenedReply = !this.comments[index].isOpenedReply;
+    toggleChildList(index, state) {
+      this.$emit('toggleChildList', index, state);
+    },
+    clickReply(userName, group) {
+      this.$emit('clickReplyParent', userName, group);
     },
   },
   components: {

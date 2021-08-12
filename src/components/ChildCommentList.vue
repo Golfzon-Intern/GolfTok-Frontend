@@ -1,6 +1,6 @@
 <template>
   <div id="child-comments">
-    <div class="comment-content" v-for="(comment, index) in comments" v-bind:key="index">
+    <div class="comment-content" v-for="(comment, index) in propData" v-bind:key="index">
       <div class="comment-avatar">
         <b-avatar class="user-pic" :src="comment.userIcon" size="1.5rem" />
       </div>
@@ -10,7 +10,7 @@
           <span>{{ comment.commentText }}</span>
           <div class="bottom-container">
             <span class="comment-time">{{ comment.uploadDate }}</span>
-            <span class="reply-btn">reply</span>
+            <span class="reply-btn" @click="clickReply(comment.userName, comment.commentGroup)">reply</span>
           </div>
         </div>
       </div>
@@ -44,6 +44,7 @@ export default {
       type: Number,
       default: 0,
     },
+    propData: [],
   },
   created() {
     this.getComments();
@@ -57,9 +58,11 @@ export default {
         console.log(error);
       }
     },
+    clickReply(userName, group) {
+      this.$emit('clickReplyChild', userName, group);
+    },
     hideReply() {
-      this.$emit('hideReply', this.targetOrder);
-      console.log('child');
+      this.$emit('hideList', this.targetOrder, false);
     },
   },
   components: {

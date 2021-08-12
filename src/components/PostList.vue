@@ -39,7 +39,7 @@
                       <i v-if="post.isMuted" class="fas fa-volume-mute"></i>
                       <i v-else class="fas fa-volume-up"></i>
                     </div>
-                    <div class="play-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setisPlaying(index)">
+                    <div class="play-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setIsPlaying(index)">
                       <i v-if="post.isPlaying" class="fas fa-pause"></i>
                       <i v-else class="fas fa-play"></i>
                     </div>
@@ -221,7 +221,7 @@ export default {
     setIsHover(state, index) {
       this.postInfos[index].isHover = state;
     },
-    setisPlaying(index) {
+    setIsPlaying(index) {
       event.preventDefault();
       this.postInfos[index].isPlaying = !this.postInfos[index].isPlaying;
 

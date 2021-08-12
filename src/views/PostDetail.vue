@@ -1,6 +1,6 @@
 <template>
   <div class="post-detail-wrapper">
-    <div class="video-card-container" @click="setisPlaying">
+    <div class="video-card-container" @click="setIsPlaying">
       <div class="background-image">
         <img :src="postInfo.postThumbnail" />
       </div>
@@ -53,10 +53,10 @@
         </div>
       </div>
       <div class="comment-container">
-        <CommentList :postId="postInfo.postId" :commentData="comments" />
+        <CommentList :postId="postInfo.postId" :propData="comments" @toggleChildList="setIsOpened" @clickReplyParent="setReplyTo" />
       </div>
       <div class="comment-input-container">
-        <CommentInput @submitComment="addComment" />
+        <CommentInput :replyTo="replyTo" @submitComment="addComment" />
       </div>
     </div>
   </div>
@@ -81,13 +81,14 @@ export default {
       isHover: false,
       isMuted: true,
       isPlaying: true,
+      replyTo: {},
       // isFirst: this.$route.params.isFirst,
       // isLast: this.$route.params.isLast,
     };
   },
   created() {
     this.getPostInfo();
-    this.getComments();
+    this.setComments();
   },
   methods: {
     async getPostInfo() {
@@ -101,10 +102,24 @@ export default {
         console.log(error);
       }
     },
-    async getComments() {
+    async setComments() {
       try {
         const response = await commentApi.getParentComments(this.postInfo.postId);
-        this.comments = response.data.parentList;
+        const parents = response.data.parentList;
+
+        for (const parent of parents) {
+          const childRes = await commentApi.getChildComments(parent.commentId);
+          const childList = childRes.data.childrenList;
+
+          const parentObj = {
+            ...parent,
+            children: childList,
+            isOpened: false,
+          };
+          this.comments.push(parentObj);
+        }
+
+        console.log(this.comments);
       } catch (error) {
         console.log(error);
       }
@@ -115,7 +130,7 @@ export default {
     setIsHover(state) {
       this.isHover = state;
     },
-    setisPlaying() {
+    setIsPlaying() {
       event.preventDefault();
       this.isPlaying = !this.isPlaying;
 
@@ -135,10 +150,28 @@ export default {
         this.$refs.videoRef.muted = false;
       }
     },
-    addComment(text) {
-      const tmp = [text, ...this.comments];
-      console.log(tmp);
-      // this.comments = tmp;
+    setIsOpened(index, state) {
+      this.comments[index].isOpened = state;
+    },
+    async addComment(text, isChild) {
+      const newObj = {
+        postId: this.postInfo.postId,
+        commentText: text,
+        commentGroup: isChild ? isChild : 0,
+        groupLayer: isChild ? 1 : 0,
+      };
+      const response = await commentApi.addComment(newObj);
+      const newComment = response.data.commentList[0];
+      console.log(newComment);
+
+      this.comments = [newComment, ...this.comments];
+    },
+    setReplyTo(userName, group) {
+      console.log(userName, group);
+      this.replyTo = {
+        userName: userName,
+        group: group,
+      };
     },
   },
   components: {
@@ -264,7 +297,7 @@ export default {
 
 .content-container {
   flex: 0 0 auto;
-  width: 35%;
+  width: 37%;
   display: flex;
   flex-direction: column;
   background: #fff;
