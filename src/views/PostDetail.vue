@@ -60,10 +60,10 @@
         </div>
       </div>
       <div class="comment-container">
-        <CommentList :postId="postInfo.postId" />
+        <CommentList :postId="postInfo.postId" :commentData="comments" />
       </div>
       <div class="comment-input-container">
-        <CommentInput />
+        <CommentInput @submitComment="addComment" />
       </div>
     </div>
   </div>
@@ -71,6 +71,7 @@
 
 <script>
 import * as postApi from '@/api/post';
+import * as commentApi from '@/api/comment';
 import * as likeApi from '@/api/like';
 
 import FollowButton from '@/components/common/FollowButton.vue';
@@ -83,6 +84,7 @@ export default {
   data: function() {
     return {
       postInfo: {},
+      comments: [],
       video: null,
       isHover: false,
       isMuted: true,
@@ -93,6 +95,7 @@ export default {
   },
   created() {
     this.getPostInfo();
+    this.getComments();
   },
   methods: {
     async getPostInfo() {
@@ -102,6 +105,14 @@ export default {
 
         // video 태그로 추가된 동영상 정보 가져오기
         this.video = document.getElementsByTagName('video');
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getComments() {
+      try {
+        const response = await commentApi.getParentComments(this.postInfo.postId);
+        this.comments = response.data.parentList;
       } catch (error) {
         console.log(error);
       }
@@ -141,13 +152,18 @@ export default {
         await likeApi.deletePostLiked(this.targetId);
       }
     },
-    setCommentCount(state) {
-      if (state) {
-        this.postInfo.commentCount += 1;
-      } else {
-        this.postInfo.commentCount -= 1;
-      }
+    addComment(text) {
+      const tmp = [text, ...this.comments];
+      console.log(tmp);
+      // this.comments = tmp;
     },
+    // setCommentCount(state) {
+    //   if (state) {
+    //     this.postInfo.commentCount += 1;
+    //   } else {
+    //     this.postInfo.commentCount -= 1;
+    //   }
+    // },
   },
   components: {
     LikeButton,
