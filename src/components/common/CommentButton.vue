@@ -1,18 +1,14 @@
 <template>
   <div class="comment-wrapper" :style="boxStyleObj">
-    <i class="fas fa-comment" :style="iconStyleObj"></i>
+    <div class="comment-icon" :style="iconStyleObj">
+      <i class="fas fa-comment" :style="{ position: 'relative', bottom: '2px' }"></i>
+    </div>
+    <strong :style="textStyleObj">57</strong>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      boxStyleObj: {},
-      iconStyleObj: {},
-      textStyleObj: {},
-    };
-  },
   props: {
     numOfComments: {
       type: Number,
@@ -23,58 +19,88 @@ export default {
       default: 0,
     },
   },
-  created() {
-    switch (this.styleType) {
-      case 0: // post-list
-        this.boxStyleObj = {
+  created() {},
+  computed: {
+    boxStyleObj() {
+      if (this.styleType === 1) {
+        return {
+          display: 'flex',
+          alignItems: 'center',
+        };
+      } else {
+        return {};
+      }
+    },
+    iconStyleObj() {
+      if (this.styleType === 0) {
+        return {
           width: '50px',
           height: '50px',
           marginTop: '8px',
-          background: '#dee2e6',
-          padding: '13px 0',
-          borderRadius: '100%',
-          cursor: 'pointer',
-        };
-        this.iconStyleObj = {
-          width: '100%',
-          height: '100%',
-          overflow: 'hidden',
+          paddingTop: '8px',
           fontSize: '1.5rem',
           textAlign: 'center',
+          overflow: 'hidden',
+          background: '#dee2e6',
+          borderRadius: '100%',
         };
-        break;
-      case 1: // post-detail
-        this.boxStyleObj = {
+      } else if (this.styleType === 1) {
+        return {
           width: '32px',
           height: '32px',
           marginRight: '6px',
-          paddingTop: '1px',
-          paddingLeft: '2px',
+          fontSize: '1.25rem',
+          textAlign: 'center',
+          overflow: 'hidden',
           background: '#dee2e6',
           borderRadius: '100%',
-          cursor: 'pointer',
         };
-        this.iconStyleObj = {
-          position: 'relative',
-          top: '5px',
-          width: '100%',
-          height: '100%',
-          overflow: 'hidden',
-          fontSize: '1.2rem',
+      } else if (this.styleType === 2) {
+        return {
+          fontSize: '1.25rem',
           textAlign: 'center',
-          color: 'black',
         };
-        break;
-      default:
-    }
+      } else {
+        return {};
+      }
+    },
+    textStyleObj() {
+      if (this.styleType === 0) {
+        return {
+          width: '100%',
+          display: 'inline-block',
+          marginTop: '4px',
+          fontSize: '0.875rem',
+          lineHeight: '17px',
+          padding: '0 7px 0 8px',
+        };
+      } else if (this.styleType === 1) {
+        return {};
+      } else if (this.styleType === 2) {
+        return {
+          width: '100%',
+          display: 'inline-block',
+          marginTop: '4px',
+          fontSize: '0.875rem',
+          lineHeight: '17px',
+          padding: '0 7px 0 8px',
+        };
+      } else {
+        return {};
+      }
+    },
   },
 };
 </script>
 
 <style>
 .comment-wrapper {
-  /* width: 100%;
-  text-align: center; */
+  cursor: pointer;
+}
+.comment-wrapper strong {
+  text-align: center;
+  color: #343a40;
+  font-weight: 500;
   font-family: Helvetica, Arial, sans-serif;
 }
 </style>
