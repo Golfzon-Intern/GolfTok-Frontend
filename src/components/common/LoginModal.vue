@@ -20,7 +20,7 @@
               <input placeholder="Password" type="password" autocomplete=" password" name="password" v-model="userPw" />
             </div>
             <a href="#" class="login-forgot-password">Forgot Password?</a>
-            <LoginButton :styleType="2" />
+            <LoginButton :styleType="2" @clickButton="login" />
           </form>
         </div>
 
