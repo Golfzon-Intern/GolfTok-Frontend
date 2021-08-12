@@ -33,7 +33,7 @@
               <a href="#" class="video-card-wrapper">
                 <div class="video-card-bg">
                   <div class="video-card" @mouseenter="setIsHover(true, index)" @mouseleave="setIsHover(false, index)">
-                    <video ref="videoRef" :src="post.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="post.Thumbnail"></video>
+                    <video ref="videoRef" :src="post.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="post.Thumbnail" @click="openPostDetail(post.postId, false)"></video>
                     <span class="style-layer-mask"></span>
                     <div class="volume-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setIsMuted(index)">
                       <i v-if="post.isMuted" class="fas fa-volume-mute"></i>
@@ -46,18 +46,13 @@
                   </div>
                 </div>
               </a>
-              <!-- <VideoPlayer :options="post.videoOption" /> -->
-              <!-- <router-link :to="{ name: 'testModal', params: { index: index, postId: post.postId } }"> -->
-              <!-- <div class="video-modal-btn" @click="openPostDetail(index, post.postId)">...</div> -->
-              <!-- </router-link> -->
             </div>
             <div class="item-action-bar">
               <div class="bar-item-wrapper">
                 <LikeButton :targetId="post.postId" :styleType="0"></LikeButton>
               </div>
-              <div class="bar-item-wrapper" @click="openPostDetail(index, post.postId)">
+              <div class="bar-item-wrapper" @click="openPostDetail(post.postId, true)">
                 <CommentButton :styleType="0"></CommentButton>
-                <strong>{{ post.commentCount }}</strong>
               </div>
             </div>
           </div>
@@ -75,7 +70,6 @@
 import InfiniteLoading from 'vue-infinite-loading';
 import * as postApi from '@/api/post';
 
-// import VideoPlayer from '@/components/common/VideoPlayer.vue';
 import LikeButton from '@/components/common/LikeButton.vue';
 import CommentButton from '@/components/common/CommentButton.vue';
 import FollowButton from '@/components/common/FollowButton.vue';
@@ -85,7 +79,6 @@ export default {
     return {
       postInfos: [],
       pageNum: 1,
-      curIndex: 0,
       videos: [],
     };
   },
@@ -174,29 +167,13 @@ export default {
       }
     },
     // 게시물 상세보기
-    openPostDetail(index, postId) {
-      // const postsLen = this.postInfos.length;
-      // let isFirst = false;
-      // let isLast = false;
-
-      // if (index === 0) {
-      //   isFirst = true;
-      // } else if (index === postsLen) {
-      //   isLast = true;
-      // }
-
-      // this.$router.push({
-      //   name: 'PostDetail',
-      //   params: {
-      //     postId: postId,
-      //     isFirst: isFirst,
-      //     isLast: isLast,
-      //   },
-      // });
-
-      this.$emit('openPage', postId);
-
-      this.curIndex = index;
+    openPostDetail(postId, isComment) {
+      if (isComment && !this.$store.state.auth.userInfo) {
+        // 로그인 모달 열기
+        this.$emit('openLoginModal', true);
+      } else {
+        this.$emit('openPage', postId);
+      }
     },
     // 스크롤에 따라 동영상 자동재생
     handleScroll() {
@@ -266,7 +243,6 @@ export default {
     },
   },
   components: {
-    // VideoPlayer,
     InfiniteLoading,
     LikeButton,
     CommentButton,
@@ -337,18 +313,27 @@ a {
   margin-bottom: 0;
 }
 
+.item-location-info {
+  margin-top: 4px;
+  margin-bottom: 12px;
+  max-width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.item-location-info h4 {
+  margin: 0;
+}
 .location-decoration {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   display: inline-block;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   line-height: 22px;
   width: 100%;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   color: #495057;
-  /* margin-bottom: 0; */
 }
 .location-decoration i {
   /* margin-right: 5px; */
@@ -360,7 +345,7 @@ a {
 
 .video-meta-caption {
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 22px;
   color: #343a40;
   flex: 0 0 auto;
@@ -386,17 +371,6 @@ a {
   position: absolute;
   right: 0;
   top: 8px;
-}
-
-.item-location-info {
-  margin-top: 4px;
-  margin-bottom: 12px;
-  max-width: 45vw;
-  position: relative;
-  overflow: hidden;
-}
-.item-location-info h4 {
-  margin: 0;
 }
 
 .item-video-container {

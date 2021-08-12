@@ -49,7 +49,6 @@ export default {
   methods: {
     closeModal() {
       this.$emit('closeModal', false);
-      console.log('bye');
     },
     login() {
       this.$store.dispatch('auth/login', { userId: this.userId, password: this.userPw });

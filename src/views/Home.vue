@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="trending-container">
-        <PostList :postType="0" @openPage="openDetailPage"></PostList>
+        <PostList :postType="0" @openPage="openDetailPage" @openLoginModal="toggleModal"></PostList>
       </div>
     </div>
     <LoginModal v-if="isVisibleModal" @close="isVisibleModal = false" :isVisible="isVisibleModal" @closeModal="toggleModal"> </LoginModal>
@@ -45,7 +45,7 @@ export default {
       });
     },
     checkIsOpenedPage() {
-      console.log(this.$route.path);
+      // console.log(this.$route.path);
 
       if (this.$route.path === '/') {
         this.isOpenedPage = false;
