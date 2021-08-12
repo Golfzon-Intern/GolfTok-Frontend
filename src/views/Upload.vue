@@ -108,6 +108,8 @@ import AppHeader from '@/components/common/AppHeader.vue';
 import NasmoSelector from '@/components/NasmoSelector.vue';
 // import VideoPlayer from '@/components/common/VideoPlayer.vue';
 
+const THUMBNAIL_URL = 'https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/thumbnails%2Fthumbnail1.png?alt=media&token=693a8a6a-d028-4561-96af-50be2d8b17cc';
+
 export default {
   data() {
     return {
@@ -153,6 +155,7 @@ export default {
       // 파일 선택창 열기
       let input = document.createElement('input');
       input.type = 'file';
+      input.accept = 'video/*';
       input.onchange = (event) => {
         // you can use this method to get file and perform respective operations
         this.handleFileChange(event);
@@ -211,6 +214,7 @@ export default {
           postContent: this.newContent,
           videoRoot: this.newVideoUrl,
           locations: '',
+          postThumbnail: THUMBNAIL_URL,
         };
 
         console.log(postObj);
