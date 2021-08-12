@@ -78,16 +78,6 @@ export default {
   z-index: -1;
   inset: 0px;
   background: rgba(0, 0, 0, 0.5);
-
-  /* position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: table;
-  transition: opacity 0.3s ease; */
 }
 
 .login-modal-wrapper {
@@ -99,9 +89,6 @@ export default {
   background: rgb(255, 255, 255);
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.5);
-
-  /* display: table-cell;
-  vertical-align: middle; */
 }
 
 .login-modal-container {
@@ -111,15 +98,6 @@ export default {
   height: 100%;
   box-sizing: border-box;
   border: none;
-
-  /* width: 300px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.3s ease;
-  font-family: Helvetica, Arial, sans-serif; */
 }
 
 .login-modal-header {
@@ -137,9 +115,6 @@ export default {
   align-items: center;
   box-sizing: border-box;
   position: relative;
-
-  /* display: flex;
-  justify-content: space-between; */
 }
 .login-modal-header h3 {
   position: absolute;
@@ -152,9 +127,6 @@ export default {
   text-align: center;
   font-weight: bolder;
   color: #000;
-
-  /* margin-top: 0;
-  color: #42b983; */
 }
 .login-modal-close-btn {
   position: absolute;
@@ -170,8 +142,6 @@ export default {
   background: rgba(22, 24, 35, 0.05);
   padding-top: 6px;
   padding-left: 9px;
-
-  /* cursor: pointer; */
 }
 .login-modal-close-btn i {
   font-size: 1.25rem;
@@ -199,7 +169,6 @@ export default {
   line-height: 22px;
   color: #161823;
   margin-top: 24px;
-  /* margin-bottom: 12px; */
   font-weight: bold;
   display: flex;
   justify-content: space-between;
@@ -208,7 +177,6 @@ export default {
 .login-form-container {
   position: relative;
   border-radius: 4px;
-  /* margin-bottom: 8px; */
   background: rgba(22, 24, 35, 0.06);
   border: 1.5px solid rgba(22, 24, 35, 0.06);
   display: flex;
@@ -241,6 +209,9 @@ export default {
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
+}
+.login-forgot-password:hover {
+  color: #fa5252;
 }
 .login-modal-body button {
   align-self: center;
@@ -277,6 +248,11 @@ export default {
   display: inline-block;
   font-weight: 600;
   cursor: pointer;
+  text-decoration: none;
+}
+.signup-btn-link:hover {
+  color: #fa5252;
+  text-decoration: underline;
 }
 
 .info-input {
@@ -296,38 +272,5 @@ export default {
 
 .modal-footer {
   padding: 8px 12px;
-}
-/* .login-btn {
-  margin: 0 0 0 8px;
-  width: 200px;
-  height: 50px;
-  border: none;
-  border-radius: 2rem;
-  background-color: #7950f2;
-  color: #f8f9fa;
-  cursor: pointer;
-} */
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
-
-.modal-enter {
-  opacity: 0;
-}
-
-.modal-leave-active {
-  opacity: 0;
-}
-
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
 }
 </style>
