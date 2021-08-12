@@ -24,26 +24,27 @@
         </button>
       </div>
       <div class="login-container" v-else>
-        <LoginButton :styleType="0" @clickButton="toggleModal" />
+        <LoginButton :styleType="0" @clickButton="openLoginModal" />
       </div>
     </div>
-    <LoginModal v-if="isVisibleModal" @close="isVisibleModal = false" v-bind:isVisible="isVisibleModal" v-on:toggleVisible="toggleModal"> </LoginModal>
+    <!-- <LoginModal v-if="isVisibleModal" @close="isVisibleModal = false" v-bind:isVisible="isVisibleModal" v-on:toggleVisible="toggleModal"> </LoginModal> -->
   </div>
 </template>
 
 <script>
-import LoginModal from '@/components/common/LoginModal.vue';
+// import LoginModal from '@/components/common/LoginModal.vue';
 import LoginButton from '@/components/common/LoginButton.vue';
 
 export default {
-  data: function() {
-    return {
-      isVisibleModal: false,
-    };
-  },
+  // data: function() {
+  //   return {
+  //     isVisibleModal: false,
+  //   };
+  // },
   methods: {
-    toggleModal: function() {
-      this.isVisibleModal = !this.isVisibleModal;
+    openLoginModal() {
+      this.$emit('openModal', true);
+      console.log('hi');
     },
     clickUploadBtn() {
       this.$router.push({
@@ -52,7 +53,7 @@ export default {
     },
   },
   components: {
-    LoginModal,
+    // LoginModal,
     LoginButton,
   },
 };

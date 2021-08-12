@@ -1,18 +1,19 @@
 <template>
   <div id="home-view" :style="styleObj">
     <div class="header-container">
-      <AppHeader></AppHeader>
+      <AppHeader @openModal="toggleModal"></AppHeader>
     </div>
     <div class="body-container">
       <div class="side-bar-container">
         <div class="scroll-container">
-          <SideBar :isActive="this.navIndex"></SideBar>
+          <SideBar :isActive="this.navIndex" @openModal="toggleModal"></SideBar>
         </div>
       </div>
       <div class="trending-container">
         <PostList :postType="0" @openPage="openDetailPage"></PostList>
       </div>
     </div>
+    <LoginModal v-if="isVisibleModal" @close="isVisibleModal = false" :isVisible="isVisibleModal" @closeModal="toggleModal"> </LoginModal>
   </div>
 </template>
 
@@ -20,6 +21,7 @@
 import AppHeader from '@/components/common/AppHeader.vue';
 import SideBar from '@/components/SideBar.vue';
 import PostList from '@/components/PostList.vue';
+import LoginModal from '@/components/common/LoginModal.vue';
 
 export default {
   data() {
@@ -27,6 +29,7 @@ export default {
       isOpenedPage: false,
       styleObj: {},
       navIndex: 0,
+      isVisibleModal: false,
     };
   },
   watch: {
@@ -58,11 +61,15 @@ export default {
         this.styleObj = {};
       }
     },
+    toggleModal(state) {
+      this.isVisibleModal = state;
+    },
   },
   components: {
     AppHeader,
     SideBar,
     PostList,
+    LoginModal,
   },
 };
 </script>

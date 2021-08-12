@@ -89,14 +89,22 @@ export default {
   methods: {
     movePage(state) {
       if (state) {
-        this.$router.push({
-          name: 'Following',
-        });
+        if (this.$store.state.auth.userInfo) {
+          this.$router.push({
+            name: 'Following',
+          });
+        } else {
+          this.openLoginModal();
+        }
       } else {
         this.$router.push({
           name: 'Home',
         });
       }
+    },
+    openLoginModal() {
+      this.$emit('openModal', true);
+      console.log('hello');
     },
     async getRecommended() {
       const response = await friendApi.getRecFriendShort();

@@ -7,7 +7,7 @@
             <slot name="header">
               Login
             </slot>
-            <i class="fas fa-times close-btn" v-on:click="toggleVisible"></i>
+            <i class="fas fa-times close-btn" @click="closeModal"></i>
           </div>
 
           <div class="modal-body">
@@ -32,19 +32,20 @@
 
 <script>
 export default {
-  data: function() {
+  data() {
     return {
       userId: '',
       userPw: '',
     };
   },
   methods: {
-    toggleVisible: function() {
-      this.$emit('toggleVisible');
+    closeModal() {
+      this.$emit('closeModal', false);
+      console.log('bye');
     },
     login() {
       this.$store.dispatch('auth/login', { userId: this.userId, password: this.userPw });
-      this.toggleVisible();
+      this.closeModal();
     },
   },
 };
