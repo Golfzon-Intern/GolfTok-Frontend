@@ -1,6 +1,6 @@
 <template>
   <div class="post-detail-wrapper">
-    <div class="video-card-container">
+    <div class="video-card-container" @click="setisPlaying">
       <div class="background-image">
         <img :src="postInfo.postThumbnail" />
       </div>
@@ -13,7 +13,7 @@
       <button class="close-btn" @click="closePage">
         <i class="fas fa-times"></i>
       </button>
-      <button class="mute-btn" @click="closePage">
+      <button class="mute-btn" @click="setIsMuted">
         <i v-if="isMuted" class="fas fa-volume-mute"></i>
         <i v-else class="fas fa-volume-up"></i>
       </button>
@@ -39,23 +39,18 @@
         <FollowButton />
       </div>
       <div class="video-info-container">
-        <div class="location-info">
-          <h4>
-            <div class="location-decoration">
-              <i class="fas fa-map-marker-alt"></i>
-              {{ postInfo.locations }}
-            </div>
-          </h4>
-        </div>
-        <div class="video-meta-title">
-          <strong>{{ postInfo.postContent }}</strong>
-        </div>
-        <!-- <p class="video-meta-title">{{ postInfo.postContent }}</p> -->
+        <h4 class="location-info">
+          <div class="location-decoration">
+            <i class="fas fa-map-marker-alt"></i>
+            {{ postInfo.locations }}
+          </div>
+        </h4>
+        <h1 class="video-meta-title">{{ postInfo.postContent }}</h1>
         <div class="action-container">
           <div class="action-wrapper">
             <!-- <i class="far fa-heart"></i>
             <strong>{{ postInfo.likeCount }}</strong> -->
-            <LikeButton :targetType="'post'" :targetId="postInfo.postId" :styleType="1" />
+            <LikeButton :targetId="postInfo.postId" :styleType="1" @updateLiked="setLikeCount" />
             <strong>{{ postInfo.likeCount }}</strong>
           </div>
           <div class="action-wrapper">
@@ -87,6 +82,8 @@ export default {
   data: function() {
     return {
       postInfo: {},
+      video: null,
+      isHover: false,
       isMuted: true,
       isPlaying: true,
       // isFirst: this.$route.params.isFirst,
@@ -98,11 +95,57 @@ export default {
   },
   methods: {
     async getPostInfo() {
-      const response = await postApi.getPostDetail(this.$route.params.postId, 0);
-      this.postInfo = response.data.postList[0];
+      try {
+        const response = await postApi.getPostDetail(this.$route.params.postId, 0);
+        this.postInfo = response.data.postList[0];
+
+        // video 태그로 추가된 동영상 정보 가져오기
+        this.video = document.getElementsByTagName('video');
+      } catch (error) {
+        console.log(error);
+      }
     },
     closePage() {
       this.$router.back();
+    },
+    setIsHover(state) {
+      this.isHover = state;
+    },
+    setisPlaying() {
+      event.preventDefault();
+      this.isPlaying = !this.isPlaying;
+
+      if (this.isPlaying) {
+        this.$refs.videoRef.play();
+      } else {
+        this.$refs.videoRef.pause();
+      }
+    },
+    setIsMuted() {
+      event.preventDefault();
+      this.isMuted = !this.isMuted;
+
+      if (this.isMuted) {
+        this.$refs.videoRef.muted = true;
+      } else {
+        this.$refs.videoRef.muted = false;
+      }
+    },
+    setLikeCount(state) {
+      if (state) {
+        // await likeApi.addPostLiked(this.targetId);
+        this.postInfo.likeCount += 1;
+      } else {
+        // await likeApi.deletePostLiked(this.targetId);
+        this.postInfo.likeCount -= 1;
+      }
+    },
+    setCommentCount(state) {
+      if (state) {
+        this.postInfo.commentCount += 1;
+      } else {
+        this.postInfo.commentCount -= 1;
+      }
     },
   },
   components: {
@@ -169,6 +212,7 @@ export default {
 }
 .video-card-big .play-btn {
   height: 100%;
+  cursor: pointer;
 }
 .video-card-big .play-btn i {
   position: absolute;
@@ -227,7 +271,7 @@ export default {
 
 .content-container {
   flex: 0 0 auto;
-  width: 40%;
+  width: 35%;
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -317,18 +361,28 @@ export default {
   flex-direction: column;
   justify-content: space-between; */
 }
-
-.video-meta-title {
+.video-info-container .location-info .location-decoration {
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 1rem;
+  font-weight: 600;
+  display: inline-block;
+  font-size: 0.875rem;
+  line-height: 22px;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #495057;
+  margin-top: 8px;
+}
+.video-info-container .video-meta-title {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1.25rem;
   line-height: 24px;
   color: rgb(18, 18, 18);
   flex: 0 0 auto;
   font-weight: normal;
-  margin-bottom: 0px;
   word-break: break-word;
-
-  /* font-size: 1.25rem; */
+  margin-bottom: 16px;
 }
 
 .action-container {
@@ -339,17 +393,13 @@ export default {
   padding: 16px 0px;
   position: relative;
   flex: 0 0 auto;
+  margin-bottom: 16px;
 
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   font-size: 0.875rem;
   height: 40px;
   line-height: 40px;
-
-  /* height: 30%;
-  margin-bottom: 4px;
-  display: flex;
-  align-items: center; */
 }
 .action-wrapper {
   display: flex;
@@ -367,16 +417,11 @@ export default {
   border-top: 0.5px solid rgba(18, 18, 18, 0.12);
   border-bottom: 0.5px solid rgba(18, 18, 18, 0.12);
   box-sizing: border-box;
-  overflow-y: scroll;
-
-  /* height: 60%;
-  background: #f1f3f5;
-  border-top: 1px solid #ced4da;
-  border-bottom: 1px solid #ced4da; */
+  overflow-y: overlay;
 }
 .comment-input-container {
-  height: 10%;
   margin: 0 32px;
   padding: 21px 0;
+  background-color: #fff;
 }
 </style>

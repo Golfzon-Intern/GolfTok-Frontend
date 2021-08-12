@@ -48,6 +48,8 @@ export default {
           width: '32px',
           height: '32px',
           marginRight: '6px',
+          paddingTop: '1px',
+          paddingLeft: '2px',
           background: '#dee2e6',
           borderRadius: '100%',
           cursor: 'pointer',
@@ -58,7 +60,7 @@ export default {
           width: '100%',
           height: '100%',
           overflow: 'hidden',
-          fontSize: '1.25rem',
+          fontSize: '1.2rem',
           textAlign: 'center',
           color: 'black',
         };

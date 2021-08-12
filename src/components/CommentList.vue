@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-list-wrapper">
+  <div id="parent-comments">
     <div class="comment-item" v-for="(comment, index) in comments" v-bind:key="index">
       <div class="comment-content">
         <div class="comment-avatar">
@@ -16,17 +16,18 @@
           </div>
         </div>
         <div class="like-container">
-          <LikeButton :targetType="'comment'" :targetId="comment.commentId" :styleType="2" />
+          <LikeButton :targetId="comment.commentId" :targetOrder="index" :styleType="2" @updateLiked="setLikeCount" />
+          <p>{{ comment.likeCount }}</p>
         </div>
       </div>
       <div class="more-contents">
-        <div class="more-btn" v-if="isHidedReply" @click="toggleReply">
+        <div class="more-btn" v-if="!comment.isOpenedReply" @click="toggleReply(index)">
           <span class="more-text">View more replies ({{ comment.childrenCount }})</span>
           <span class="more-icon">
             <i class="fas fa-chevron-down"></i>
           </span>
         </div>
-        <childCommentList v-else @hideReply="toggleReply" />
+        <childCommentList v-else :targetOrder="index" @hideReply="toggleReply" />
       </div>
     </div>
   </div>
@@ -42,7 +43,6 @@ export default {
   data() {
     return {
       comments: [],
-      isHidedReply: true,
     };
   },
   props: {
@@ -56,11 +56,42 @@ export default {
   },
   methods: {
     async getComments() {
-      const response = await commentApi.getParentComments(this.postId);
-      this.comments = response.data.parentList;
+      try {
+        const response = await commentApi.getParentComments(this.postId);
+        const data = response.data.parentList;
+
+        if (data.length) {
+          for (const item of data) {
+            const commentObj = {
+              ...item,
+              isOpenedReply: false,
+            };
+
+            this.comments.push(commentObj);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
-    toggleReply() {
-      this.isHidedReply = !this.isHidedReply;
+    toggleReply(index) {
+      this.comments[index].isOpenedReply = !this.comments[index].isOpenedReply;
+    },
+    setLikeCount(state, index) {
+      if (state) {
+        // await likeApi.addCommentLike(this.targetId);
+        this.comments[index].likeCount += 1;
+      } else {
+        // await likeApi.deleteCommentLiked(this.targetId);
+        this.comments[index].likeCount -= 1;
+      }
+    },
+    setCommentCount(state, index) {
+      if (state) {
+        this.comments[index].commentCount += 1;
+      } else {
+        this.comments[index].commentCount -= 1;
+      }
     },
   },
   components: {
@@ -71,36 +102,31 @@ export default {
 </script>
 
 <style>
-.comment-list-wrapper {
+#parent-comments {
   width: 100%;
   padding-top: 16px;
-
-  /* min-height: 100%;
-  max-height: 100%;
-  overflow: scroll;
-  font-family: Helvetica, Arial, sans-serif; */
+  background-color: rgb(248, 248, 248);
 }
 
-.comment-item {
+#parent-comments .comment-item {
   margin-bottom: 16px;
   width: 100%;
-
-  /* min-height: 100px;
-  max-height: 120px; */
 }
 
-.comment-content {
+#parent-comments .comment-content {
   padding: 0;
   margin-bottom: 16px;
   position: relative;
   display: flex;
+  flex-direction: row;
 }
 
-.comment-avatar {
+#parent-comments .comment-avatar {
   display: block;
   cursor: pointer;
 }
-.user-pic {
+
+#parent-comments .user-pic {
   display: inline-flex;
   width: 40px;
   height: 40px;
@@ -116,13 +142,12 @@ export default {
   line-height: 32px;
 }
 
-.content-container {
+#parent-comments .content-container {
   display: block;
-
-  /* width: 80%; */
+  width: 70%;
+  background-color: inherit;
 }
-
-.user-info {
+#parent-comments .user-info {
   display: block;
   font-size: 1.125rem;
   line-height: 25px;
@@ -130,47 +155,40 @@ export default {
   font-weight: 600;
   color: #212529;
 }
-
-.comment-text {
+#parent-comments .comment-text {
   font-size: 1rem;
   line-height: 22px;
   color: #212529;
   padding-top: 4px;
-  padding-right: 40px;
+  padding-right: 10px;
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
   word-break: break-word;
   white-space: pre-line;
 }
-.bottom-container {
+#parent-comments .bottom-container {
   display: flex;
-  font-family: Helvetica, Arial, sans-serif;
-  /* margin-top: 6px; */
 }
-/* .bottom-container span {
+#parent-comments .comment-time {
+  font-family: Helvetica, Arial, sans-serif;
   font-size: 0.875rem;
   line-height: 20px;
   color: #212529;
   opacity: 0.5;
-} */
-.comment-time {
-  display: block;
-  font-size: 0.875rem;
-  line-height: 20px;
-  color: #212529 0.5;
+  margin: 6px 0px 0px;
 }
-.reply-btn {
+#parent-comments .reply-btn {
   margin: 6px 0 0 24px;
+  font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   font-size: 0.875rem;
   line-height: 20px;
-  color: #212529 0.5;
+  color: #212529;
+  opacity: 0.5;
   cursor: pointer;
-
-  /* margin-left: 16px; */
 }
 
-.like-container {
+#parent-comments .like-container {
   position: absolute;
   top: 24px;
   right: 2px;
@@ -178,29 +196,34 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 20px;
-
-  /* width: 10%; */
 }
-/* .like-container i {
-  font-size: 1.25rem;
-} */
-.like-container p {
+#parent-comments .like-container p {
   font-size: 0.75rem;
 }
 
-.more-contents {
+#parent-comments .more-contents {
   padding-left: 12%;
 }
-.more-btn {
+#parent-comments .more-btn {
+  margin-top: 14px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.875rem;
+  line-height: 20px;
+  font-weight: 600;
+  position: relative;
   color: #212529;
   opacity: 0.5;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
-.more-text:hover {
+#parent-comments .more-text:hover {
   text-decoration: underline;
 }
-.more-icon {
-  padding-top: 4px;
-  padding-left: 12px;
+#parent-comments .more-icon {
+  width: 1rem;
+  height: 1rem;
+  font-size: 1rem;
+  margin-left: 6px;
 }
 </style>

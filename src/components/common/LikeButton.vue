@@ -1,7 +1,13 @@
 <template>
   <div class="like-wrapper" :style="boxStyleObj">
     <div class="like-icon" @click="updateLiked" :style="iconStyleObj">
-      <i class="fas fa-heart full-heart" :style="[isLiked ? { color: '#f03e3e', textShadow: '1px 1px 2px #868e96' } : { color: 'inherit' }]"></i>
+      <div v-if="isLiked">
+        <i class="fas fa-heart full-heart" :style="{ color: '#f03e3e', textShadow: '1px 1px 2px #868e96' }"></i>
+      </div>
+      <div v-else>
+        <i v-if="styleType === 2" class="far fa-heart"></i>
+        <i v-else class="fas fa-heart full-heart"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -19,10 +25,6 @@ export default {
     };
   },
   props: {
-    targetType: {
-      type: String,
-      default: 'post',
-    },
     targetId: {
       type: Number,
       default: 0,
@@ -110,39 +112,16 @@ export default {
     },
     async updateLiked() {
       let likeCount = this.numOfLike;
-      console.log('btn:' + likeCount);
 
       if (likeCount && this.isLiked) {
         // 좋아요 취소
         likeCount -= 1;
         if (likeCount < 0) likeCount = 0;
-
-        if (this.targetType === 'post') {
-          // 게시물 좋아요 삭제
-          // await likeApi.deletePostLiked(this.targetId);
-          console.log('delete like of post');
-          this.$emit('updateLiked', false, this.targetOrder);
-        } else {
-          // this.targetType === 'comment'
-          // 댓글 좋아요 삭제
-          // await likeApi.deleteCommentLiked(this.targetId);
-          console.log('delete like of comment');
-        }
+        this.$emit('updateLiked', false, this.targetOrder);
       } else {
         // 좋아요 추가
         likeCount += 1;
-
-        if (this.targetType === 'post') {
-          // 게시물 좋아요 추가
-          // await likeApi.addPostLiked(this.targetId);
-          console.log('add like of post');
-          this.$emit('updateLiked', true, this.targetOrder);
-        } else {
-          // this.targetType === 'comment'
-          // 댓글 좋아요 추가
-          // await likeApi.addCommentLike(this.targetId);
-          console.log('add like of comment');
-        }
+        this.$emit('updateLiked', true, this.targetOrder);
       }
 
       this.isLiked = !this.isLiked;

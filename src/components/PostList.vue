@@ -39,8 +39,8 @@
                       <i v-if="post.isMuted" class="fas fa-volume-mute"></i>
                       <i v-else class="fas fa-volume-up"></i>
                     </div>
-                    <div class="play-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setIsPlayed(index)">
-                      <i v-if="post.isPlayed" class="fas fa-pause"></i>
+                    <div class="play-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setisPlaying(index)">
+                      <i v-if="post.isPlaying" class="fas fa-pause"></i>
                       <i v-else class="fas fa-play"></i>
                     </div>
                   </div>
@@ -53,7 +53,7 @@
             </div>
             <div class="item-action-bar">
               <div class="bar-item-wrapper">
-                <LikeButton :targetType="'post'" :targetId="post.postId" :targetOrder="index" :styleType="0" @updateLiked="setLikeCount"></LikeButton>
+                <LikeButton :targetId="post.postId" :targetOrder="index" :styleType="0" @updateLiked="setLikeCount"></LikeButton>
                 <strong>{{ post.likeCount }}</strong>
               </div>
               <div class="bar-item-wrapper" @click="openPostDetail(index, post.postId)">
@@ -156,7 +156,7 @@ export default {
               authorAvatar: post.userIcon,
               isHover: false,
               isMuted: true,
-              isPlayed: true,
+              isPlaying: true,
             };
 
             this.postInfos.push(postObj);
@@ -233,22 +233,22 @@ export default {
         if (visible > fraction) {
           // console.log(this.$refs.videoRef[i]);
           this.$refs.videoRef[i].play();
-          this.postInfos[i].isPlayed = true;
+          this.postInfos[i].isPlaying = true;
         } else {
           // console.log('pausevideo');
           this.$refs.videoRef[i].pause();
-          this.postInfos[i].isPlayed = false;
+          this.postInfos[i].isPlaying = false;
         }
       }
     },
     setIsHover(state, index) {
       this.postInfos[index].isHover = state;
     },
-    setIsPlayed(index) {
+    setisPlaying(index) {
       event.preventDefault();
-      this.postInfos[index].isPlayed = !this.postInfos[index].isPlayed;
+      this.postInfos[index].isPlaying = !this.postInfos[index].isPlaying;
 
-      if (this.postInfos[index].isPlayed) {
+      if (this.postInfos[index].isPlaying) {
         this.$refs.videoRef[index].play();
       } else {
         this.$refs.videoRef[index].pause();
@@ -266,12 +266,12 @@ export default {
     },
     setLikeCount(state, index) {
       if (state) {
+        // await likeApi.addPostLiked(this.targetId);
         this.postInfos[index].likeCount += 1;
       } else {
+        // await likeApi.deletePostLiked(this.targetId);
         this.postInfos[index].likeCount -= 1;
       }
-
-      console.log(this.postInfos[index].likeCount);
     },
     setCommentCount(state, index) {
       if (state) {
@@ -279,8 +279,6 @@ export default {
       } else {
         this.postInfos[index].commentCount -= 1;
       }
-
-      console.log(this.postInfos[index].commentCount);
     },
   },
   components: {
