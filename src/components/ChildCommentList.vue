@@ -19,7 +19,7 @@
           <i class="fas fa-trash"></i>
           <strong>del</strong>
         </div>
-        <LikeButton :targetId="comment.commentId" :styleType="2" />
+        <LikeButton :targetType="'comment'" :targetId="comment.commentId" :styleType="2" />
       </div>
     </div>
 

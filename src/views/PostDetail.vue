@@ -45,7 +45,7 @@
         <h1 class="video-meta-title">{{ postInfo.postContent }}</h1>
         <div class="action-container">
           <div class="action-wrapper">
-            <LikeButton :targetId="postInfo.postId" :styleType="1" />
+            <LikeButton :targetType="'post'" :targetId="postInfo.postId" :styleType="1" />
           </div>
           <div class="action-wrapper">
             <CommentButton :numOfComments="postInfo.commentCount" :styleType="1" />
@@ -53,7 +53,7 @@
         </div>
       </div>
       <div class="comment-container">
-        <CommentList :postId="postInfo.postId" :comments="comments" @toggleChildList="setIsOpened" @clickReplyParent="setReplyTo" @clickDeleteBtn="removeComment" />
+        <CommentList :comments="comments" @toggleChildList="setIsOpened" @clickReplyParent="setReplyTo" @clickDeleteBtn="removeComment" />
       </div>
       <div class="comment-input-container">
         <CommentInput :replyTo="replyTo" @submitComment="addComment" />
@@ -89,6 +89,7 @@ export default {
   created() {
     this.getPostInfo();
     this.setComments();
+    console.log(this.$route.params.postId);
   },
   methods: {
     async getPostInfo() {

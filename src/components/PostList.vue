@@ -49,7 +49,7 @@
             </div>
             <div class="item-action-bar">
               <div class="bar-item-wrapper">
-                <LikeButton :targetId="post.postId" :styleType="0"></LikeButton>
+                <LikeButton :targetType="'post'" :targetId="post.postId" :styleType="0"></LikeButton>
               </div>
               <div class="bar-item-wrapper" @click="openPostDetail(post.postId, true)">
                 <CommentButton :styleType="0"></CommentButton>
