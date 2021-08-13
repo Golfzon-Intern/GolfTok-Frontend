@@ -3,7 +3,7 @@
     <div class="comment-icon" :style="iconStyleObj">
       <i class="fas fa-comment" :style="{ position: 'relative', bottom: '2px' }"></i>
     </div>
-    <strong :style="textStyleObj">57</strong>
+    <strong :style="textStyleObj">{{ numOfComments }}</strong>
   </div>
 </template>
 

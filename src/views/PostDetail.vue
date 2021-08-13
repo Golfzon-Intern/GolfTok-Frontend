@@ -48,7 +48,7 @@
             <LikeButton :targetId="postInfo.postId" :styleType="1" />
           </div>
           <div class="action-wrapper">
-            <CommentButton :styleType="1" />
+            <CommentButton :numOfComments="postInfo.commentCount" :styleType="1" />
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@ export default {
     },
     async setComments() {
       try {
-        const response = await commentApi.getParentComments(this.postInfo.postId);
+        const response = await commentApi.getParentComments(this.$route.params.postId);
         const parents = response.data.parentList;
 
         for (const parent of parents) {
