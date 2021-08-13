@@ -1,33 +1,33 @@
 <template>
-  <transition name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container">
-          <div class="modal-header">
-            <slot name="header">
-              Login
-            </slot>
-            <i class="fas fa-times close-btn" v-on:click="toggleVisible"></i>
-          </div>
+  <div id="nasmo-modal-container">
+    <div class="nasmo-modal-wrapper">
+      <div class="nasmo-modal-container">
+        <div class="nasmo-modal-header">
+          <h3 class="nasmo-modal-title">Nasmo videos</h3>
+          <button class="nasmo-modal-close-btn" @click="toggleVisible">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
 
-          <div class="modal-body">
-            <p>{{ selectedIndex }}</p>
-            <ul class="nasmo-list">
-              <li class="nasmo-item" v-for="(value, index) in videoList" v-bind:key="index">
-                <b-form-radio v-model="selectedIndex" :aria-describedby="value" name="some-radios" v-bind:value="index" @change="changeSelected(index)" />
-                <img v-bind:src="value.nasmoThumbnail" />
-              </li>
-            </ul>
+        <div class="nasmo-modal-body">
+          <div class="nasmo-video-list">
+            <div class="nasmo-video-item" v-for="(videoItem, index) in videoList" v-bind:key="index">
+              <b-form-radio v-model="selectedIndex" :aria-describedby="videoItem" name="some-radios" :value="index" @change="changeSelected(index)" />
+              <img v-bind:src="videoItem.nasmoThumbnail" />
+            </div>
           </div>
+        </div>
 
-          <div class="modal-footer">
-            <button class="file-btn" @click="onClickFileBtn">다른 영상 선택하기</button>
-            <button class="select-btn" @click="saveSelected(selectedIndex)">선택 완료</button>
+        <div class="nasmo-modal-footer">
+          <div class="btn-wrapper">
+            <button class="another-video-btn" @click="onClickFileBtn">Another video</button>
+            <button class="select-video-btn" @click="saveSelected(selectedIndex)">Select</button>
           </div>
         </div>
       </div>
     </div>
-  </transition>
+    <div class="nasmo-modal-mask"></div>
+  </div>
 </template>
 
 <script>
@@ -60,111 +60,169 @@ export default {
 </script>
 
 <style>
-.modal-mask {
+#nasmo-modal-container {
   position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: table;
-  transition: opacity 0.3s ease;
-}
-
-.modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.modal-container {
-  width: 70%;
-  height: 90%;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 50px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.3s ease;
+  inset: 0px;
+  z-index: 10010;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-}
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
-.close-btn {
-  cursor: pointer;
+.nasmo-modal-mask {
+  position: absolute;
+  z-index: -1;
+  inset: 0px;
+  background: rgba(0, 0, 0, 0.5);
 }
 
-.modal-body {
-  height: 60vh;
-  margin: 20px 0;
+.nasmo-modal-wrapper {
+  overflow: hidden;
+  display: block;
+  position: relative;
+  width: 70%;
+  min-height: 700px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.nasmo-modal-container {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: none;
+}
+
+.nasmo-modal-header {
+  width: 100%;
+  height: 48px;
+  font-size: 1.5rem;
+  line-height: 32px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  padding: 0 20px 90px 22px;
+  color: #fff;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+}
+.nasmo-modal-header h3 {
+  position: absolute;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  line-height: 32px;
+  flex: 1;
+  text-align: center;
+  font-weight: bolder;
+  color: #000;
+}
+.nasmo-modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  z-index: 2;
+  display: inline-flex;
+  cursor: pointer;
+  border-radius: 50%;
+  border: none;
+  background: rgba(22, 24, 35, 0.05);
+  padding-top: 6px;
+  padding-left: 9px;
+}
+.nasmo-modal-close-btn i {
+  font-size: 1.25rem;
+}
+
+.nasmo-modal-body {
+  flex: 1;
+  width: 100%;
+  min-height: auto;
+  max-height: 70vh;
+  margin: 0 auto;
+  padding: 0 48px;
+  box-sizing: border-box;
+  position: relative;
   overflow: scroll;
 }
-.nasmo-list {
+
+.nasmo-video-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
+  gap: 12px;
+  padding: 12px 0;
+  margin-bottom: 12px;
 }
-.nasmo-list img {
-  width: 370px;
-  height: 220px;
-}
-.nasmo-item {
+.nasmo-video-item {
   display: flex;
-  gap: 10px;
+  width: 25vw;
+  height: auto;
+}
+.nasmo-video-item img {
+  width: 100%;
+  height: 100%;
 }
 
-.modal-footer {
-  padding: 8px 12px;
+.nasmo-modal-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
 }
-.file-btn {
-  margin-right: 12px;
+.nasmo-modal-footer .btn-wrapper {
+  position: absolute;
+  right: 48px;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nasmo-modal-footer button {
   border: none;
-  background-color: rgba(0, 0, 0, 0);
-  color: #868e96;
+  cursor: pointer;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 700;
 }
-.file-btn:hover {
-  color: #495057;
+.another-video-btn {
+  right: 20%;
+  bottom: 12px;
+  font-size: 1rem;
+  line-height: 18px;
+  color: #161823;
+  padding: 0 24px;
+  background-color: #fff;
 }
-.select-btn {
-  margin-left: 12px;
-  width: 150px;
-  height: 50px;
-  border-radius: 50px;
-  border: none;
-  background-color: #5d5fef;
-  color: #f8f9fa;
+.another-video-btn:hover {
+  text-decoration: underline;
+  color: #fa5252;
 }
-.select-btn:hover {
-  background-color: #5557ec;
+.select-video-btn {
+  right: 10%;
+  bottom: 12px;
+  width: 200px;
+  height: 40px;
+  font-size: 1rem;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: #fa5252;
+  color: #fff;
 }
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
-
-.modal-enter {
-  opacity: 0;
-}
-
-.modal-leave-active {
-  opacity: 0;
-}
-
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
+.select-video-btn:hover {
+  background-color: #f03e3e;
 }
 </style>
