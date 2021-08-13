@@ -314,6 +314,7 @@ export default {
 }
 .upload-video-card {
   width: 25vw;
+  max-width: 384px;
   height: 67vh;
   background: rgba(22, 24, 35, 0.03);
   border-radius: 8px;
@@ -370,12 +371,13 @@ export default {
 .upload-form-container {
   margin-left: 60px;
   margin-bottom: 111px;
+  width: 50vw;
+  max-width: 756px;
 }
 
 .upload-cption-container {
   outline-style: none;
   position: relative;
-  width: 50vw;
   margin-bottom: 24px;
 }
 .form-title-container {
@@ -409,7 +411,6 @@ export default {
 .upload-location-container {
   outline-style: none;
   position: relative;
-  width: 50vw;
   margin-bottom: 24px;
 }
 

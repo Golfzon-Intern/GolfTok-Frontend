@@ -82,6 +82,7 @@ export default {
   display: block;
   position: relative;
   width: 70%;
+  height: 80%;
   min-height: 700px;
   background-color: #fff;
   border-radius: 8px;
@@ -147,8 +148,9 @@ export default {
 .nasmo-modal-body {
   flex: 1;
   width: 100%;
-  min-height: auto;
-  max-height: 70vh;
+  min-height: 500px;
+  height: 60vh;
+  max-height: 570px;
   margin: 0 auto;
   padding: 0 48px;
   box-sizing: border-box;
