@@ -162,7 +162,7 @@ export default {
         groupLayer: isChild ? 1 : 0,
       };
       const response = await commentApi.addComment(newObj);
-      const newComment = response.data.commentList[0];
+      const newComment = response.data.comment;
       console.log(newComment);
 
       this.comments = [newComment, ...this.comments];

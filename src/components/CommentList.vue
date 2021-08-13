@@ -26,7 +26,7 @@
         </div>
         <div class="more-contents">
           <div class="more-btn" v-if="!comment.isOpened" @click="toggleChildList(index, true)">
-            <span class="more-text">View more replies ({{ comment.childrenCount }})</span>
+            <span v-if="comment.childrenCount > 0" class="more-text">View more replies ({{ comment.childrenCount }})</span>
             <span class="more-icon">
               <i class="fas fa-chevron-down"></i>
             </span>
