@@ -44,7 +44,7 @@ export default {
     async getLiked() {
       let response = null;
 
-      if (response && this.targetType === 'post') {
+      if (this.targetType === 'post') {
         // 게시물 좋아요 수 조회
         response = await likeApi.getPostLike(this.targetId);
       } else {
