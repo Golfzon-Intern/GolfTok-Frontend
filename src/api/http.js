@@ -14,6 +14,8 @@ const instance = axios.create({
 instance.interceptors.request.use(function(config) {
   if (store.state.auth.userInfo !== null) {
     config['headers'] = {
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json;charset=utf-8',
       'x-access-token': `Bearer ${store.state.auth.userInfo.accessToken}`,
     };
   }
