@@ -3,15 +3,23 @@
     <div class="header-container">
       <AppHeader></AppHeader>
     </div>
-    <div class="body-container">
-      <!-- <div class="upload-container">
+    <div class="body-container" @click="toggleLocationVisible(false)">
+      <div class="upload-container">
         <div class="upload-title">
           Upload Video
           <div class="upload-sub-title">This video will be published to @{{ this.$store.state.auth.userInfo.userName }}</div>
         </div>
         <div class="upload-contents">
-          <div class="upload-operation">
-            <div class="upload-video-btn">
+          <div v-if="newFile || newVideoUrl" class="upload-operation">
+            <div class="upload-video-card preview">
+              <div class="preview-close-btn" @click="deleteVideo">
+                <i class="fas fa-times-circle"></i>
+              </div>
+              <video :src="this.newVideoUrl || this.newFile" type="video/mp4" autoplay="true" controls="controls"></video>
+            </div>
+          </div>
+          <div v-else class="upload-operation empty">
+            <div class="upload-video-btn" @click="toggleSelectorVisible">
               <div class="upload-video-card">
                 <i class="fas fa-cloud-upload-alt"></i>
                 <h2>Select video to upload</h2>
@@ -25,64 +33,36 @@
               <input type="file" name="upload-file-btn" accept="video/mp4,video/x-m4v,video/*" class="upload-btn-input" />
             </div>
           </div>
-          <div class="upload-form">
+          <div class="upload-form-container">
             <div class="upload-cption-container">
-              <h3 class="caption-title-container">Caption</h3>
+              <h3 class="form-title-container">Caption</h3>
               <div class="caption-text-container">
-                <b-form-textarea class="content-input" v-model="newContent" placeholder="문구 입력..." rows="7" no-resize></b-form-textarea>
+                <b-form-textarea class="caption-input" v-model="newContent" rows="5" no-resize></b-form-textarea>
                 <div class="hash-icon">
                   <i class="fas fa-hashtag"></i>
                 </div>
               </div>
             </div>
-            <div class="upload-location-container"></div>
-            <div class="form-bottom-container"></div>
-          </div>
-        </div>
-      </div> -->
-
-      <div class="post-header">
-        <h2>동영상 업로드</h2>
-        <p>@{{ this.$store.state.auth.userInfo.userName }}님의 골프 영상이 게시됩니다.</p>
-      </div>
-      <div class="post-body">
-        <div class="video-box">
-          <div v-if="newFile || newVideoUrl" class="video-player">
-            <button class="delete-video-btn" @click="deleteVideo">
-              <i class="fas fa-times-circle"></i>
-            </button>
-            <video :src="this.newVideoUrl || this.newFile" type="video/mp4" autoplay="true" controls="controls"></video>
-          </div>
-          <button v-else class="video-selector" @click="toggleSelectorVisible">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <p>업로드할 동영상 선택</p>
-            <ul>
-              <li>MP4 또는 WebM</li>
-              <li>720x1280 해상도 이상</li>
-              <li>최대 180초</li>
-            </ul>
-          </button>
-        </div>
-
-        <div class="content-box">
-          <b-form-textarea class="content-input" v-model="newContent" placeholder="문구 입력..." rows="7" no-resize></b-form-textarea>
-          <b-form-input class="location-input" :type="'search'" v-model="newLocation" placeholder="location search ..." v-on:keyup.enter="toggleLocationVisible"></b-form-input>
-          <div class="location-list" v-if="isLocationVisible">
-            <b-list-group>
-              <b-list-group-item button>Button item</b-list-group-item>
-              <b-list-group-item button>I am a button</b-list-group-item>
-              <b-list-group-item button disabled>Disabled button</b-list-group-item>
-              <b-list-group-item button>This is a button too</b-list-group-item>
-              <b-list-group-item button>Button item</b-list-group-item>
-              <b-list-group-item button>I am a button</b-list-group-item>
-              <b-list-group-item button disabled>Disabled button</b-list-group-item>
-              <b-list-group-item button>This is a button too</b-list-group-item>
-            </b-list-group>
-          </div>
-
-          <div class="button-box">
-            <button class="cancel-btn" @click="deleteAll">취소</button>
-            <button class="post-btn" @click="submitPost" v-bind:disabled="isDisabled">게시</button>
+            <div class="upload-location-container">
+              <h3 class="form-title-container">Location</h3>
+              <b-form-input class="location-input" :type="'search'" v-model="newLocation" placeholder="Search location" v-on:keyup.enter="toggleLocationVisible(true)"></b-form-input>
+              <div class="location-list-wrapper" v-if="isLocationVisible">
+                <b-list-group class="location-result-list">
+                  <b-list-group-item button>Button item</b-list-group-item>
+                  <b-list-group-item button>I am a button</b-list-group-item>
+                  <b-list-group-item button disabled>Disabled button</b-list-group-item>
+                  <b-list-group-item button>This is a button too</b-list-group-item>
+                  <b-list-group-item button>Button item</b-list-group-item>
+                  <b-list-group-item button>I am a button</b-list-group-item>
+                  <b-list-group-item button disabled>Disabled button</b-list-group-item>
+                  <b-list-group-item button>This is a button too</b-list-group-item>
+                </b-list-group>
+              </div>
+            </div>
+            <div class="form-bottom-container">
+              <button class="upload-cancle-btn" @click="deleteAll">Discard</button>
+              <button class="upload-post-btn" @click="submitPost" :disabled="isDisabled">Post</button>
+            </div>
           </div>
         </div>
       </div>
@@ -245,11 +225,12 @@ export default {
       this.newVideoUrl = '';
       this.toggleDisabled();
     },
-    toggleLocationVisible() {
-      this.isLocationVisible = !this.isLocationVisible;
+    toggleLocationVisible(state) {
+      this.isLocationVisible = state;
     },
     toggleSelectorVisible() {
       this.isSelectorVisible = !this.isSelectorVisible;
+      console.log('click');
     },
     toggleDisabled() {
       this.isDisabled = !this.isDisabled;
@@ -271,21 +252,15 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-}
-
-#upload-view .body-container {
-  width: 100%;
-  background-color: #fff;
-  display: flex;
-  justify-content: space-between;
-  flex: 1 1 auto;
+  position: fixed;
+  overflow: hidden;
 }
 
 .upload-container {
   max-width: 1200px;
   margin: 0px auto;
   padding-top: 11px;
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
 .upload-title {
@@ -293,14 +268,15 @@ export default {
   font-weight: 700;
   font-size: 3.5rem;
   line-height: 1;
-  margin-top: 60px;
+  margin-top: 3vh;
 }
 .upload-sub-title {
+  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
-  font-size: 1.25rem;
+  font-size: 18px;
   line-height: 24px;
-  color: #495057;
-  margin-top: 2px;
+  color: rgb(138, 139, 145);
+  margin-top: 8px;
 }
 
 .upload-contents {
@@ -312,15 +288,33 @@ export default {
 .upload-operation {
   height: 100%;
 }
+.upload-operation .preview {
+  position: relative;
+}
+.upload-operation .preview video {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.preview-close-btn {
+  position: absolute;
+  z-index: 3;
+  top: -10px;
+  left: -10px;
+  /* right: 5px; */
+}
+.preview-close-btn i {
+  font-size: 2rem;
+  color: #fa5252;
+}
 
 .upload-video-btn {
   cursor: pointer;
   text-align: center;
 }
-
 .upload-video-card {
-  width: 306px;
-  height: 544px;
+  width: 25vw;
+  height: 67vh;
   background: rgba(22, 24, 35, 0.03);
   border-radius: 8px;
   display: flex;
@@ -330,7 +324,7 @@ export default {
   cursor: pointer;
   transition: 0.15s ease-in-out 0s;
 }
-.upload-video-card i {
+.upload-video-btn .upload-video-card i {
   width: 40px;
   height: 40px;
   font-size: 2.5rem;
@@ -373,131 +367,106 @@ export default {
   overflow: hidden;
 }
 
-.upload-form {
+.upload-form-container {
   margin-left: 60px;
   margin-bottom: 111px;
 }
 
-.post-header {
+.upload-cption-container {
+  outline-style: none;
+  position: relative;
+  width: 50vw;
+  margin-bottom: 24px;
+}
+.form-title-container {
   display: flex;
-}
-.post-header h2 {
-  margin: 8px 0;
-  font-weight: 600;
-  color: #343a40;
-}
-.post-header p {
-  margin: 8px 0;
-  color: #495057;
-}
-.post-body {
-  display: flex;
-  width: 100%;
-  height: 78vh;
-  margin: 8px 0;
-}
-.video-box {
-  display: flex;
-  width: 30%;
-  min-width: 300px;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  margin-bottom: 12px;
 }
-.video-selector {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #e9ecef;
-  border-radius: 3rem;
-  border: none;
-  color: #868e96;
+.caption-text-container {
+  min-height: 44px;
+  position: relative;
+  text-align: center;
+  border: 1px solid rgba(22, 24, 35, 0.12);
+  border-radius: 2px;
 }
-.video-selector i {
-  margin-bottom: 1rem;
-  font-size: 2.5rem;
-}
-.video-selector p {
-  font-size: 1.4rem;
-}
-.video-selector ul {
-  text-align: left;
-}
-.video-player {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 3rem;
-  background-color: #212529;
-}
-.video-player video {
-  width: 26vw;
-  min-width: 300px;
-}
-.delete-video-btn {
+.hash-icon {
   position: absolute;
-  left: -20px;
-  top: 60px;
-  border: none;
-  background: rgba(0, 0, 0, 0);
+  top: 12px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  text-align: center;
+  cursor: pointer;
 }
-.delete-video-btn i {
-  font-size: 2rem;
-  color: #c92a2a;
+
+.upload-location-container {
+  outline-style: none;
+  position: relative;
+  width: 50vw;
+  margin-bottom: 24px;
 }
-.content-box {
-  width: 65%;
-  margin-left: 5%;
-  display: flex;
-  flex-direction: column;
-}
-.content-input {
-  margin-top: 3%;
-}
+
 .location-input {
-  display: block;
-  margin-top: 3%;
+  min-height: 44px;
+  position: relative;
+  text-align: left;
+  border: 1px solid rgba(22, 24, 35, 0.12);
+  border-radius: 2px;
 }
-.location-list {
-  margin-top: 4px;
-  max-height: 210px;
-  margin-bottom: 10px;
+.location-list-wrapper {
+  height: 165px;
+  border: 1px solid rgba(22, 24, 35, 0.12);
+  border-radius: 2px;
+}
+.location-result-list {
+  max-height: 160px;
   overflow: scroll;
-  -webkit-overflow-scrolling: touch;
 }
-.button-box {
+
+.form-bottom-container {
   position: absolute;
-  bottom: 30px;
+  bottom: 5%;
+  right: 8%;
   display: flex;
-  align-self: flex-end;
+  justify-content: flex-end;
+  margin-top: 30px;
 }
-.cancel-btn {
-  margin-right: 12px;
-  border: none;
-  background-color: rgba(0, 0, 0, 0);
-  color: #868e96;
+.form-bottom-container button {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+  outline: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
 }
-.cancel-btn:hover {
-  color: #495057;
+.upload-cancle-btn {
+  margin-right: 32px;
+  background-color: transparent;
+  color: rgb(22, 24, 35);
 }
-.post-btn {
-  margin-left: 12px;
-  width: 150px;
-  height: 50px;
-  border-radius: 50px;
-  border: none;
-  background-color: #5d5fef;
-  color: #f8f9fa;
+.upload-post-btn {
+  width: 164px;
+  height: 44px;
+  background-color: #fa5252;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
 }
-.post-btn:disabled {
-  background-color: #868e96;
+.upload-post-btn:disabled {
+  background: rgba(22, 24, 35, 0.06);
+  color: rgba(22, 24, 35, 0.34);
+  cursor: not-allowed;
 }
-.post-btn:enabled:hover {
-  background-color: #5557ec;
+.upload-post-btn:hover {
+  background: #f03e3e;
 }
 </style>
