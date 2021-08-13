@@ -19,7 +19,7 @@ export function deletePostLiked(targetId) {
 
 // 특정 댓글 좋아요 여부 조회
 export function getCommentLike(targetId) {
-  return http.get('/like/post', { params: { postId: targetId } });
+  return http.get('/like/post', { params: { commentId: targetId } });
   // return axios.get('https://gist.githubusercontent.com/Joie-Kim/184928b11f72cea1bdf4388afae13087/raw/66a9f6c63456b0798ff75db89600706ec91a6c3c/dummy_like.json', { params: { commentId: targetId } });
 }
 
