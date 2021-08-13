@@ -19,7 +19,6 @@ export default {
       default: 0,
     },
   },
-  created() {},
   computed: {
     boxStyleObj() {
       if (this.styleType === 1) {
