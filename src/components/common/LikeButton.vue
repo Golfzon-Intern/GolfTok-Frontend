@@ -65,7 +65,7 @@ export default {
     async updateLiked() {
       let likeCount = this.numOfLike;
 
-      if (likeCount && this.isLiked) {
+      if (this.isLiked) {
         // 좋아요 취소
         likeCount -= 1;
         if (likeCount < 0) likeCount = 0;

@@ -97,6 +97,8 @@ export default {
         const response = await postApi.getPostDetail(this.$route.params.postId, 0);
         this.postInfo = response.data.postList[0];
 
+        console.log(this.postInfo);
+
         // video 태그로 추가된 동영상 정보 가져오기
         this.video = document.getElementsByTagName('video');
       } catch (error) {
