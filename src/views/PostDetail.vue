@@ -48,7 +48,7 @@
             <LikeButton :targetType="'post'" :targetId="Number(this.$route.params.postId)" :styleType="1"></LikeButton>
           </div>
           <div class="action-wrapper">
-            <CommentButton :targetId="Number(this.$route.params.postId)" :styleType="1"></CommentButton>
+            <CommentButton :targetId="Number(this.$route.params.postId)" :updateState="commentState" :styleType="1"></CommentButton>
           </div>
         </div>
       </div>
@@ -82,6 +82,7 @@ export default {
       isMuted: true,
       isPlaying: true,
       replyTo: {},
+      commentState: null, // 댓글 작성: 1, 댓글 삭제: 0
       // isFirst: this.$route.params.isFirst,
       // isLast: this.$route.params.isLast,
     };
@@ -175,6 +176,7 @@ export default {
           this.comments = [newComment, ...this.comments];
         }
         console.log(this.comments);
+        this.commentState = 1;
       } catch (error) {
         console.log(error);
       }
@@ -187,13 +189,17 @@ export default {
       };
     },
     removeComment(commentId, parentIndex, index) {
+      console.log('remove');
+      console.log(commentId, parentIndex, index);
       if (parentIndex) {
-        // 부모 댓글 삭제
-        this.comments.splice(index, 1);
-      } else {
+        // 부모 인덱스가 있으면 (자식 댓글이라는 의미)
         // 자식 댓글 삭제
         this.comments[parentIndex].children.splice(index, 1);
+      } else {
+        // 부모 댓글 삭제
+        this.comments.splice(index, 1);
       }
+      this.commentState = 0;
       commentApi.deleteComment(commentId);
     },
   },
