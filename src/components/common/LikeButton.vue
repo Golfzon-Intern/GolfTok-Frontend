@@ -23,19 +23,24 @@ export default {
       numOfLike: 0,
     };
   },
+  // props: {
+  // targetType: {
+  //   type: String,
+  //   default: '',
+  // },
+  // targetId: {
+  //   type: Number,
+  //   default: 0,
+  // },
+  // styleType: {
+  //   type: Number,
+  //   default: 0,
+  // },
+  // },
   props: {
-    targetType: {
-      type: String,
-      default: '',
-    },
-    targetId: {
-      type: Number,
-      default: 0,
-    },
-    styleType: {
-      type: Number,
-      default: 0,
-    },
+    targetType: String,
+    targetId: Number,
+    styleType: Number,
   },
   created() {
     this.getLiked();
