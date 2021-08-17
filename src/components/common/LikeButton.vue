@@ -61,6 +61,7 @@ export default {
       }
 
       this.numOfLike = response.data.likeCount;
+      console.log('numOfList: ' + this.numOfLike);
     },
     async updateLiked() {
       let likeCount = this.numOfLike;
