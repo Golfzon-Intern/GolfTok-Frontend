@@ -107,12 +107,20 @@ export default {
       console.log('hello');
     },
     async getRecommended() {
-      const response = await friendApi.getRecFriendShort();
-      this.recommendations = response.data.recommendList;
+      try {
+        const response = await friendApi.getRecFriendShort();
+        this.recommendations = response.data.recommendList;
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getFollowing() {
-      const response = await friendApi.getFowFriendShort();
-      this.followings = response.data.followingList;
+      try {
+        const response = await friendApi.getFowFriendShort();
+        this.followings = response.data.followingList;
+      } catch (error) {
+        console.log(error);
+      }
     },
     setIsHover(state) {
       this.isHover = state;

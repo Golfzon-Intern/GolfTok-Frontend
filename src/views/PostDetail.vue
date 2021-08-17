@@ -97,7 +97,7 @@ export default {
         const response = await postApi.getPostDetail(this.$route.params.postId, 0);
         this.postInfo = response.data.postList[0];
 
-        console.log(this.postInfo);
+        // console.log(this.postInfo);
 
         // video 태그로 추가된 동영상 정보 가져오기
         this.video = document.getElementsByTagName('video');
@@ -157,17 +157,21 @@ export default {
       this.comments[index].isOpened = state;
     },
     async addComment(text, isChild) {
-      const newObj = {
-        postId: this.postInfo.postId,
-        commentText: text,
-        commentGroup: isChild ? isChild : 0,
-        groupLayer: isChild ? 1 : 0,
-      };
-      const response = await commentApi.addComment(newObj);
-      const newComment = response.data.comment;
-      console.log(newComment);
+      try {
+        const newObj = {
+          postId: this.postInfo.postId,
+          commentText: text,
+          commentGroup: isChild ? isChild : 0,
+          groupLayer: isChild ? 1 : 0,
+        };
+        const response = await commentApi.addComment(newObj);
+        const newComment = response.data.comment;
+        console.log(newComment);
 
-      this.comments = [newComment, ...this.comments];
+        this.comments = [newComment, ...this.comments];
+      } catch (error) {
+        console.log(error);
+      }
     },
     setReplyTo(userName, group) {
       console.log(userName, group);

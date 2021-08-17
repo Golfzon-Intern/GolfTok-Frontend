@@ -39,64 +39,72 @@ export default {
   },
   created() {
     this.getLiked();
+    console.log(this.targetType + this.styleType + this.targetId);
   },
   methods: {
     async getLiked() {
-      let response = null;
+      try {
+        let response = null;
 
-      if (this.targetType === 'post') {
-        // 게시물 좋아요 수 조회
-        response = await likeApi.getPostLike(this.targetId);
-      } else {
-        // this.targetType === 'comment'
-        // 댓글 좋아요 수 조회
-        response = await likeApi.getCommentLike(this.targetId);
+        if (this.targetType === 'post') {
+          // 게시물 좋아요 수 조회
+          response = await likeApi.getPostLike(this.targetId);
+        } else {
+          // this.targetType === 'comment'
+          // 댓글 좋아요 수 조회
+          response = await likeApi.getCommentLike(this.targetId);
+        }
+
+        // 0: 좋아요 되어있는 상태, 1: 좋아요 안 되어 있는 상태
+        if (!response.data.flag) {
+          this.isLiked = true;
+        } else {
+          this.isLiked = false;
+        }
+
+        this.numOfLike = response.data.likeCount !== null ? response.data.likeCount : 0;
+      } catch (error) {
+        console.log(error);
       }
-
-      // 0: 좋아요 되어있는 상태, 1: 좋아요 안 되어 있는 상태
-      if (!response.data.flag) {
-        this.isLiked = true;
-      } else {
-        this.isLiked = false;
-      }
-
-      this.numOfLike = response.data.likeCount;
-      console.log('numOfList: ' + this.numOfLike);
     },
     async updateLiked() {
-      let likeCount = this.numOfLike;
+      try {
+        let likeCount = this.numOfLike;
 
-      if (this.isLiked) {
-        // 좋아요 취소
-        likeCount -= 1;
-        if (likeCount < 0) likeCount = 0;
-        if (this.targetType === 'post') {
-          // 게시물 좋아요 삭제
-          await likeApi.deletePostLiked(this.targetId);
-          console.log('delete like of post');
+        if (this.isLiked) {
+          // 좋아요 취소
+          likeCount -= 1;
+          if (likeCount < 0) likeCount = 0;
+          if (this.targetType === 'post') {
+            // 게시물 좋아요 삭제
+            await likeApi.deletePostLiked(this.targetId);
+            console.log('delete like of post');
+          } else {
+            // this.targetType === 'comment'
+            // 댓글 좋아요 삭제
+            await likeApi.deleteCommentLiked(this.targetId);
+            console.log('delete like of comment');
+          }
         } else {
-          // this.targetType === 'comment'
-          // 댓글 좋아요 삭제
-          await likeApi.deleteCommentLiked(this.targetId);
-          console.log('delete like of comment');
+          // 좋아요 추가
+          likeCount += 1;
+          if (this.targetType === 'post') {
+            // 게시물 좋아요 추가
+            await likeApi.addPostLiked(this.targetId);
+            console.log('add like of post');
+          } else {
+            // this.targetType === 'comment'
+            // 댓글 좋아요 추가
+            await likeApi.addCommentLike(this.targetId);
+            console.log('add like of comment');
+          }
         }
-      } else {
-        // 좋아요 추가
-        likeCount += 1;
-        if (this.targetType === 'post') {
-          // 게시물 좋아요 추가
-          await likeApi.addPostLiked(this.targetId);
-          console.log('add like of post');
-        } else {
-          // this.targetType === 'comment'
-          // 댓글 좋아요 추가
-          await likeApi.addCommentLike(this.targetId);
-          console.log('add like of comment');
-        }
+
+        this.isLiked = !this.isLiked;
+        this.numOfLike = likeCount;
+      } catch (error) {
+        console.log(error);
       }
-
-      this.isLiked = !this.isLiked;
-      this.numOfLike = likeCount;
     },
   },
   computed: {
