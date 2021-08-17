@@ -37,11 +37,6 @@ export default {
       default: 0,
     },
   },
-  // props: {
-  //   targetType: String,
-  //   targetId: Number,
-  //   styleType: Number,
-  // },
   created() {
     this.getLiked();
     console.log(this.targetType + this.styleType + this.targetId);
@@ -54,9 +49,6 @@ export default {
         if (this.targetType === 'post') {
           // 게시물 좋아요 수 조회
           response = await likeApi.getPostLike(this.targetId);
-          console.log(this.targetType);
-          console.log(this.targetId);
-          console.log(response);
         } else {
           // this.targetType === 'comment'
           // 댓글 좋아요 수 조회

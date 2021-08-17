@@ -45,10 +45,10 @@
         <h1 class="video-meta-title">{{ postInfo.postContent }}</h1>
         <div class="action-container">
           <div class="action-wrapper">
-            <LikeButton :targetType="'post'" :targetId="postInfo.postId" :styleType="1" />
+            <LikeButton :targetType="'post'" :targetId="Number(this.$route.params.postId)" :styleType="1"></LikeButton>
           </div>
           <div class="action-wrapper">
-            <CommentButton :numOfComments="postInfo.commentCount" :styleType="1" />
+            <CommentButton :numOfComments="postInfo.commentCount" :styleType="1"></CommentButton>
           </div>
         </div>
       </div>
@@ -89,16 +89,13 @@ export default {
   created() {
     this.getPostInfo();
     this.setComments();
-    console.log(this.$route.params.postId);
+    // console.log(this.$route.params.postId);
   },
   methods: {
     async getPostInfo() {
       try {
         const response = await postApi.getPostDetail(this.$route.params.postId, 0);
         this.postInfo = response.data.postList[0];
-
-        console.log(this.postInfo);
-        console.log(this.postInfo.postId);
 
         // video 태그로 추가된 동영상 정보 가져오기
         this.video = document.getElementsByTagName('video');
