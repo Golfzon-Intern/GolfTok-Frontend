@@ -52,7 +52,7 @@
                 <LikeButton :targetType="'post'" :targetId="post.postId" :styleType="0"></LikeButton>
               </div>
               <div class="bar-item-wrapper" @click="openPostDetail(post.postId, true)">
-                <CommentButton :numOfComments="post.commentCount" :styleType="0"></CommentButton>
+                <CommentButton :targetId="post.postId" :styleType="0"></CommentButton>
               </div>
             </div>
           </div>

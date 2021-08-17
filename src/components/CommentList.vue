@@ -11,8 +11,8 @@
             <div class="comment-text">
               <span>{{ comment.commentText }}</span>
               <div class="bottom-container">
-                <span class="comment-time">{{ comment.commentGroup }}</span>
-                <span class="reply-btn" @click="clickReply(comment.userName, comment.commentGroup)">reply</span>
+                <span class="comment-time">{{ comment.uploadDate }}</span>
+                <span class="reply-btn" @click="clickReply(comment.userName, comment.commentGroup, index)">reply</span>
               </div>
             </div>
           </div>
@@ -24,9 +24,9 @@
             <LikeButton :targetType="'comment'" :targetId="comment.commentId" :styleType="2" />
           </div>
         </div>
-        <div class="more-contents">
+        <div class="more-contents" v-if="comment.childrenCount > 0">
           <div class="more-btn" v-if="!comment.isOpened" @click="toggleChildList(index, true)">
-            <span v-if="comment.childrenCount > 0" class="more-text">View more replies ({{ comment.childrenCount }})</span>
+            <span class="more-text">View more replies ({{ comment.childrenCount }})</span>
             <span class="more-icon">
               <i class="fas fa-chevron-down"></i>
             </span>
@@ -55,8 +55,8 @@ export default {
     toggleChildList(index, state) {
       this.$emit('toggleChildList', index, state);
     },
-    clickReply(userName, group) {
-      this.$emit('clickReplyParent', userName, group);
+    clickReply(userName, group, parentIndex) {
+      this.$emit('clickReplyParent', userName, group, parentIndex);
     },
     clickDeleteBtn(commentId, parentIndex, index) {
       this.$emit('clickDeleteBtn', commentId, parentIndex, index);
@@ -72,7 +72,7 @@ export default {
 <style>
 #parent-comments {
   width: 100%;
-  padding-top: 16px;
+  padding: 16px 0px;
   background-color: rgb(248, 248, 248);
 }
 

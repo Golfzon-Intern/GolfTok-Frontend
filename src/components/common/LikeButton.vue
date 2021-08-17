@@ -109,16 +109,17 @@ export default {
   },
   computed: {
     boxStyleObj() {
-      if (this.styleType === 1) {
+      if (this.styleType === 0) {
         return {
-          display: 'flex',
-          alignItems: 'center',
+          flexDirection: 'column',
+        };
+      } else if (this.styleType === 1) {
+        return {
+          flexDirection: 'row',
         };
       } else if (this.styleType === 2) {
         return {
-          display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
         };
       } else {
         return {};
@@ -130,7 +131,7 @@ export default {
           width: '50px',
           height: '50px',
           marginTop: '8px',
-          paddingTop: '8px',
+          paddingTop: '4px',
           fontSize: '1.5rem',
           textAlign: 'center',
           overflow: 'hidden',
@@ -141,6 +142,7 @@ export default {
         return {
           width: '32px',
           height: '32px',
+          paddingTop: '4px',
           marginRight: '6px',
           fontSize: '1.25rem',
           textAlign: 'center',
@@ -189,6 +191,8 @@ export default {
 
 <style scoped>
 .like-wrapper {
+  display: flex;
+  align-items: center;
   cursor: pointer;
 }
 .like-wrapper strong {
@@ -196,5 +200,11 @@ export default {
   color: #343a40;
   font-weight: 500;
   font-family: Helvetica, Arial, sans-serif;
+}
+
+.like-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

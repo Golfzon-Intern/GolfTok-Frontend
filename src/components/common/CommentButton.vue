@@ -3,14 +3,25 @@
     <div class="comment-icon" :style="iconStyleObj">
       <i class="fas fa-comment" :style="{ position: 'relative', bottom: '2px' }"></i>
     </div>
-    <strong :style="textStyleObj">{{ numOfComments }}</strong>
+    <strong :style="textStyleObj">{{ this.numOfComments }}</strong>
   </div>
 </template>
 
 <script>
+import * as commentApi from '@/api/comment';
+
 export default {
+  data() {
+    return {
+      numOfComments: 0,
+    };
+  },
   props: {
-    numOfComments: {
+    // numOfComments: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    targetId: {
       type: Number,
       default: 0,
     },
@@ -19,12 +30,32 @@ export default {
       default: 0,
     },
   },
+  created() {
+    this.getNumOfComments();
+  },
+  methods: {
+    async getNumOfComments() {
+      try {
+        const response = await commentApi.getNumOfComments(this.targetId);
+        this.numOfComments = response.data.commentCount !== null ? response.data.commentCount : 0;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
   computed: {
     boxStyleObj() {
-      if (this.styleType === 1) {
+      if (this.styleType === 0) {
         return {
-          display: 'flex',
-          alignItems: 'center',
+          flexDirection: 'column',
+        };
+      } else if (this.styleType === 1) {
+        return {
+          flexDirection: 'row',
+        };
+      } else if (this.styleType === 2) {
+        return {
+          flexDirection: 'column',
         };
       } else {
         return {};
@@ -36,7 +67,7 @@ export default {
           width: '50px',
           height: '50px',
           marginTop: '8px',
-          paddingTop: '8px',
+          paddingTop: '4px',
           fontSize: '1.5rem',
           textAlign: 'center',
           overflow: 'hidden',
@@ -47,6 +78,7 @@ export default {
         return {
           width: '32px',
           height: '32px',
+          paddingTop: '4px',
           marginRight: '6px',
           fontSize: '1.25rem',
           textAlign: 'center',
@@ -56,6 +88,8 @@ export default {
         };
       } else if (this.styleType === 2) {
         return {
+          width: '32px',
+          height: '32px',
           fontSize: '1.25rem',
           textAlign: 'center',
         };
@@ -94,6 +128,8 @@ export default {
 
 <style>
 .comment-wrapper {
+  display: flex;
+  align-items: center;
   cursor: pointer;
 }
 .comment-wrapper strong {
@@ -101,5 +137,11 @@ export default {
   color: #343a40;
   font-weight: 500;
   font-family: Helvetica, Arial, sans-serif;
+}
+
+.comment-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

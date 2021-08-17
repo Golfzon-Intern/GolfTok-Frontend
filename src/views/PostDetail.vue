@@ -48,7 +48,7 @@
             <LikeButton :targetType="'post'" :targetId="Number(this.$route.params.postId)" :styleType="1"></LikeButton>
           </div>
           <div class="action-wrapper">
-            <CommentButton :numOfComments="postInfo.commentCount" :styleType="1"></CommentButton>
+            <CommentButton :targetId="Number(this.$route.params.postId)" :styleType="1"></CommentButton>
           </div>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default {
 
           const parentObj = {
             ...parent,
-            children: childList,
+            children: childList ? childList : [],
             isOpened: false,
           };
           this.comments.push(parentObj);
@@ -154,7 +154,7 @@ export default {
     setIsOpened(index, state) {
       this.comments[index].isOpened = state;
     },
-    async addComment(text, isChild) {
+    async addComment(text, isChild, parentIndex) {
       try {
         const newObj = {
           postId: this.postInfo.postId,
@@ -166,16 +166,24 @@ export default {
         const newComment = response.data.comment;
         console.log(newComment);
 
-        this.comments = [newComment, ...this.comments];
+        if (isChild) {
+          console.log(parentIndex);
+          console.log(this.comments[parentIndex]);
+          this.comments[parentIndex].children.push(newComment);
+          this.setIsOpened(parentIndex, true);
+        } else {
+          this.comments = [newComment, ...this.comments];
+        }
+        console.log(this.comments);
       } catch (error) {
         console.log(error);
       }
     },
-    setReplyTo(userName, group) {
-      console.log(userName, group);
+    setReplyTo(userName, group, parentIndex) {
       this.replyTo = {
         userName: userName,
         group: group,
+        parentIndex: parentIndex,
       };
     },
     removeComment(commentId, parentIndex, index) {

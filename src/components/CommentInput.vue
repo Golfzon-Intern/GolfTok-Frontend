@@ -42,11 +42,18 @@ export default {
         return false;
       }
     },
+    parentIndex() {
+      if (this.replyTo) {
+        return this.replyTo.parentIndex;
+      } else {
+        return null;
+      }
+    },
   },
   methods: {
     submitText() {
       if (this.newText.length) {
-        this.$emit('submitComment', this.newText, this.isChild);
+        this.$emit('submitComment', this.newText, this.isChild, this.parentIndex);
         this.clearText();
       }
     },

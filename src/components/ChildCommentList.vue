@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     clickReply(userName, group) {
-      this.$emit('clickReplyChild', userName, group);
+      this.$emit('clickReplyChild', userName, group, this.targetOrder);
     },
     clickDel(commentId, index) {
       this.$emit('clickDelete', commentId, this.targetOrder, index);
@@ -79,6 +79,10 @@ export default {
   display: flex;
   align-items: center;
   padding-left: 12%;
+}
+#child-comments .hide-text,
+#child-comments .hide-icon {
+  margin-bottom: 8px;
 }
 #child-comments .hide-text:hover {
   text-decoration: underline;
