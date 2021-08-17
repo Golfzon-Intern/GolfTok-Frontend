@@ -3,7 +3,7 @@
     <div class="comment-icon" :style="iconStyleObj">
       <i class="fas fa-comment" :style="{ position: 'relative', bottom: '2px' }"></i>
     </div>
-    <strong :style="textStyleObj">{{ this.commentCount }}</strong>
+    <strong :style="textStyleObj">{{ this.numOfComments }}</strong>
   </div>
 </template>
 
@@ -33,6 +33,9 @@ export default {
   created() {
     this.getNumOfComments();
   },
+  watch: {
+    updateState: 'setNumOfComments',
+  },
   methods: {
     async getNumOfComments() {
       try {
@@ -42,19 +45,17 @@ export default {
         console.log(error);
       }
     },
-  },
-  computed: {
-    commentCount() {
-      if (this.updateState === null) {
-        return this.numOfComments;
-      } else {
+    setNumOfComments() {
+      if (this.updateState !== null) {
         if (this.updateState) {
-          return this.numOfComments + 1;
+          this.numOfComments += 1;
         } else {
-          return this.numOfComments - 1;
+          this.numOfComments -= 1;
         }
       }
     },
+  },
+  computed: {
     boxStyleObj() {
       if (this.styleType === 0) {
         return {
