@@ -85,6 +85,8 @@ export default {
   },
   created() {
     this.getRecommended();
+    this.getFollowing();
+
     EventBus.$on('login-success', () => {
       this.getFollowing();
       console.log('login success');
