@@ -7,9 +7,9 @@
     </div>
     <div class="search-container">
       <form action="" class="search-input">
-        <input type="search" />
+        <input type="search" v-model="searchText" @keyup.enter="submitSearchText" />
         <span class="split"></span>
-        <button type="submit">
+        <button type="submit" @click="submitSearchText">
           <i class="fas fa-search"></i>
         </button>
       </form>
@@ -27,20 +27,18 @@
         <LoginButton :styleType="0" @clickButton="openLoginModal" />
       </div>
     </div>
-    <!-- <LoginModal v-if="isVisibleModal" @close="isVisibleModal = false" v-bind:isVisible="isVisibleModal" v-on:toggleVisible="toggleModal"> </LoginModal> -->
   </div>
 </template>
 
 <script>
-// import LoginModal from '@/components/common/LoginModal.vue';
 import LoginButton from '@/components/common/LoginButton.vue';
 
 export default {
-  // data: function() {
-  //   return {
-  //     isVisibleModal: false,
-  //   };
-  // },
+  data: function() {
+    return {
+      searchText: '',
+    };
+  },
   methods: {
     openLoginModal() {
       this.$emit('openModal', true);
@@ -50,6 +48,14 @@ export default {
       this.$router.push({
         name: 'Upload',
       });
+    },
+    submitSearchText() {
+      if (this.searchText.length) {
+        this.$router.push({
+          name: 'SearchResult',
+          params: { keyword: this.searchText },
+        });
+      }
     },
   },
   components: {

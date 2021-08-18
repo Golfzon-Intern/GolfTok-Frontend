@@ -80,7 +80,7 @@ export default {
   props: {
     isActive: {
       type: Number,
-      default: 0,
+      default: null,
     },
   },
   created() {
