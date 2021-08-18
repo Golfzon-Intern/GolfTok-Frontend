@@ -24,10 +24,10 @@
             <LikeButton :targetType="'comment'" :targetId="comment.commentId" :styleType="2" />
           </div>
         </div>
-        <div class="more-contents" v-if="comment.childrenCount > 0">
+        <div class="more-contents">
           <div class="more-btn" v-if="!comment.isOpened" @click="toggleChildList(index, true)">
-            <span class="more-text">View more replies ({{ comment.childrenCount }})</span>
-            <span class="more-icon">
+            <span class="more-text" v-if="comment.childrenCount > 0">View more replies ({{ comment.childrenCount }})</span>
+            <span class="more-icon" v-if="comment.childrenCount > 0">
               <i class="fas fa-chevron-down"></i>
             </span>
           </div>
