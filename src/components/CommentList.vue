@@ -173,11 +173,12 @@ export default {
 }
 #parent-comments .action-container .delete-btn i {
   position: relative;
-  top: 10px;
+  top: 8px;
   width: 32px;
   height: 32px;
   font-size: 1.15rem;
   text-align: center;
+  color: #343a40;
 }
 #parent-comments .action-container .delete-btn strong {
   width: 100%;

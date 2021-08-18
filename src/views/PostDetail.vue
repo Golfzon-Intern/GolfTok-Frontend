@@ -208,11 +208,17 @@ export default {
       if (parentIndex !== null) {
         // 부모 인덱스가 있으면 (자식 댓글이라는 의미)
         // 자식 댓글 삭제
-        // this.comments[parentIndex].children.splice(index, 1);
-        // const newChildren = this.comments[parentIndex].children.filter(child => child.commentId !== commentId);
+        this.comments[parentIndex].children.splice(index, 1);
+        // const newChildren = this.comments[parentIndex].children.filter((child) => child.commentId !== commentId);
+        // this.comments[parentIndex] = {
+        //   ...this.comments[parentIndex],
+        //   children: newChildren,
+        // };
+        console.log(this.comments[parentIndex]);
+        console.log(this.comments);
       } else {
         // 부모 댓글 삭제
-        // this.comments.splice(index, 1);
+        this.comments.splice(index, 1);
       }
       this.commentState = 0;
       commentApi.deleteComment(commentId);
