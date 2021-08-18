@@ -60,9 +60,6 @@
       </div>
     </div>
     <InfiniteLoading @infinite="infiniteHandler"></InfiniteLoading>
-    <router-view>
-      <PostDetail />
-    </router-view>
   </div>
 </template>
 

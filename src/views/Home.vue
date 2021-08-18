@@ -1,5 +1,5 @@
 <template>
-  <div id="home-view" :style="styleObj">
+  <div id="home-view">
     <div class="header-container">
       <AppHeader @openModal="toggleModal"></AppHeader>
     </div>
@@ -26,16 +26,9 @@ import LoginModal from '@/components/common/LoginModal.vue';
 export default {
   data() {
     return {
-      isOpenedPage: false,
-      styleObj: {},
       navIndex: 0,
       isVisibleModal: false,
     };
-  },
-  watch: {
-    // 라우트가 변경되면 메소드를 다시 호출
-    $route: 'checkIsOpenedPage',
-    isVisibleModal: 'checkIsOpenedPage',
   },
   methods: {
     openDetailPage(postId) {
@@ -43,24 +36,6 @@ export default {
         name: 'PostDetail',
         params: { postId: postId },
       });
-    },
-    checkIsOpenedPage() {
-      // console.log(this.$route.path);
-
-      if (this.$route.path === '/') {
-        this.isOpenedPage = false;
-      } else {
-        this.isOpenedPage = true;
-      }
-
-      if (this.isOpenedPage || this.isVisibleModal) {
-        this.styleObj = {
-          position: 'fixed',
-          overflow: 'hidden',
-        };
-      } else {
-        this.styleObj = {};
-      }
     },
     toggleModal(state) {
       this.isVisibleModal = state;
