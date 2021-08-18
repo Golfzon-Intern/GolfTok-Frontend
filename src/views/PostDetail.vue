@@ -1,5 +1,5 @@
 <template>
-  <div class="post-detail-wrapper">
+  <div id="post-detail-view">
     <div class="video-card-container" @click="setIsPlaying">
       <div class="background-image">
         <img :src="postInfo.postThumbnail" />
@@ -164,15 +164,28 @@ export default {
           groupLayer: isChild ? 1 : 0,
         };
         const response = await commentApi.addComment(newObj);
-        const newComment = response.data.comment;
-        console.log(newComment);
+        // const newComment =  response.data.comment;
+        // console.log(newComment);
 
         if (isChild) {
+          // 추가하려는 댓글이 대댓글(자식 댓글)일 경우
+          const newComment = response.data.comment;
+          console.log(newComment);
+
           console.log(parentIndex);
           console.log(this.comments[parentIndex]);
+
           this.comments[parentIndex].children.push(newComment);
           this.setIsOpened(parentIndex, true);
         } else {
+          // 추가하려는 댓글이 댓글(부모 댓글)일 경우
+          const newComment = {
+            ...response.data.comment,
+            children: [],
+            isOpened: false,
+          };
+          console.log(newComment);
+
           this.comments = [newComment, ...this.comments];
         }
         console.log(this.comments);
@@ -187,17 +200,19 @@ export default {
         group: group,
         parentIndex: parentIndex,
       };
+      console.log(this.replyTo);
     },
     removeComment(commentId, parentIndex, index) {
       console.log('remove');
       console.log(commentId, parentIndex, index);
-      if (parentIndex) {
+      if (parentIndex !== null) {
         // 부모 인덱스가 있으면 (자식 댓글이라는 의미)
         // 자식 댓글 삭제
-        this.comments[parentIndex].children.splice(index, 1);
+        // this.comments[parentIndex].children.splice(index, 1);
+        // const newChildren = this.comments[parentIndex].children.filter(child => child.commentId !== commentId);
       } else {
         // 부모 댓글 삭제
-        this.comments.splice(index, 1);
+        // this.comments.splice(index, 1);
       }
       this.commentState = 0;
       commentApi.deleteComment(commentId);
@@ -214,7 +229,7 @@ export default {
 </script>
 
 <style>
-.post-detail-wrapper {
+#post-detail-view {
   position: fixed;
   top: 0;
   left: 0;
