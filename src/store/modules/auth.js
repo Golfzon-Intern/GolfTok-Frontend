@@ -1,4 +1,5 @@
 import * as authApi from '@/api/auth';
+import EventBus from '@/lib/eventBus';
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user ? { ...user } : null;
@@ -32,8 +33,7 @@ export default {
           // 로컬 스토리지에 유저 정보(id, token) 저장하고, mutation 호출
           localStorage.setItem('user', JSON.stringify(response.data));
           context.commit('setUserInfo', response.data);
-          // this.$router.push(this.$route.query.redirect);
-          this.$router.go();
+          EventBus.$emit('login-success');
         }
       } catch (error) {
         console.log(error);

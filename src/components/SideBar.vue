@@ -65,6 +65,7 @@
 
 <script>
 import * as friendApi from '@/api/friend';
+import EventBus from '@/lib/eventBus';
 
 import LoginButton from '@/components/common/LoginButton.vue';
 
@@ -84,7 +85,10 @@ export default {
   },
   created() {
     this.getRecommended();
-    this.getFollowing();
+    EventBus.$on('login-success', () => {
+      this.getFollowing();
+      console.log('login success');
+    });
   },
   methods: {
     movePage(state) {
