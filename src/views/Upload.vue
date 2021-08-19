@@ -10,79 +10,14 @@
           <div class="upload-sub-title">This video will be published to @{{ this.$store.state.auth.userInfo.userName }}</div>
         </div>
         <div class="upload-contents">
-          <div v-if="newFile || newVideoUrl" class="upload-operation">
-            <div class="upload-video-card preview">
-              <div class="preview-close-btn" @click="deleteVideo">
-                <i class="fas fa-times-circle"></i>
-              </div>
-              <video :src="this.newVideoUrl || this.newFile" type="video/mp4" autoplay="true" controls="controls"></video>
-            </div>
-          </div>
-          <div v-else class="upload-operation empty">
-            <div class="upload-video-btn" @click="toggleSelectorVisible">
-              <div class="upload-video-card">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <h2>Select video to upload</h2>
-                <br />
-                <ul>
-                  <li>MP4 or WebM</li>
-                  <li>1280x720 resolution or heigher</li>
-                  <li>Up to 180 seconds</li>
-                </ul>
-              </div>
-              <input type="file" name="upload-file-btn" accept="video/mp4,video/x-m4v,video/*" class="upload-btn-input" />
-            </div>
-          </div>
+          <UploadOperation :videoFile="newFile" :videoUrl="newVideoUrl" @clearVideo="deleteVideo" @openVideoSelector="toggleSelectorVisible" />
           <div class="upload-form-container">
-            <div class="upload-cption-container">
-              <h3 class="form-title-container">Caption</h3>
-              <div class="caption-text-container">
-                <div
-                  class="caption-text-editor"
-                  contenteditable="true"
-                  @input="handleTextInput"
-                  @keyup.space="handleSpaceKeyUp"
-                  @keydown.enter="preventTextNewLine"
-                  style="white-space: nowrap; overflow: hidden;"
-                ></div>
-                <div class="hash-icon">
-                  <i class="fas fa-hashtag"></i>
-                </div>
-              </div>
-            </div>
-            <div class="upload-location-container">
-              <h3 class="form-title-container">Location</h3>
-              <b-form-input class="location-input" :type="'search'" v-model="newLocation" placeholder="Search location" v-on:keyup.enter="toggleLocationVisible(true)"></b-form-input>
-              <div class="location-list-wrapper" v-if="isLocationVisible">
-                <b-list-group class="location-result-list">
-                  <b-list-group-item button>Button item</b-list-group-item>
-                  <b-list-group-item button>I am a button</b-list-group-item>
-                  <b-list-group-item button disabled>Disabled button</b-list-group-item>
-                  <b-list-group-item button>This is a button too</b-list-group-item>
-                  <b-list-group-item button>Button item</b-list-group-item>
-                  <b-list-group-item button>I am a button</b-list-group-item>
-                  <b-list-group-item button disabled>Disabled button</b-list-group-item>
-                  <b-list-group-item button>This is a button too</b-list-group-item>
-                </b-list-group>
-              </div>
-            </div>
-            <div class="form-bottom-container">
-              <button class="upload-cancle-btn" @click="deleteAll">Discard</button>
-              <button class="upload-post-btn" @click="submitPost" :disabled="isDisabled">Post</button>
-            </div>
+            <UploadForm :isListVisible="isLocationVisible" :isBtnDisabled="isDisabled" @setIsListVisible="toggleLocationVisible" @clearContents="deleteAll" @submitPost="addPost" />
           </div>
         </div>
       </div>
     </div>
-    <NasmoSelector
-      v-if="isSelectorVisible"
-      @close="isSelectorVisible = false"
-      v-bind:isVisible="isSelectorVisible"
-      v-bind:videoList="nasmoList"
-      v-on:toggleVisible="toggleSelectorVisible"
-      v-on:onClickFileBtn="openFileSelector"
-      v-on:saveSelected="selectNasmo"
-    ></NasmoSelector>
+    <NasmoSelector v-if="isSelectorVisible" @toggleVisible="toggleSelectorVisible" @onClickFileBtn="openFileSelector" @saveSelected="selectNasmo"></NasmoSelector>
   </div>
 </template>
 
@@ -93,46 +28,25 @@ import * as postApi from '@/api/post';
 
 import AppHeader from '@/components/common/AppHeader.vue';
 import NasmoSelector from '@/components/NasmoSelector.vue';
-// import VideoPlayer from '@/components/common/VideoPlayer.vue';
+import UploadOperation from '@/components/UploadOperation.vue';
+import UploadForm from '@/components/UploadForm.vue';
 
 const THUMBNAIL_URL = 'https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/thumbnails%2Fthumbnail1.png?alt=media&token=693a8a6a-d028-4561-96af-50be2d8b17cc';
 
 export default {
   data() {
     return {
-      nasmoList: [],
       newFile: '',
       newVideoUrl: '',
-      // newVideoIndex: 0,
-      newText: '',
-      newLocation: '',
-      videoOptions: {},
-      isLocationVisible: false,
       isSelectorVisible: false,
+      isLocationVisible: false,
       isDisabled: true,
-      isHashActive: false,
     };
   },
-  created() {
-    this.getNasmoList();
-  },
   methods: {
-    // 나스모 영상 서버로부터 받아옴 (나스모 선택창에 props로 전달)
-    async getNasmoList() {
-      try {
-        const response = await postApi.getNasmos();
-        const videos = response.data.nasmoList;
-
-        this.nasmoList = videos;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    selectNasmo(index) {
-      this.newVideoUrl = this.nasmoList[index].videoRoot;
-      // this.newVideoIndex = index;
-
-      this.setVideoOptions(this.newVideoUrl);
+    // 나스모 영상 선택
+    selectNasmo(videoRoot) {
+      this.newVideoUrl = videoRoot;
       this.toggleDisabled();
     },
     // 파일 선택창 열기
@@ -164,31 +78,18 @@ export default {
         } = finishedEvent;
 
         this.newFile = result;
-
-        this.setVideoOptions(this.newFile);
         this.toggleDisabled();
       };
       if (file) {
         reader.readAsDataURL(file);
       }
     },
-    setVideoOptions(videoRoot) {
-      this.videoOptions = {
-        autoplay: true,
-        controls: true,
-        sources: [
-          {
-            src: videoRoot,
-            type: 'video/mp4',
-          },
-        ],
-      };
-    },
     // 게시물 업로드 하기
-    async submitPost(evnet) {
+    async addPost(evnet) {
       // 새로고침 방지
       evnet.preventDefault();
-      console.log('submitPost');
+      console.log(this.newText);
+      console.log('addPost');
       try {
         // 만약 파일 선택창에서 선택한 파일이 있다면
         if (this.newFile !== '') {
@@ -221,89 +122,35 @@ export default {
         console.log(error);
       }
     },
+    // 모든 내용 삭제
     deleteAll() {
       this.newFile = '';
       this.newVideoUrl = '';
-      this.newText = '';
-      this.newLocation = '';
       this.toggleDisabled();
     },
+    // 비디오 삭제
     deleteVideo() {
       this.newFile = '';
       this.newVideoUrl = '';
       this.toggleDisabled();
     },
+    // 나스모 선택 모달창 토글
+    toggleSelectorVisible() {
+      this.isSelectorVisible = !this.isSelectorVisible;
+    },
     toggleLocationVisible(state) {
       this.isLocationVisible = state;
     },
-    toggleSelectorVisible() {
-      this.isSelectorVisible = !this.isSelectorVisible;
-      console.log('click');
-    },
+    // 게시 버튼 활성화 토글
     toggleDisabled() {
       this.isDisabled = !this.isDisabled;
-    },
-    preventTextNewLine(event) {
-      event.preventDefault();
-    },
-    handleTextInput(event) {
-      this.newText = event.target.outerText;
-
-      if (event.data === '#' && this.isHashActive === false) {
-        console.log('hash tag!');
-        this.isHashActive = true;
-
-        var newHTML = '';
-        this.newText
-          .replace(/[\s]+/g, ' ')
-          .trim()
-          .split(' ')
-          .forEach((val, index, arr) => {
-            if (val[0] === '#') {
-              // 해시태그를 분리하는 조건
-              if (index === arr.length - 1) {
-                // 만약 마지막 해시태그라면 공백을 추가하지 않는다. # 뒤에 문자가 올 거기 때문에
-                newHTML += "<span class='statement'>" + val + '</span>';
-              } else {
-                // 이미 # 뒤에 문자가 있는 해시태그는 뒤에 공백을 추가한다.
-                newHTML += "<span class='statement'>" + val + '&nbsp;</span>';
-              }
-            } else newHTML += "<span class='other'>" + val + '&nbsp;</span>';
-          });
-        event.target.innerHTML = newHTML;
-
-        this.setCursorPosition(event);
-      }
-    },
-    handleSpaceKeyUp(event) {
-      this.newText = event.target.outerText;
-      console.log(event.target.outerText);
-      console.log(this.isHashActive);
-
-      if (this.isHashActive === true) {
-        this.isHashActive = false;
-
-        event.target.innerHTML += "<span class='other'>&nbsp;</span>";
-
-        this.setCursorPosition(event);
-      }
-    },
-    setCursorPosition(event) {
-      // Set cursor postion to end of text
-      var child = event.target.children;
-      var range = document.createRange();
-      var sel = window.getSelection();
-      range.setStart(child[child.length - 1], 1);
-      range.collapse(true);
-      sel.removeAllRanges();
-      sel.addRange(range);
-      event.target.focus();
     },
   },
   components: {
     AppHeader,
     NasmoSelector,
-    // VideoPlayer,
+    UploadOperation,
+    UploadForm,
   },
 };
 </script>
@@ -349,212 +196,10 @@ export default {
   box-sizing: inherit;
 }
 
-.upload-operation {
-  height: 100%;
-}
-.upload-operation .preview {
-  position: relative;
-}
-.upload-operation .preview video {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.preview-close-btn {
-  position: absolute;
-  z-index: 3;
-  top: -10px;
-  left: -10px;
-  /* right: 5px; */
-}
-.preview-close-btn i {
-  font-size: 2rem;
-  color: #fa5252;
-}
-
-.upload-video-btn {
-  cursor: pointer;
-  text-align: center;
-}
-.upload-video-card {
-  width: 25vw;
-  max-width: 384px;
-  height: 67vh;
-  background: rgba(22, 24, 35, 0.03);
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  cursor: pointer;
-  transition: 0.15s ease-in-out 0s;
-}
-.upload-video-btn .upload-video-card i {
-  width: 40px;
-  height: 40px;
-  font-size: 2.5rem;
-  text-align: center;
-}
-.upload-video-card h2 {
-  font-family: Helvetica, Arial, sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 24px;
-  text-align: center;
-  color: rgba(22, 24, 35, 0.34);
-  margin-top: 29px;
-}
-.upload-video-card ul {
-  margin: 0px;
-  font-family: Helvetica, Arial, sans-serif;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 18px;
-  color: rgba(22, 24, 35, 0.34);
-  text-align: left;
-}
-
-.upload-btn-input {
-  height: 0px;
-  width: 0px;
-  opacity: 0;
-  position: absolute;
-  appearance: none;
-  background-color: inherit;
-  cursor: default;
-  align-items: baseline;
-  color: inherit;
-  text-overflow: ellipsis;
-  white-space: pre;
-  text-align: start;
-  padding: initial;
-  border: initial;
-  overflow: hidden;
-}
-
 .upload-form-container {
   margin-left: 60px;
   margin-bottom: 111px;
   width: 50vw;
   max-width: 756px;
-}
-
-.upload-cption-container {
-  outline-style: none;
-  position: relative;
-  margin-bottom: 24px;
-}
-.form-title-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 1;
-  margin-bottom: 12px;
-}
-.caption-text-container {
-  min-height: 44px;
-  position: relative;
-  /* text-align: center; */
-  border: 1px solid rgba(22, 24, 35, 0.12);
-  border-radius: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.caption-text-editor {
-  position: relative;
-  width: 100%;
-  padding: 0px 80px 0px 16px;
-  font-family: Helvetica, Arial, sans-serif;
-  font-weight: 400;
-  font-size: 1rem;
-  line-height: 18px;
-  color: inherit;
-  cursor: text;
-  outline: none;
-  /* background-color: aqua; */
-}
-[contenteditable='true'] {
-  caret-color: #fa5252;
-}
-.caption-text-editor .statement {
-  color: #fa5252;
-}
-
-.hash-icon {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 20px;
-  height: 20px;
-  margin-left: 8px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.upload-location-container {
-  outline-style: none;
-  position: relative;
-  margin-bottom: 24px;
-}
-
-.location-input {
-  min-height: 44px;
-  position: relative;
-  text-align: left;
-  border: 1px solid rgba(22, 24, 35, 0.12);
-  border-radius: 2px;
-}
-.location-list-wrapper {
-  height: 165px;
-  border: 1px solid rgba(22, 24, 35, 0.12);
-  border-radius: 2px;
-}
-.location-result-list {
-  max-height: 160px;
-  overflow: scroll;
-}
-
-.form-bottom-container {
-  position: absolute;
-  bottom: 5%;
-  right: 8%;
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 30px;
-}
-.form-bottom-container button {
-  font-family: Helvetica, Arial, sans-serif;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 18px;
-  outline: none;
-  border: 1px solid transparent;
-  border-radius: 2px;
-  cursor: pointer;
-  position: relative;
-}
-.upload-cancle-btn {
-  margin-right: 32px;
-  background-color: transparent;
-  color: rgb(22, 24, 35);
-}
-.upload-post-btn {
-  width: 164px;
-  height: 44px;
-  background-color: #fa5252;
-  color: rgb(255, 255, 255);
-  cursor: pointer;
-}
-.upload-post-btn:disabled {
-  background: rgba(22, 24, 35, 0.06);
-  color: rgba(22, 24, 35, 0.34);
-  cursor: not-allowed;
-}
-.upload-post-btn:hover {
-  background: #f03e3e;
 }
 </style>

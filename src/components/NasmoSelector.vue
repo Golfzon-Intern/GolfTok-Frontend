@@ -11,9 +11,9 @@
 
         <div class="nasmo-modal-body">
           <div class="nasmo-video-list">
-            <div class="nasmo-video-item" v-for="(videoItem, index) in videoList" v-bind:key="index">
-              <b-form-radio v-model="selectedIndex" :aria-describedby="videoItem" name="some-radios" :value="index" @change="changeSelected(index)" />
-              <img v-bind:src="videoItem.nasmoThumbnail" />
+            <div class="nasmo-video-item" v-for="(video, index) in videos" v-bind:key="index">
+              <b-form-radio v-model="selectedIndex" :aria-describedby="video" name="some-radios" :value="index" @change="changeSelected(index)" />
+              <img v-bind:src="video.nasmoThumbnail" />
             </div>
           </div>
         </div>
@@ -21,7 +21,7 @@
         <div class="nasmo-modal-footer">
           <div class="btn-wrapper">
             <button class="another-video-btn" @click="onClickFileBtn">Another video</button>
-            <button class="select-video-btn" @click="saveSelected(selectedIndex)">Select</button>
+            <button class="select-video-btn" @click="saveSelected">Select</button>
           </div>
         </div>
       </div>
@@ -31,17 +31,28 @@
 </template>
 
 <script>
+import * as postApi from '@/api/post';
+
 export default {
   data: function() {
     return {
+      videos: [],
       selectedIndex: 0,
     };
   },
-  props: {
-    // selected: Number,
-    videoList: [],
+  created() {
+    this.getNasmoList();
   },
   methods: {
+    // 서버로부터 나스모 영상 데이터 받음
+    async getNasmoList() {
+      try {
+        const response = await postApi.getNasmos();
+        this.videos = response.data.nasmoList;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     toggleVisible() {
       this.$emit('toggleVisible');
     },
@@ -51,8 +62,8 @@ export default {
     changeSelected(index) {
       this.selectedIndex = index;
     },
-    saveSelected(selectedIndex) {
-      this.$emit('saveSelected', selectedIndex);
+    saveSelected() {
+      this.$emit('saveSelected', this.videos[this.selectedIndex].videoRoot);
       this.toggleVisible();
     },
   },
