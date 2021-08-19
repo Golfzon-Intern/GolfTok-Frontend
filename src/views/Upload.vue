@@ -37,7 +37,15 @@
             <div class="upload-cption-container">
               <h3 class="form-title-container">Caption</h3>
               <div class="caption-text-container">
-                <b-form-textarea class="caption-input" v-model="newContent" rows="5" no-resize></b-form-textarea>
+                <div
+                  class="caption-text-editor"
+                  contenteditable="true"
+                  @input="handleTextInput"
+                  @keyup.space="handleSpaceKeyUp"
+                  @keydown.enter="preventTextNewLine"
+                  style="white-space: nowrap; overflow: hidden;"
+                ></div>
+                <!-- <div v-html="checkedHashtag"></div> -->
                 <div class="hash-icon">
                   <i class="fas fa-hashtag"></i>
                 </div>
@@ -97,13 +105,24 @@ export default {
       newFile: '',
       newVideoUrl: '',
       // newVideoIndex: 0,
-      newContent: '',
+      newText: '',
       newLocation: '',
       videoOptions: {},
       isLocationVisible: false,
       isSelectorVisible: false,
       isDisabled: true,
+      isHashActive: false,
     };
+  },
+  computed: {
+    checkedHashtag() {
+      let newContent = this.newText;
+      if (!newContent) return '';
+
+      let hashReg = /#(\w+|[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+)/g;
+      newContent = newContent.toString().replace(hashReg, '<a href="#">#$1</a>');
+      return newContent;
+    },
   },
   created() {
     this.getNasmoList();
@@ -191,7 +210,7 @@ export default {
 
         // 게시글 obj
         const postObj = {
-          postContent: this.newContent,
+          postContent: this.newText,
           videoRoot: this.newVideoUrl,
           locations: '',
           postThumbnail: THUMBNAIL_URL,
@@ -216,7 +235,7 @@ export default {
     deleteAll() {
       this.newFile = '';
       this.newVideoUrl = '';
-      this.newContent = '';
+      this.newText = '';
       this.newLocation = '';
       this.toggleDisabled();
     },
@@ -234,6 +253,59 @@ export default {
     },
     toggleDisabled() {
       this.isDisabled = !this.isDisabled;
+    },
+    preventTextNewLine(event) {
+      event.preventDefault();
+    },
+    handleTextInput(event) {
+      this.newText = event.target.outerText;
+
+      if (event.data === '#' && this.isHashActive === false) {
+        console.log('hash tag!');
+        this.isHashActive = true;
+
+        var newHTML = '';
+        this.newText
+          .replace(/[\s]+/g, ' ')
+          .trim()
+          .split(' ')
+          .forEach((val, index, arr) => {
+            if (val[0] === '#') {
+              if (index === arr.length - 1) {
+                newHTML += "<span class='statement'>" + val + '</span>';
+              } else {
+                newHTML += "<span class='statement'>" + val + '&nbsp;</span>';
+              }
+            } else newHTML += "<span class='other'>" + val + '&nbsp;</span>';
+          });
+        event.target.innerHTML = newHTML;
+
+        this.setCursorPosition(event);
+      }
+    },
+    handleSpaceKeyUp(event) {
+      this.newText = event.target.outerText;
+      console.log(event.target.outerText);
+      console.log(this.isHashActive);
+
+      if (this.isHashActive === true) {
+        this.isHashActive = false;
+
+        event.target.innerHTML += "<span class='other'>&nbsp;</span>";
+
+        this.setCursorPosition(event);
+      }
+    },
+    setCursorPosition(event) {
+      // Set cursor postion to end of text
+      var child = event.target.children;
+      var range = document.createRange();
+      var sel = window.getSelection();
+      range.setStart(child[child.length - 1], 1);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      event.target.focus();
     },
   },
   components: {
@@ -393,10 +465,33 @@ export default {
 .caption-text-container {
   min-height: 44px;
   position: relative;
-  text-align: center;
+  /* text-align: center; */
   border: 1px solid rgba(22, 24, 35, 0.12);
   border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
+.caption-text-editor {
+  position: relative;
+  width: 100%;
+  padding: 0px 80px 0px 16px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 18px;
+  color: inherit;
+  cursor: text;
+  outline: none;
+  /* background-color: aqua; */
+}
+[contenteditable='true'] {
+  caret-color: #fa5252;
+}
+.caption-text-editor .statement {
+  color: #fa5252;
+}
+
 .hash-icon {
   position: absolute;
   top: 12px;

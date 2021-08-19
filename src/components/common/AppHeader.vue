@@ -50,6 +50,7 @@ export default {
       });
     },
     submitSearchText() {
+      event.preventDefault();
       if (this.searchText.length) {
         this.$router.push({
           name: 'SearchResult',
