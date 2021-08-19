@@ -45,7 +45,6 @@
                   @keydown.enter="preventTextNewLine"
                   style="white-space: nowrap; overflow: hidden;"
                 ></div>
-                <!-- <div v-html="checkedHashtag"></div> -->
                 <div class="hash-icon">
                   <i class="fas fa-hashtag"></i>
                 </div>
@@ -113,16 +112,6 @@ export default {
       isDisabled: true,
       isHashActive: false,
     };
-  },
-  computed: {
-    checkedHashtag() {
-      let newContent = this.newText;
-      if (!newContent) return '';
-
-      let hashReg = /#(\w+|[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+)/g;
-      newContent = newContent.toString().replace(hashReg, '<a href="#">#$1</a>');
-      return newContent;
-    },
   },
   created() {
     this.getNasmoList();
@@ -271,9 +260,12 @@ export default {
           .split(' ')
           .forEach((val, index, arr) => {
             if (val[0] === '#') {
+              // 해시태그를 분리하는 조건
               if (index === arr.length - 1) {
+                // 만약 마지막 해시태그라면 공백을 추가하지 않는다. # 뒤에 문자가 올 거기 때문에
                 newHTML += "<span class='statement'>" + val + '</span>';
               } else {
+                // 이미 # 뒤에 문자가 있는 해시태그는 뒤에 공백을 추가한다.
                 newHTML += "<span class='statement'>" + val + '&nbsp;</span>';
               }
             } else newHTML += "<span class='other'>" + val + '&nbsp;</span>';

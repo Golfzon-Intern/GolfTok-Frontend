@@ -23,7 +23,7 @@
             </h4>
           </div>
           <div class="video-meta-caption">
-            <strong>{{ post.postContent }}</strong>
+            <strong v-html="post.postContent" />
           </div>
           <div class="item-follow-wrapper">
             <FollowButton />
@@ -134,7 +134,7 @@ export default {
           for (const post of posts) {
             const postObj = {
               postId: post.postId,
-              postContent: post.postContent,
+              postContent: this.setPostContent(post.postContent),
               videoRoot: post.videoRoot,
               Thumbnail: post.postThumbnail,
               location: post.locations,
@@ -162,6 +162,15 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    setPostContent(content) {
+      let newContent = content;
+      if (!newContent) return '';
+
+      let hashReg = /#(\w+|[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+)/g;
+
+      newContent = newContent.toString().replace(hashReg, '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>');
+      return newContent;
     },
     // 게시물 상세보기
     openPostDetail(postId, isComment) {

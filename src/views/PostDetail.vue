@@ -42,7 +42,7 @@
             {{ postInfo.locations }}
           </div>
         </h4>
-        <h1 class="video-meta-title">{{ postInfo.postContent }}</h1>
+        <h1 class="video-meta-title" v-html="postInfo.postContent" />
         <div class="action-container">
           <div class="action-wrapper">
             <LikeButton :targetType="'post'" :targetId="Number(this.$route.params.postId)" :styleType="1"></LikeButton>
@@ -96,13 +96,31 @@ export default {
     async getPostInfo() {
       try {
         const response = await postApi.getPostDetail(this.$route.params.postId, 0);
-        this.postInfo = response.data.postList[0];
+        const data = response.data.postList[0];
+
+        if (data) {
+          const postObj = {
+            ...data,
+            postContent: this.setPostContent(data.postContent),
+          };
+
+          this.postInfo = postObj;
+        }
 
         // video 태그로 추가된 동영상 정보 가져오기
         this.video = document.getElementsByTagName('video');
       } catch (error) {
         console.log(error);
       }
+    },
+    setPostContent(content) {
+      let newContent = content;
+      if (!newContent) return '';
+
+      let hashReg = /#(\w+|[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+)/g;
+
+      newContent = newContent.toString().replace(hashReg, '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>');
+      return newContent;
     },
     async setComments() {
       try {
