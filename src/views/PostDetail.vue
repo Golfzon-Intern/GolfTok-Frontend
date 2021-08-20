@@ -35,13 +35,32 @@
         </div>
         <FollowButton />
       </div>
+      <div class="user-golf-container">
+        <span class="golf-grade">등급 - {{ postInfo.userGrade }}</span>
+        <span class="golf-handicap">핸디캡 - {{ postInfo.handicap }}</span>
+        <span class="golf-rolmodel">{{ postInfo.roleModel }}처럼 되려고 노력 중</span>
+      </div>
       <div class="video-info-container">
-        <h4 class="location-info">
-          <div class="location-decoration">
-            <i class="fas fa-map-marker-alt"></i>
-            {{ postInfo.locations }}
-          </div>
-        </h4>
+        <div class="location-info" v-if="postInfo.locations">
+          <h4>
+            <div class="info-text-decoration">
+              <i class="fas fa-map-marker-alt"></i>
+              {{ postInfo.locations }}
+            </div>
+          </h4>
+        </div>
+        <div class="club-info" v-if="postInfo.golfClub.length">
+          <h4>
+            <div class="info-text-decoration">
+              <div class="club-info-tags">
+                <i class="fas fa-thumbs-up"></i>
+                <span v-for="(tag, id) of postInfo.golfClub" :key="id">
+                  <a :href="`/search/${tag.substring(1)}`">{{ tag }}</a>
+                </span>
+              </div>
+            </div>
+          </h4>
+        </div>
         <h1 class="video-meta-title" v-html="postInfo.postContent" />
         <div class="action-container">
           <div class="action-wrapper">
@@ -367,6 +386,7 @@ export default {
   font-family: Helvetica, Arial, sans-serif;
   margin-bottom: 0;
 }
+
 .user-info-container {
   position: relative;
   display: flex;
@@ -375,10 +395,8 @@ export default {
   align-items: center;
   padding: 32px 32px 0;
   color: rgb(22, 24, 35);
-  /* height: 10%;
-  padding: 4% 4% 4% 0;
-  display: flex; */
 }
+
 .user-avatar {
   margin-right: 12px;
   flex: 0 0 auto;
@@ -388,6 +406,7 @@ export default {
   /* width: 20%;
   text-align: center; */
 }
+
 .user-text-container {
   display: flex;
   flex-direction: column;
@@ -415,22 +434,41 @@ export default {
   line-height: 20px;
   margin-bottom: 0px;
 }
-/* .follow-btn-wrapper {
-  width: 30%;
-  height: 50px;
+
+.user-golf-container {
+  width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  padding: 0 32px 0 64px;
 }
-.follow-btn-wrapper .follow-btn {
-  position: inherit;
-  width: 150px;
-  height: 100%;
-  border-radius: 50px;
-  border: none;
-  background-color: #5d5fef;
-  color: #f8f9fa;
-} */
+.user-golf-container span {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 22px;
+  color: #495057;
+  border-radius: 5px;
+  background-color: #ffe3e3;
+}
+.golf-grade {
+  min-width: 30px;
+  padding: 0 8px;
+  margin-right: 12px;
+  text-align: center;
+}
+.golf-handicap {
+  min-width: 70px;
+  padding: 0 8px;
+  margin-right: 12px;
+  text-align: center;
+}
+.golf-rolmodel {
+  min-width: 170px;
+  padding: 0 8px;
+  margin-right: 12px;
+  text-align: center;
+}
 
 .video-info-container {
   display: flex;
@@ -445,20 +483,70 @@ export default {
   flex-direction: column;
   justify-content: space-between; */
 }
-.video-info-container .location-info .location-decoration {
+
+.location-info {
+  max-width: 100%;
+  position: relative;
+  overflow: hidden;
+  /* margin-bottom: 4px; */
+}
+.location-info h4 {
+  margin: 0;
+}
+.info-text-decoration {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   display: inline-block;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   line-height: 22px;
   width: 100%;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   color: #495057;
-  margin-top: 8px;
 }
-.video-info-container .video-meta-title {
+.info-text-decoration i {
+  /* margin-right: 5px; */
+  width: 18px;
+  height: 18px;
+  position: relative;
+  left: 4px;
+  text-align: center;
+  margin-right: 4px;
+}
+
+.club-info {
+  max-width: 100%;
+  position: relative;
+  overflow: hidden;
+  font-family: Helvetica, Arial, sans-serif;
+}
+.club-info-tags {
+  display: flex;
+  flex-flow: row wrap;
+  min-height: 30px;
+}
+.club-info-tags i {
+  position: relative;
+  top: 5px;
+  margin-right: 4px;
+}
+.club-info-tags a {
+  padding: 6px;
+  margin: 0 5px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 22px;
+  background-color: rgba(22, 24, 35, 0.03);
+  border-radius: 4px;
+  color: #495057;
+}
+.club-info-tags a:hover {
+  color: #fa5252;
+}
+
+.video-meta-title {
   font-family: Helvetica, Arial, sans-serif;
   font-size: 1rem;
   line-height: 24px;
