@@ -90,9 +90,6 @@ export default {
       event.preventDefault();
 
       console.log('addPost');
-      console.log(newCaption);
-      console.log(newClub);
-      console.log(newLocation);
 
       try {
         // 만약 파일 선택창에서 선택한 파일이 있다면

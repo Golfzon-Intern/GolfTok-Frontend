@@ -39,8 +39,6 @@ export default {
       });
     },
     checkIsOpenedPage() {
-      console.log(this.$route.path);
-
       if (this.$route.path === '/following') {
         this.isOpenedPage = false;
       } else {

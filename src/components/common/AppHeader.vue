@@ -43,7 +43,6 @@ export default {
   methods: {
     openLoginModal() {
       this.$emit('openModal', true);
-      console.log('hi');
     },
     clickUploadBtn() {
       this.$router.push({

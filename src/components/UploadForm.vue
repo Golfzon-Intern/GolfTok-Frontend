@@ -81,7 +81,6 @@ export default {
       this.newCaption = event.target.outerText;
 
       if (event.data === '#' && this.isHashActive === false) {
-        console.log('hash tag!');
         this.isHashActive = true;
 
         var newHTML = '';
@@ -109,8 +108,6 @@ export default {
     // [caption] 스페이스바 누를 때 동작 설정 (@keyup.space)
     handleSpaceKey(event) {
       this.newCaption = event.target.outerText;
-      console.log(event.target.outerText);
-      console.log(this.isHashActive);
 
       if (this.isHashActive === true) {
         this.isHashActive = false;
@@ -149,7 +146,6 @@ export default {
         value = value[0] === '#' ? value : '#' + value;
 
         this.newClubTags.push(value);
-        console.log(this.newClubTags);
 
         event.target.value = '';
       }
@@ -158,7 +154,6 @@ export default {
     deleteClubTag(id) {
       event.target.remove();
       this.newClubTags = this.newClubTags.filter((tag, index) => id !== index);
-      console.log(this.newClubTags);
     },
     // [location] 위치 검색 결과 리스트 보이기
     setIsListVisible(state) {
@@ -171,7 +166,6 @@ export default {
 
         if (data.length) {
           for (const item of data) {
-            // console.log(item);
             const locationObj = {
               title: this.setLocationText(item.title),
               category: item.category,
@@ -192,19 +186,15 @@ export default {
         .split(locReg)
         .join(' ')
         .trim();
-      console.log(newText);
       return newText;
     },
     selectLocation(selectedIndex) {
       const selected = this.LocationSearchList[selectedIndex].title + ' (' + this.LocationSearchList[selectedIndex].address + ')';
 
-      console.log(selected);
-
       this.newLocation = selected;
     },
     clearLocationList() {
       if (!this.isListVisible) this.LocationSearchList = [];
-      console.log(this.LocationSearchList);
     },
     // 전체 삭제
     clearContents() {
@@ -216,7 +206,6 @@ export default {
     // 게시글 작성 완료 (제출)
     submitPost() {
       const newClubInfo = this.newClubTags.join(' ');
-      console.log(newClubInfo);
       this.$emit('submitPost', this.newCaption, newClubInfo, this.newLocation);
     },
   },

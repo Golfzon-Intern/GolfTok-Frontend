@@ -111,7 +111,6 @@ export default {
     },
     openLoginModal() {
       this.$emit('openModal', true);
-      console.log('hello');
     },
     async getRecommended() {
       try {

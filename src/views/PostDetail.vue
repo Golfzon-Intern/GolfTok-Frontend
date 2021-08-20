@@ -101,7 +101,8 @@ export default {
         if (data) {
           const postObj = {
             ...data,
-            postContent: this.setPostContent(data.postContent),
+            postContent: this.separateHashtag(data.postContent, 0),
+            golfClub: this.separateHashtag(data.golfClub, 1),
           };
 
           this.postInfo = postObj;
@@ -113,14 +114,19 @@ export default {
         console.log(error);
       }
     },
-    setPostContent(content) {
-      let newContent = content;
-      if (!newContent) return '';
+    separateHashtag(text, type) {
+      let newText = text;
+      if (!newText) return '';
+
+      if (type) {
+        // 텍스트에 해시태그만 있는 경우
+        const newTags = newText.split(' ');
+        return newTags;
+      }
 
       let hashReg = /#(\w+|[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+)/g;
-
-      newContent = newContent.toString().replace(hashReg, '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>');
-      return newContent;
+      newText = newText.toString().replace(hashReg, '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>');
+      return newText;
     },
     async setComments() {
       try {
@@ -138,8 +144,6 @@ export default {
           };
           this.comments.push(parentObj);
         }
-
-        console.log(this.comments);
       } catch (error) {
         console.log(error);
       }
@@ -182,16 +186,10 @@ export default {
           groupLayer: isChild ? 1 : 0,
         };
         const response = await commentApi.addComment(newObj);
-        // const newComment =  response.data.comment;
-        // console.log(newComment);
 
         if (isChild) {
           // 추가하려는 댓글이 대댓글(자식 댓글)일 경우
           const newComment = response.data.comment;
-          console.log(newComment);
-
-          console.log(parentIndex);
-          console.log(this.comments[parentIndex]);
 
           this.comments[parentIndex].children.push(newComment);
           this.setIsOpened(parentIndex, true);
@@ -222,18 +220,10 @@ export default {
     },
     removeComment(commentId, parentIndex, index) {
       console.log('remove');
-      console.log(commentId, parentIndex, index);
       if (parentIndex !== null) {
         // 부모 인덱스가 있으면 (자식 댓글이라는 의미)
         // 자식 댓글 삭제
         this.comments[parentIndex].children.splice(index, 1);
-        // const newChildren = this.comments[parentIndex].children.filter((child) => child.commentId !== commentId);
-        // this.comments[parentIndex] = {
-        //   ...this.comments[parentIndex],
-        //   children: newChildren,
-        // };
-        console.log(this.comments[parentIndex]);
-        console.log(this.comments);
       } else {
         // 부모 댓글 삭제
         this.comments.splice(index, 1);

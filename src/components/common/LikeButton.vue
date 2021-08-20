@@ -39,7 +39,6 @@ export default {
   },
   created() {
     this.getLiked();
-    console.log(this.targetType + this.styleType + this.targetId);
   },
   methods: {
     async getLiked() {

@@ -3,29 +3,46 @@
     <div v-if="postInfos" class="video-feed-container">
       <div class="video-feed-item" v-for="(post, index) in postInfos" v-bind:key="index">
         <a href="#" class="feed-item-avatar">
-          <b-avatar class="user-pic" v-bind:src="post.authorAvatar" size="3.5rem" />
+          <b-avatar class="user-pic" v-bind:src="post.userIcon" size="3.5rem" />
         </a>
         <div class="feed-item-content">
           <div class="author-info-content">
             <a href="#">
-              <h3 class="author-uniqueId">{{ post.authorNick }}</h3>
+              <h3 class="author-uniqueId">{{ post.userNickname }}</h3>
             </a>
             <a href="#">
-              <h4 class="author-nickname">@{{ post.authorName }}</h4>
+              <h4 class="author-nickname">@{{ post.userName }}</h4>
             </a>
           </div>
-          <div class="item-location-info">
+          <div class="author-golf-info">
+            <span class="golf-grade">등급 - {{ post.userGrade }}</span>
+            <span class="golf-handicap">핸디캡 - {{ post.handicap }}</span>
+            <span class="golf-rolmodel">{{ post.roleModel }}처럼 되려고 노력 중</span>
+          </div>
+          <div class="location-info" v-if="post.locations">
             <h4>
-              <div class="location-decoration">
+              <div class="info-text-decoration">
                 <i class="fas fa-map-marker-alt"></i>
-                {{ post.location }}
+                {{ post.locations }}
+              </div>
+            </h4>
+          </div>
+          <div class="club-info" v-if="post.golfClub.length">
+            <h4>
+              <div class="info-text-decoration">
+                <div class="club-info-tags">
+                  <i class="fas fa-thumbs-up"></i>
+                  <span v-for="(tag, id) of post.golfClub" :key="id">
+                    <a :href="`/search/${tag.substring(1)}`">{{ tag }}</a>
+                  </span>
+                </div>
               </div>
             </h4>
           </div>
           <div class="video-meta-caption">
             <strong v-html="post.postContent" />
           </div>
-          <div class="item-follow-wrapper">
+          <div v-if="!postType" class="item-follow-wrapper">
             <FollowButton />
           </div>
           <div class="item-video-container">
@@ -133,22 +150,15 @@ export default {
         if (posts.length) {
           for (const post of posts) {
             const postObj = {
-              postId: post.postId,
-              postContent: this.setPostContent(post.postContent),
-              videoRoot: post.videoRoot,
-              Thumbnail: post.postThumbnail,
-              location: post.locations,
-              likeCount: post.likeCount,
-              commentCount: post.commentCount,
-              authorId: post.userId,
-              authorName: post.userName,
-              authorNick: post.userNickname,
-              authorAvatar: post.userIcon,
+              ...post,
+              postContent: this.separateHashtag(post.postContent, 0),
+              golfClub: this.separateHashtag(post.golfClub, 1),
               isHover: false,
               isMuted: true,
               isPlaying: true,
             };
 
+            console.log(postObj);
             this.postInfos.push(postObj);
           }
           this.pageNum += 1;
@@ -163,14 +173,19 @@ export default {
         console.log(error);
       }
     },
-    setPostContent(content) {
-      let newContent = content;
-      if (!newContent) return '';
+    separateHashtag(text, type) {
+      let newText = text;
+      if (!newText) return '';
+
+      if (type) {
+        // 텍스트에 해시태그만 있는 경우
+        const newTags = newText.split(' ');
+        return newTags;
+      }
 
       let hashReg = /#(\w+|[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+)/g;
-
-      newContent = newContent.toString().replace(hashReg, '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>');
-      return newContent;
+      newText = newText.toString().replace(hashReg, '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>');
+      return newText;
     },
     // 게시물 상세보기
     openPostDetail(postId, isComment) {
@@ -214,11 +229,9 @@ export default {
         visible = (visibleX * visibleY) / (w * h);
 
         if (visible > fraction) {
-          // console.log(this.$refs.videoRef[i]);
           this.$refs.videoRef[i].play();
           this.postInfos[i].isPlaying = true;
         } else {
-          // console.log('pausevideo');
           this.$refs.videoRef[i].pause();
           this.postInfos[i].isPlaying = false;
         }
@@ -305,6 +318,9 @@ a {
   margin-right: 150px;
   font-family: Helvetica, Arial, sans-serif;
 }
+.author-info-content a:hover {
+  color: #fa5252;
+}
 .author-info-content h3 {
   margin-right: 4px;
   font-weight: 700;
@@ -319,21 +335,53 @@ a {
   margin-bottom: 0;
 }
 
-.item-location-info {
-  margin-top: 4px;
-  margin-bottom: 12px;
+.author-golf-info {
+  width: 100%;
+  display: flex;
+  margin-bottom: 24px;
+}
+.author-golf-info span {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 22px;
+  color: #495057;
+  border-radius: 5px;
+  background-color: #ffe3e3;
+}
+.golf-grade {
+  min-width: 30px;
+  padding: 0 8px;
+  margin-right: 12px;
+  text-align: center;
+}
+.golf-handicap {
+  min-width: 70px;
+  padding: 0 8px;
+  margin-right: 12px;
+  text-align: center;
+}
+.golf-rolmodel {
+  min-width: 170px;
+  padding: 0 8px;
+  margin-right: 12px;
+  text-align: center;
+}
+
+.location-info {
   max-width: 100%;
   position: relative;
   overflow: hidden;
+  margin-bottom: 4px;
 }
-.item-location-info h4 {
+.location-info h4 {
   margin: 0;
 }
-.location-decoration {
+.info-text-decoration {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   display: inline-block;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   line-height: 22px;
   width: 100%;
   text-overflow: ellipsis;
@@ -341,12 +389,45 @@ a {
   overflow: hidden;
   color: #495057;
 }
-.location-decoration i {
+.info-text-decoration i {
   /* margin-right: 5px; */
   width: 18px;
   height: 18px;
   position: relative;
   left: 4px;
+  text-align: center;
+  margin-right: 4px;
+}
+
+.club-info {
+  max-width: 100%;
+  position: relative;
+  overflow: hidden;
+  font-family: Helvetica, Arial, sans-serif;
+}
+.club-info-tags {
+  display: flex;
+  flex-flow: row wrap;
+  min-height: 30px;
+}
+.club-info-tags i {
+  position: relative;
+  top: 10px;
+  margin-right: 4px;
+}
+.club-info-tags a {
+  padding: 6px;
+  margin: 0 5px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 22px;
+  background-color: rgba(22, 24, 35, 0.03);
+  border-radius: 4px;
+  color: #495057;
+}
+.club-info-tags a:hover {
+  color: #fa5252;
 }
 
 .video-meta-caption {
@@ -355,7 +436,8 @@ a {
   line-height: 22px;
   color: #343a40;
   flex: 0 0 auto;
-  margin-bottom: 8px;
+  margin-top: 24px;
+  margin-bottom: 12px;
   margin-right: 150px;
   word-break: break-word;
 }
