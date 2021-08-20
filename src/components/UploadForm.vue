@@ -97,7 +97,7 @@ export default {
                 newHTML += "<span class='statement'>" + val + '</span>';
               } else {
                 // 이미 # 뒤에 문자가 있는 해시태그는 뒤에 공백을 추가한다.
-                newHTML += "<span class='statement'>" + val + '&nbsp;</span>';
+                newHTML += "<span class='statement'>" + val + ' ' + '</span>';
               }
             } else newHTML += "<span class='other'>" + val + '&nbsp;</span>';
           });
