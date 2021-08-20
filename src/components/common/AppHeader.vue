@@ -3,6 +3,7 @@
     <div class="header-logo">
       <a href="/">
         <img src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/assets%2Flogo-1.png?alt=media&token=c34366aa-9387-4d86-b9bc-9d2a992c7549" alt="logo" />
+        <!-- <span>golftok</span> -->
       </a>
     </div>
     <div class="search-container">
@@ -52,10 +53,16 @@ export default {
     submitSearchText() {
       event.preventDefault();
       if (this.searchText.length) {
-        this.$router.push({
-          name: 'SearchResult',
-          params: { keyword: this.searchText },
-        });
+        this.$router
+          .push({
+            name: 'SearchResult',
+            params: { keyword: this.searchText },
+          })
+          .catch((error) => {
+            this.$router.go(this.$router.currentRoute);
+            // console.log(error);
+            throw error;
+          });
       }
     },
   },
@@ -86,6 +93,7 @@ export default {
 }
 
 .header-logo {
+  width: 20%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
