@@ -85,11 +85,15 @@ export default {
       }
     },
     // 게시물 업로드 하기
-    async addPost(evnet) {
+    async addPost(newCaption, newClub, newLocation) {
       // 새로고침 방지
-      evnet.preventDefault();
-      console.log(this.newText);
+      event.preventDefault();
+
       console.log('addPost');
+      console.log(newCaption);
+      console.log(newClub);
+      console.log(newLocation);
+
       try {
         // 만약 파일 선택창에서 선택한 파일이 있다면
         if (this.newFile !== '') {
@@ -100,10 +104,11 @@ export default {
 
         // 게시글 obj
         const postObj = {
-          postContent: this.newText,
+          postContent: newCaption,
           videoRoot: this.newVideoUrl,
-          locations: '',
+          locations: newLocation,
           postThumbnail: THUMBNAIL_URL,
+          golfClub: newClub,
         };
 
         console.log(postObj);
@@ -116,8 +121,6 @@ export default {
           // 마이 페이지로 이동. 일단 메인 페이지로 이동하도록 함
           this.$router.push('/');
         }
-
-        this.deleteAll();
       } catch (error) {
         console.log(error);
       }

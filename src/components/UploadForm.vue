@@ -9,7 +9,7 @@
           @input="handleCaptionInput"
           @focus="setIsInputFocused(true)"
           @blur="setIsInputFocused(false)"
-          @keydown.space="handleSpaceKey"
+          @keyup.space="handleSpaceKey"
           @keydown.enter="preventTextNewLine"
           style="white-space: nowrap; overflow: hidden;"
         >
@@ -25,12 +25,14 @@
     <div class="upload-club-container">
       <h3 class="form-title-container">Club</h3>
       <div class="form-input-container">
-        <input class="form-text-editor" @keydown.space="test" placeholder="What club did you use today?" />
+        <input class="form-text-editor" @keyup.space="addClubTag" placeholder="What club did you use today?" />
         <div class="hash-icon">
           <i class="fas fa-hashtag"></i>
         </div>
       </div>
-      <div class="hashtag-container"></div>
+      <div class="hashtag-container">
+        <div class="hashtags" v-for="(tag, index) of newClubTags" :key="index" @click="deleteClubTag(index)">{{ tag }}</div>
+      </div>
     </div>
     <div class="upload-location-container">
       <h3 class="form-title-container">Location</h3>
@@ -61,7 +63,7 @@ export default {
   data() {
     return {
       newCaption: '',
-      newClubTags: [],
+      newClubTags: ['apple'],
       newLocation: '',
       isHashActive: false,
       isInputFocused: false,
@@ -72,6 +74,7 @@ export default {
     isBtnDisabled: Boolean,
   },
   methods: {
+    // [caption] 텍스트 입력 동작 설정 (@input)
     handleCaptionInput(event) {
       this.newCaption = event.target.outerText;
 
@@ -101,6 +104,7 @@ export default {
         this.setCursorPosition(event);
       }
     },
+    // [caption] 스페이스바 누를 때 동작 설정 (@keyup.space)
     handleSpaceKey(event) {
       this.newCaption = event.target.outerText;
       console.log(event.target.outerText);
@@ -114,7 +118,7 @@ export default {
         this.setCursorPosition(event);
       }
     },
-    // 게시글 작성 시, 커서 위치 설정
+    // [caption] 텍스트 입력할 때, 커서 위치 설정
     setCursorPosition(event) {
       // Set cursor postion to end of text
       var child = event.target.children;
@@ -126,10 +130,35 @@ export default {
       sel.addRange(range);
       event.target.focus();
     },
+    // [caption] 엔터키 기본 동작인 줄바꿈 막기 (@keyup.enter)
     preventTextNewLine(event) {
       event.preventDefault();
     },
-    // 위치 리스트 보이는 여부 설정
+    // [caption] 텍스트 입력칸 클릭 시, 포커싱
+    setIsInputFocused(state) {
+      this.isInputFocused = state;
+    },
+    // [club] 클럽 태그 추가
+    addClubTag(event) {
+      event.preventDefault();
+      let value = event.target.value.trim();
+
+      if (value.length > 0) {
+        value = value[0] === '#' ? value : '#' + value;
+
+        this.newClubTags.push(value);
+        console.log(this.newClubTags);
+
+        event.target.value = '';
+      }
+    },
+    // [club] 클럽 태그 삭제
+    deleteClubTag(id) {
+      event.target.remove();
+      this.newClubTags = this.newClubTags.filter((tag, index) => id !== index);
+      console.log(this.newClubTags);
+    },
+    // [location] 위치 검색 결과 리스트 보이기
     setIsListVisible(state) {
       this.$emit('setIsListVisible', state);
     },
@@ -140,37 +169,11 @@ export default {
 
       this.$emit('clearContents');
     },
+    // 게시글 작성 완료 (제출)
     submitPost() {
-      this.$emit('submitPost');
-    },
-    setIsInputFocused(state) {
-      this.isInputFocused = state;
-    },
-    test(event) {
-      event.preventDefault();
-      //   let input = document.querySelector('.form-text-editor');
-      let container = document.querySelector('.hashtag-container');
-      //   let hashtagArray = [];
-      //   let t = null;
-
-      if (event.target.value.length > 0) {
-        var text = document.createTextNode('#' + event.target.value);
-        var p = document.createElement('p');
-        container.appendChild(p);
-        p.appendChild(text);
-        p.classList.add('hashtag');
-        this.newClubTags.push(event.target.value);
-
-        event.target.value = '';
-
-        let deleteTags = document.querySelectorAll('.hashtag');
-
-        for (let i = 0; i < deleteTags.length; i++) {
-          deleteTags[i].addEventListener('click', () => {
-            container.removeChild(deleteTags[i]);
-          });
-        }
-      }
+      const newClubInfo = this.newClubTags.join(' ');
+      console.log(newClubInfo);
+      this.$emit('submitPost', this.newCaption, newClubInfo, this.newLocation);
     },
   },
 };
@@ -245,7 +248,7 @@ export default {
   flex-flow: row wrap;
 }
 
-.hashtag {
+.hashtags {
   pointer-events: none;
   background-color: #242424;
   color: white;
@@ -253,7 +256,7 @@ export default {
   margin: 5px;
 }
 
-.hashtag::before {
+.hashtags::before {
   pointer-events: all;
   display: inline-block;
   content: 'x';
