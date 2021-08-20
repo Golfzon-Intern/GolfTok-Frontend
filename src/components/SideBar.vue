@@ -30,6 +30,9 @@
                 <h4 class="user-title">{{ user.userName }}</h4>
                 <p class="user-desc">{{ user.userNickname }}</p>
               </div>
+              <div class="user-grade">
+                <span>{{ user.userGrade }}</span>
+              </div>
             </span>
           </a>
           <div class="see-all">
@@ -48,6 +51,9 @@
               <div class="user-infos">
                 <h4 class="user-title">{{ user.userName }}</h4>
                 <p class="user-desc">{{ user.userNickname }}</p>
+              </div>
+              <div class="user-grade">
+                <span>{{ user.userGrade }}</span>
               </div>
             </span>
           </a>
@@ -165,6 +171,7 @@ export default {
   padding: 0;
   margin-bottom: 8px;
 }
+
 .nav-item {
   position: relative;
   display: flex;
@@ -225,6 +232,7 @@ export default {
   position: relative;
   box-sizing: border-box;
 }
+
 .user-list-header {
   display: flex;
   align-items: center;
@@ -241,6 +249,7 @@ export default {
   text-align: left;
   color: #495057;
 }
+
 .user-list .user-item {
   color: inherit;
   text-decoration: none;
@@ -293,6 +302,32 @@ export default {
   line-height: 15px;
   max-width: 260px;
 }
+
+.user-grade {
+  position: relative;
+  bottom: 8px;
+  min-width: 30px;
+  height: 20px;
+  padding: 0 8px;
+  margin-left: 8px;
+  margin-right: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: rgba(22, 24, 35, 0.06);
+}
+.user-grade span {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  /* line-height: 22px; */
+  color: #495057;
+  text-align: center;
+  margin: 0;
+}
+
 .see-all {
   height: 20px;
   margin-top: 8px;

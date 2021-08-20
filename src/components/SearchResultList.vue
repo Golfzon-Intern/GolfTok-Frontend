@@ -6,7 +6,7 @@
       </span>
       <div class="search-keyword-container">
         <h1 class="search-keyword-title">#{{ this.keyword }}</h1>
-        <h2 class="search-sub-title">119.58 posts</h2>
+        <h2 class="search-sub-title">Search results for #{{ this.keyword }}</h2>
       </div>
     </header>
     <div class="search-result-body">
@@ -135,6 +135,8 @@ export default {
 }
 
 .search-keyword-container {
+  position: relative;
+  top: 10px;
   margin-left: 20px;
   flex: 1;
   overflow: hidden;
@@ -153,7 +155,7 @@ export default {
   font-weight: 400;
   font-size: 1rem;
   line-height: 22px;
-  color: rgba(18, 18, 18, 0.75);
+  color: rgba(18, 18, 18, 0.5);
 }
 
 .search-result-body {
