@@ -17,38 +17,34 @@
             How was your golf today?
           </div>
         </div>
-        <div class="hash-icon">
+        <!-- <div class="hash-icon">
           <i class="fas fa-hashtag"></i>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="upload-club-container">
       <h3 class="form-title-container">Club</h3>
       <div class="form-input-container">
         <input class="form-text-editor" @keyup.space="addClubTag" placeholder="What club did you use today?" />
-        <div class="hash-icon">
+        <!-- <div class="hash-icon">
           <i class="fas fa-hashtag"></i>
-        </div>
+        </div> -->
       </div>
-      <div class="hashtag-container">
-        <div class="hashtags" v-for="(tag, index) of newClubTags" :key="index" @click="deleteClubTag(index)">{{ tag }}</div>
+      <div class="club-tag-container">
+        <div class="club-tags" v-for="(tag, index) of newClubTags" :key="index" @click="deleteClubTag(index)">{{ tag }}</div>
       </div>
     </div>
     <div class="upload-location-container">
       <h3 class="form-title-container">Location</h3>
-      <!-- <b-form-input class="location-input" :type="'search'" v-model="newLocation" placeholder="Search location" v-on:keyup.enter="setIsListVisible(true)"></b-form-input> -->
-      <input type="search" v-model="newLocation" @keyup.enter="setIsListVisible(true)" />
+      <div class="form-input-container">
+        <input class="form-text-editor" type="search" v-model="newLocation" @keyup.enter="getLocationInfos()" placeholder="Where did you play golf today?" />
+      </div>
       <div class="location-list-wrapper" v-if="isListVisible">
-        <b-list-group class="location-result-list">
-          <b-list-group-item button>Button item</b-list-group-item>
-          <b-list-group-item button>I am a button</b-list-group-item>
-          <b-list-group-item button disabled>Disabled button</b-list-group-item>
-          <b-list-group-item button>This is a button too</b-list-group-item>
-          <b-list-group-item button>Button item</b-list-group-item>
-          <b-list-group-item button>I am a button</b-list-group-item>
-          <b-list-group-item button disabled>Disabled button</b-list-group-item>
-          <b-list-group-item button>This is a button too</b-list-group-item>
-        </b-list-group>
+        <div class="location-item-wrapper" v-for="(item, index) of LocationSearchList" :key="index" @click="selectLocation(index)">
+          <span class="location-item-title">{{ item.title }}</span>
+          <span class="location-item-category">{{ item.category }}</span>
+          <p class="location-item-address">{{ item.address }}</p>
+        </div>
       </div>
     </div>
     <div class="form-bottom-container">
@@ -59,12 +55,15 @@
 </template>
 
 <script>
+import * as searchApi from '@/api/search';
+
 export default {
   data() {
     return {
       newCaption: '',
-      newClubTags: ['apple'],
+      newClubTags: [],
       newLocation: '',
+      LocationSearchList: [],
       isHashActive: false,
       isInputFocused: false,
     };
@@ -72,6 +71,9 @@ export default {
   props: {
     isListVisible: Boolean,
     isBtnDisabled: Boolean,
+  },
+  watch: {
+    isListVisible: 'clearLocationList',
   },
   methods: {
     // [caption] 텍스트 입력 동작 설정 (@input)
@@ -162,6 +164,48 @@ export default {
     setIsListVisible(state) {
       this.$emit('setIsListVisible', state);
     },
+    async getLocationInfos() {
+      try {
+        const response = await searchApi.getLocation(this.newLocation);
+        const data = response.data.items;
+
+        if (data.length) {
+          for (const item of data) {
+            // console.log(item);
+            const locationObj = {
+              title: this.setLocationText(item.title),
+              category: item.category,
+              address: item.roadAddress,
+            };
+            this.LocationSearchList.push(locationObj);
+          }
+        }
+
+        this.setIsListVisible(true);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    setLocationText(text) {
+      const locReg = /<[b]>|<[\\/][b]>/g;
+      const newText = text
+        .split(locReg)
+        .join(' ')
+        .trim();
+      console.log(newText);
+      return newText;
+    },
+    selectLocation(selectedIndex) {
+      const selected = this.LocationSearchList[selectedIndex].title + ' (' + this.LocationSearchList[selectedIndex].address + ')';
+
+      console.log(selected);
+
+      this.newLocation = selected;
+    },
+    clearLocationList() {
+      if (!this.isListVisible) this.LocationSearchList = [];
+      console.log(this.LocationSearchList);
+    },
     // 전체 삭제
     clearContents() {
       this.newCaption = '';
@@ -243,20 +287,40 @@ export default {
   cursor: pointer;
 }
 
-.hashtag-container {
-  display: flex;
-  flex-flow: row wrap;
+.upload-club-container {
+  outline-style: none;
+  position: relative;
+  margin-bottom: 24px;
 }
 
-.hashtags {
+.form-input-container input {
+  height: 44px;
+  border: none;
+}
+.form-input-container input::placeholder {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1;
+  color: rgba(22, 24, 35, 0.5);
+}
+
+.club-tag-container {
+  display: flex;
+  flex-flow: row wrap;
+  min-height: 50px;
+}
+
+.club-tags {
   pointer-events: none;
-  background-color: #242424;
-  color: white;
+  background-color: rgba(22, 24, 35, 0.03);
+  border-radius: 4px;
+  color: #fa5252;
   padding: 6px;
   margin: 5px;
 }
 
-.hashtags::before {
+.club-tags::before {
   pointer-events: all;
   display: inline-block;
   content: 'x';
@@ -264,8 +328,8 @@ export default {
   width: 20px;
   margin-right: 6px;
   text-align: center;
-  color: #ccc;
-  background-color: #111;
+  color: #fa5252;
+  background-color: none;
   cursor: pointer;
 }
 
@@ -273,23 +337,42 @@ export default {
   outline-style: none;
   position: relative;
   margin-bottom: 24px;
+  height: 25vh;
 }
 
-.location-input {
-  min-height: 44px;
-  position: relative;
-  text-align: left;
-  border: 1px solid rgba(22, 24, 35, 0.12);
-  border-radius: 2px;
-}
 .location-list-wrapper {
-  height: 165px;
+  height: 56%;
   border: 1px solid rgba(22, 24, 35, 0.12);
   border-radius: 2px;
-}
-.location-result-list {
-  max-height: 160px;
   overflow: scroll;
+  overflow-x: hidden;
+}
+
+.location-item-wrapper {
+  width: 100%;
+  height: 55px;
+  padding: 4px;
+  font-family: Helvetica, Arial, sans-serif;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(22, 24, 35, 0.12);
+}
+
+.location-item-title {
+  margin-right: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fa5252;
+}
+.location-item-category {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: rgba(22, 24, 35, 0.8);
+}
+.location-item-address {
+  margin-top: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(22, 24, 35, 0.8);
 }
 
 .form-bottom-container {
