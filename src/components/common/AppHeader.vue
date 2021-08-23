@@ -17,11 +17,12 @@
     </div>
     <div class="header-menu">
       <div class="menu-wrapper" v-if="this.$store.state.auth.userInfo">
-        <button class="upload-btn" @click="clickUploadBtn">
+        <button class="upload-cloud-btn" @click="clickUploadBtn">
           <i class="fas fa-cloud-upload-alt"></i>
         </button>
-        <button class="user-btn">
-          <i class="far fa-user-circle"></i>
+        <button class="user-pic-btn">
+          <!-- <i class="far fa-user-circle"></i> -->
+          <img src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/user_photo%2Fuser_photo_default.jpeg?alt=media&token=087db47b-26ea-4317-9bde-f6c7ac53c76d" alt="user" />
         </button>
       </div>
       <div class="login-container" v-else>
@@ -160,22 +161,32 @@ export default {
   display: flex;
   align-items: center;
 }
-.header-menu .upload-btn,
-.header-menu .user-btn {
+.header-menu button {
   position: relative;
   width: 42px;
   height: 42px;
-  font-size: 1.5rem;
+  padding: 0;
   background: transparent;
   border: none;
   cursor: pointer;
 }
-.header-menu .user-btn {
+
+.upload-cloud-btn {
+  top: 4px;
+  color: #495057;
+}
+.upload-cloud-btn i {
+  position: relative;
+  top: 2px;
+  font-size: 1.5rem;
+}
+
+.user-pic-btn {
   margin-left: 24px;
 }
-.upload-btn:hover,
-.user-btn:hover {
-  color: #fa5252;
+.user-pic-btn img {
+  width: 80%;
+  height: 80%;
 }
 
 .login-container button {
