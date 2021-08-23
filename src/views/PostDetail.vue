@@ -33,7 +33,7 @@
           <p class="username">{{ postInfo.userName }}</p>
           <p class="user-nickname">{{ postInfo.userNickname }}</p>
         </div>
-        <FollowButton />
+        <FollowButton :targetId="postInfo.userId" />
       </div>
       <div class="user-golf-container">
         <span class="golf-grade">등급 - {{ postInfo.userGrade }}</span>

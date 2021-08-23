@@ -43,7 +43,7 @@
             <strong v-html="post.postContent" />
           </div>
           <div v-if="!postType" class="item-follow-wrapper">
-            <FollowButton />
+            <FollowButton :targetId="post.userId" />
           </div>
           <div class="item-video-container">
             <div class="item-video-wrapper">
