@@ -20,6 +20,7 @@ export default {};
 
 body {
   margin: 0;
+  min-width: 500px;
 }
 
 a {
@@ -40,5 +41,21 @@ strong,
 div,
 a {
   font-family: Helvetica, Arial, sans-serif;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #e9ecef;
+  border-radius: 8px;
 }
 </style>

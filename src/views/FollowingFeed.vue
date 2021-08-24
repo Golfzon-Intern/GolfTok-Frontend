@@ -5,7 +5,9 @@
     </div>
     <div class="body-container">
       <div class="side-bar-container">
-        <SideBar :isActive="this.navIndex"></SideBar>
+        <div class="scroll-container">
+          <SideBar :isActive="this.navIndex" @openModal="toggleModal"></SideBar>
+        </div>
       </div>
       <div class="trending-container">
         <PostList :postType="1" @openPage="openDetailPage"></PostList>

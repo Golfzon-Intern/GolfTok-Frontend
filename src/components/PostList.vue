@@ -3,7 +3,7 @@
     <div v-if="postInfos" class="video-feed-container">
       <div class="video-feed-item" v-for="(post, index) in postInfos" v-bind:key="index">
         <a href="#" class="feed-item-avatar">
-          <b-avatar class="user-pic" v-bind:src="post.userIcon" size="3.5rem" />
+          <b-avatar class="user-pic" v-bind:src="post.userIcon" />
         </a>
         <div class="feed-item-content">
           <div class="author-info-content">
@@ -39,22 +39,18 @@
           </div>
           <div class="item-video-container">
             <div class="item-video-wrapper">
-              <a href="#" class="video-card-wrapper">
-                <div class="video-card-bg">
-                  <div class="video-card" @mouseenter="setIsHover(true, index)" @mouseleave="setIsHover(false, index)">
-                    <video ref="videoRef" :src="post.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="post.Thumbnail" @click="openPostDetail(post.postId, false)"></video>
-                    <span class="style-layer-mask"></span>
-                    <div class="volume-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setIsMuted(index)">
-                      <i v-if="post.isMuted" class="fas fa-volume-mute"></i>
-                      <i v-else class="fas fa-volume-up"></i>
-                    </div>
-                    <div class="play-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setIsPlaying(index)">
-                      <i v-if="post.isPlaying" class="fas fa-pause"></i>
-                      <i v-else class="fas fa-play"></i>
-                    </div>
-                  </div>
+              <div class="video-card" @mouseenter="setIsHover(true, index)" @mouseleave="setIsHover(false, index)">
+                <video ref="videoRef" :src="post.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="post.Thumbnail" @click="openPostDetail(post.postId, false)"></video>
+                <span class="style-layer-mask"></span>
+                <div class="volume-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setIsMuted(index)">
+                  <i v-if="post.isMuted" class="fas fa-volume-mute"></i>
+                  <i v-else class="fas fa-volume-up"></i>
                 </div>
-              </a>
+                <div class="play-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setIsPlaying(index)">
+                  <i v-if="post.isPlaying" class="fas fa-pause"></i>
+                  <i v-else class="fas fa-play"></i>
+                </div>
+              </div>
             </div>
             <div class="item-action-bar">
               <div class="bar-item-wrapper">
@@ -260,7 +256,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+.post-list-wrapper {
+  width: 100%;
+}
+
 .video-feed-container {
   display: flex;
   flex-direction: column;
@@ -268,8 +268,7 @@ export default {
 }
 
 .video-feed-item {
-  width: 692px;
-  max-width: 692px;
+  width: 100%;
   position: relative;
   padding: 20px 0;
   border-bottom: 0.5px solid #ced4da;
@@ -279,6 +278,7 @@ export default {
   float: left;
   position: relative;
   cursor: pointer;
+  background-color: lawngreen;
 }
 .feed-item-avatar .user-pic {
   width: 56px;
@@ -421,32 +421,22 @@ export default {
 
 .item-video-container {
   position: relative;
-  display: inline-block;
+  width: 70%;
+  display: flex;
 }
 .item-video-wrapper {
-  width: 550px;
-  height: 340px;
-  position: relative;
+  width: 100%;
 }
+
 .video-card-wrapper {
+  width: 100%;
+  min-height: 250px;
   position: relative;
   display: flex;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #343a40;
-  border-radius: 8px;
   justify-content: center;
-}
-.video-card-bg {
-  width: 100%;
-  height: 100%;
-  position: relative;
   background-repeat: no-repeat;
   background-position: center center;
   cursor: pointer;
-  overflow: hidden;
-  border-radius: 4px;
   background-color: black;
   background-size: 35vw;
 }
@@ -456,10 +446,11 @@ export default {
   justify-content: center;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
 }
 .video-card video {
-  width: 35vw;
-  display: block;
+  width: 100%;
   height: 100%;
   object-fit: cover;
 }
@@ -510,5 +501,34 @@ export default {
   align-items: center;
   width: 50px;
   margin-top: 4px;
+}
+
+@media screen and (max-width: 768px) {
+  .feed-item-avatar .user-pic {
+    width: 42px;
+    height: 42px;
+    z-index: 10;
+  }
+
+  .feed-item-content {
+    margin-left: 48px;
+    background-color: lawngreen;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .item-video-container {
+    width: 90%;
+    flex-direction: column;
+  }
+
+  .item-action-bar {
+    position: relative;
+    left: 0;
+    width: 40%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 </style>

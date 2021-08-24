@@ -3,11 +3,10 @@
     <div class="header-logo">
       <a href="/">
         <img src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/assets%2Flogo-1.png?alt=media&token=c34366aa-9387-4d86-b9bc-9d2a992c7549" alt="logo" />
-        <!-- <span>golftok</span> -->
       </a>
     </div>
     <div class="search-container">
-      <form action="" class="search-input">
+      <form class="search-input">
         <input type="search" v-model="searchText" @keyup.enter="submitSearchText" />
         <span class="split"></span>
         <button type="submit" @click="submitSearchText">
@@ -17,11 +16,13 @@
     </div>
     <div class="header-menu">
       <div class="menu-wrapper" v-if="this.$store.state.auth.userInfo">
+        <button class="search-input-btn">
+          <i class="fas fa-search"></i>
+        </button>
         <button class="upload-cloud-btn" @click="clickUploadBtn">
           <i class="fas fa-cloud-upload-alt"></i>
         </button>
         <button class="user-pic-btn">
-          <!-- <i class="far fa-user-circle"></i> -->
           <img src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/user_photo%2Fuser_photo_default.jpeg?alt=media&token=087db47b-26ea-4317-9bde-f6c7ac53c76d" alt="user" />
         </button>
       </div>
@@ -85,10 +86,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* width: 100%;
-  height: 80px;
-  padding: 8px; */
-  /* background: #f8f9fa; */
 }
 
 .header-logo {
@@ -118,27 +115,27 @@ export default {
   display: block;
 }
 .search-input {
-  display: flex;
-  align-items: center;
+  position: relative;
   margin-top: 0;
   padding: 12px 16px;
+  display: flex;
+  align-items: center;
   border-radius: 5rem;
-  position: relative;
   overflow: hidden;
   z-index: 1;
   background: #f7f7f7;
 }
 .search-input input {
+  width: 292px;
+  box-sizing: border-box;
+  padding: 0;
   font-weight: 400;
   font-size: 1rem;
   line-height: 1.4;
   border: none;
   background: transparent;
   outline: none;
-  padding: 0;
-  width: 292px;
   caret-color: var(--accent-main-color);
-  box-sizing: border-box;
 }
 .split {
   width: 1px;
@@ -160,14 +157,18 @@ export default {
   display: flex;
   align-items: center;
 }
-.header-menu button {
+.header-menu .menu-wrapper button {
   position: relative;
   width: 42px;
   height: 42px;
   padding: 0;
-  background: transparent;
+  background: var(--background-color);
   border: none;
   cursor: pointer;
+}
+
+.search-input-btn {
+  display: none;
 }
 
 .upload-cloud-btn {
@@ -190,5 +191,25 @@ export default {
 
 .login-container button {
   margin-left: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  .search-container {
+    display: none;
+  }
+
+  .header-menu .menu-wrapper {
+    width: 150px;
+    display: flex;
+    justify-content: space-around;
+  }
+  .header-menu .menu-wrapper button {
+    position: relative;
+    top: 0;
+    margin: 0;
+  }
+  .search-input-btn {
+    display: inline-block;
+  }
 }
 </style>

@@ -260,6 +260,9 @@ export default {
   box-sizing: border-box;
   cursor: pointer;
 }
+.user-item-inner:hover {
+  background-color: #f8f9fa;
+}
 .user-item-inner .user-avatar {
   width: 32px;
   height: 32px;
@@ -361,5 +364,56 @@ export default {
   background: #ced4da;
   transform: scaleY(0.5);
   top: 0;
+}
+
+@media screen and (max-width: 1000px) {
+  .side-scroll-wrapper {
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background-color: yellow; */
+  }
+
+  .nav-item,
+  .user-item-inner {
+    width: 50px;
+    /* margin-left: 8px; */
+    /* background-color: yellowgreen; */
+  }
+
+  /* .nav-item {
+    width: 50px;
+  } */
+
+  .nav-item h2 {
+    display: none;
+  }
+
+  .user-list-header {
+    display: none;
+  }
+
+  .user-item-inner .user-infos {
+    /* background-color: blue; */
+    /* color: #fff; */
+    display: none;
+  }
+
+  .user-grade {
+    display: none;
+  }
+
+  .see-all {
+    display: none;
+  }
+
+  .bottom-wrapper span {
+    width: 36px;
+    margin-left: 2px;
+    display: block;
+    font-size: 0.5rem;
+  }
 }
 </style>

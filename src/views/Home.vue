@@ -105,25 +105,19 @@ export default {
 }
 
 .trending-container {
-  width: 692px;
-  max-width: 692px;
+  width: 80%;
   padding: 24px 0;
   margin-right: 24px;
+  background-color: khaki;
 }
 
-/* width */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: var(--background-color);
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #e9ecef;
-  border-radius: 8px;
+@media screen and (max-width: 1000px) {
+  .side-bar-container {
+    flex: 0 0 86px;
+  }
+  .side-bar-container .scroll-container {
+    width: 70px;
+    border-right: 1px solid #ced4da;
+  }
 }
 </style>
