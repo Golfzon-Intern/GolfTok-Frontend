@@ -85,7 +85,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: Helvetica, Arial, sans-serif;
   /* width: 100%;
   height: 80px;
   padding: 8px; */
@@ -127,18 +126,18 @@ export default {
   position: relative;
   overflow: hidden;
   z-index: 1;
-  background: #f1f3f5;
+  background: #f7f7f7;
 }
 .search-input input {
   font-weight: 400;
   font-size: 1rem;
-  line-height: 22px;
+  line-height: 1.4;
   border: none;
   background: transparent;
   outline: none;
   padding: 0;
   width: 292px;
-  caret-color: #fe2c55;
+  caret-color: var(--accent-main-color);
   box-sizing: border-box;
 }
 .split {
@@ -173,7 +172,7 @@ export default {
 
 .upload-cloud-btn {
   top: 4px;
-  color: #495057;
+  color: var(--text-sub-color);
 }
 .upload-cloud-btn i {
   position: relative;

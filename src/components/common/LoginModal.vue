@@ -69,7 +69,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: Helvetica, Arial, sans-serif;
 }
 
 .login-modal-mask {
@@ -103,7 +102,7 @@ export default {
   width: 100%;
   height: 48px;
   font-size: 1.5rem;
-  line-height: 32px;
+  line-height: 1.3;
   margin-bottom: 0;
   flex-shrink: 0;
   padding: 0 20px 90px 22px;
@@ -120,8 +119,8 @@ export default {
   top: 48px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 1.5rem;
+  line-height: 1.3;
   flex: 1;
   text-align: center;
   font-weight: bolder;
@@ -150,7 +149,7 @@ export default {
   flex: 1;
   width: 472px;
   min-height: auto;
-  background-color: #fff;
+  background-color: var(--background-color);
   margin: 0 auto;
   padding: 0 48px;
   box-sizing: border-box;
@@ -165,8 +164,8 @@ export default {
 }
 .login-form-title {
   font-size: 1rem;
-  line-height: 22px;
-  color: #161823;
+  line-height: 1.4;
+  color: var(--text-main-color);
   margin-top: 24px;
   font-weight: bold;
   display: flex;
@@ -175,14 +174,13 @@ export default {
 }
 .login-form-container {
   position: relative;
+  height: 44px;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: content-box;
   border-radius: 4px;
   background: rgba(22, 24, 35, 0.06);
   border: 1.5px solid rgba(22, 24, 35, 0.06);
-  display: flex;
-  justify-content: space-between;
-  height: 44px;
-  line-height: 44px;
-  box-sizing: content-box;
 }
 .login-form-container input {
   padding-left: 12px;
@@ -192,10 +190,9 @@ export default {
   height: 100%;
   width: 100%;
   border: none;
-  color: #161823;
+  color: var(--text-main-color);
   font-size: 1rem;
-  caret-color: #fa5252;
-  line-height: 100%;
+  caret-color: var(--accent-main-color);
   pointer-events: initial;
 }
 .login-forgot-password {
@@ -203,14 +200,14 @@ export default {
   margin-bottom: 24px;
   display: inline-block;
   font-size: 0.75rem;
-  line-height: 15px;
-  color: #161823;
+  line-height: 1.25;
+  color: var(--text-main-color);
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
 }
 .login-forgot-password:hover {
-  color: #fa5252;
+  color: var(--accent-main-color);
 }
 .login-modal-body button {
   align-self: center;
@@ -224,33 +221,33 @@ export default {
 }
 .signup-btn-wrapper {
   height: 64px;
-  background: #fff;
+  background-color: var(--background-color);
   border-top: 0.5px solid rgba(22, 24, 35, 0.12);
   display: flex;
-  font-size: 15px;
-  line-height: 18px;
-  color: #161823;
+  font-size: 1rem;
+  line-height: 1.125;
+  color: var(--text-main-color);
   justify-content: flex-start;
   align-items: center;
   padding: 0 24px;
 }
 .signup-btn-wrapper span {
   font-size: 1rem;
-  line-height: 18px;
-  color: #161823;
+  line-height: 1.125;
+  color: var(--text-main-color);
 }
 .signup-btn-link {
   margin-left: 5px;
-  color: #fa5252;
-  font-size: 15px;
-  line-height: 18px;
+  color: var(--accent-main-color);
+  font-size: 1rem;
+  line-height: 1.125;
   display: inline-block;
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
 }
 .signup-btn-link:hover {
-  color: #fa5252;
+  color: var(--accent-main-color);
   text-decoration: underline;
 }
 

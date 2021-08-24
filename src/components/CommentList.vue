@@ -73,7 +73,7 @@ export default {
 #parent-comments {
   width: 100%;
   padding: 16px 0px;
-  background-color: rgb(248, 248, 248);
+  background-color: var(--supplement-color);
 }
 
 #parent-comments .comment-item {
@@ -107,7 +107,6 @@ export default {
   position: relative;
   overflow: hidden;
   text-align: center;
-  line-height: 32px;
 }
 
 #parent-comments .content-container {
@@ -118,18 +117,16 @@ export default {
 #parent-comments .user-info {
   display: block;
   font-size: 1.125rem;
-  line-height: 25px;
-  font-family: Helvetica, Arial, sans-serif;
+  line-height: 1.4;
   font-weight: 600;
-  color: #212529;
+  color: var(--text-main-color);
 }
 #parent-comments .comment-text {
   font-size: 1rem;
-  line-height: 22px;
-  color: #212529;
+  line-height: 1.4;
+  color: var(--text-main-color);
   padding-top: 4px;
   padding-right: 10px;
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
   word-break: break-word;
   white-space: pre-line;
@@ -138,20 +135,18 @@ export default {
   display: flex;
 }
 #parent-comments .comment-time {
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 0.875rem;
-  line-height: 20px;
-  color: #212529;
+  line-height: 1.5;
+  color: var(--text-main-color);
   opacity: 0.5;
   margin: 6px 0px 0px;
 }
 #parent-comments .reply-btn {
   margin: 6px 0 0 24px;
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   font-size: 0.875rem;
-  line-height: 20px;
-  color: #212529;
+  line-height: 1.4;
+  color: var(--text-main-color);
   opacity: 0.5;
   cursor: pointer;
 }
@@ -178,7 +173,7 @@ export default {
   height: 32px;
   font-size: 1.15rem;
   text-align: center;
-  color: #343a40;
+  color: var(--text-sub-color);
 }
 #parent-comments .action-container .delete-btn strong {
   width: 100%;
@@ -186,8 +181,8 @@ export default {
   display: inline-block;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #343a40;
-  line-height: 17px;
+  color: var(--text-sub-color);
+  line-height: 1.4;
   padding: 0 7px 0 8px;
 }
 
@@ -196,12 +191,11 @@ export default {
 }
 #parent-comments .more-btn {
   margin-top: 14px;
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 0.875rem;
-  line-height: 20px;
+  line-height: 1.5;
   font-weight: 600;
   position: relative;
-  color: #212529;
+  color: var(--text-main-color);
   opacity: 0.5;
   cursor: pointer;
   display: flex;
@@ -211,10 +205,10 @@ export default {
   text-decoration: underline;
 }
 #parent-comments .more-icon {
-  width: 1rem;
-  height: 1rem;
+  position: relative;
+  top: 2px;
   font-size: 1rem;
-  margin-left: 6px;
+  margin-left: 8px;
 }
 
 /* 리스트 아이템 트렌지션 효과 */

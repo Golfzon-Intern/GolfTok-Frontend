@@ -64,7 +64,7 @@ export default {
 }
 .preview-close-btn i {
   font-size: 2rem;
-  color: #fa5252;
+  color: var(--accent-main-color);
 }
 
 .upload-video-btn {
@@ -91,21 +91,20 @@ export default {
   text-align: center;
 }
 .upload-video-card h2 {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 1.25;
   text-align: center;
-  color: rgba(22, 24, 35, 0.34);
+  color: var(--text-sub-color);
+  opacity: 0.4;
   margin-top: 29px;
 }
 .upload-video-card ul {
   margin: 0px;
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 15px;
   line-height: 18px;
-  color: rgba(22, 24, 35, 0.34);
+  color: var(--text-sub-color);
+  opacity: 0.4;
   text-align: left;
 }
 

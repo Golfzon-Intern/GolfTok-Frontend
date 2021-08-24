@@ -60,10 +60,9 @@ export default {
   justify-content: center; */
 }
 .follow-btn-wrapper button {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   font-size: 1rem;
-  line-height: 22px;
+  line-height: 1.4;
   min-width: 88px;
   padding: 0 10px;
   height: 28px;
@@ -78,9 +77,9 @@ export default {
 }
 
 .follow-basic-btn {
-  background-color: #fff;
+  background-color: var(--background-color);
   border: 1px solid rgba(22, 24, 35, 0.12);
-  color: rgba(22, 24, 35, 0.8);
+  color: var(--text-sub-color);
 }
 .follow-basic-btn:hover {
   background-color: rgba(22, 24, 35, 0.06);
@@ -88,8 +87,8 @@ export default {
 }
 
 .follow-active-btn {
-  background: #fff;
-  border: 1px solid #f03e3e;
-  color: #f03e3e;
+  background-color: var(--background-color);
+  border: 1px solid var(--accent-main-color);
+  color: var(--accent-main-color);
 }
 </style>

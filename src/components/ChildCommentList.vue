@@ -68,12 +68,11 @@ export default {
 <style scoped>
 #child-comments .hide-btn {
   margin-top: 14px;
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 0.875rem;
-  line-height: 20px;
+  line-height: 1.4;
   font-weight: 600;
   position: relative;
-  color: #212529;
+  color: var(--text-main-color);
   opacity: 0.5;
   cursor: pointer;
   display: flex;

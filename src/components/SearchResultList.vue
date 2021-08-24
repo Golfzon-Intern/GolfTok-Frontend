@@ -79,7 +79,6 @@ export default {
       this.results[index].isHover = state;
     },
     openPostDetail(postId) {
-      console.log('open');
       if (this.$store.state.auth.userInfo) {
         this.$emit('openPage', postId);
       } else {
@@ -121,10 +120,9 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   text-align: center;
-  line-height: 32px;
   border-radius: 2px;
   border: 0.5px solid rgba(18, 18, 18, 0.12);
-  background-color: rgb(248, 248, 248);
+  background-color: var(--supplement-color);
 }
 .hash-tag-icon i {
   width: 100%;
@@ -143,19 +141,18 @@ export default {
   text-overflow: ellipsis;
 }
 .search-keyword-container h1 {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 700;
   font-size: 2rem;
-  line-height: 38px;
+  line-height: 1.4;
   padding-bottom: 4px;
   margin: 0;
 }
 .search-keyword-container h2 {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 1rem;
-  line-height: 22px;
-  color: rgba(18, 18, 18, 0.5);
+  line-height: 1.4;
+  color: var(--text-sub-color);
+  opacity: 0.5;
 }
 
 .search-result-body {
@@ -200,7 +197,6 @@ export default {
 
 .result-info-wrapper {
   margin-right: 24px;
-  font-family: Helvetica, Arial, sans-serif;
   color: #fff;
   font-size: 1.25rem;
 }

@@ -74,7 +74,6 @@ export default {
   display: flex;
   align-items: flex-end;
   margin-bottom: -5px;
-  font-family: Helvetica, Arial, sans-serif;
 }
 
 .comment-text-input {
@@ -82,7 +81,7 @@ export default {
   width: 80%;
   height: 45px;
   box-sizing: border-box;
-  background: #e9ecef;
+  background: #f8f8f8;
   border: 1px solid transparent;
   border-radius: 8px;
   display: flex;
@@ -114,7 +113,7 @@ export default {
   width: 100%;
   height: 100%;
   font-size: 0.875rem;
-  color: #212529;
+  color: var(--text-main-color);
   opacity: 0.5;
 }
 </style>

@@ -109,7 +109,6 @@ export default {
   created() {
     this.getPostInfo();
     this.setComments();
-    // console.log(this.$route.params.postId);
   },
   methods: {
     async getPostInfo() {
@@ -219,11 +218,10 @@ export default {
             children: [],
             isOpened: false,
           };
-          console.log(newComment);
+          // console.log(newComment);
 
           this.comments = [newComment, ...this.comments];
         }
-        console.log(this.comments);
         this.commentState = 1;
       } catch (error) {
         console.log(error);
@@ -235,7 +233,6 @@ export default {
         group: group,
         parentIndex: parentIndex,
       };
-      console.log(this.replyTo);
     },
     removeComment(commentId, parentIndex, index) {
       console.log('remove');
@@ -377,13 +374,12 @@ export default {
   width: 37%;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background-color: var(--background-color);
   z-index: 15;
   /* padding: 8px 12px; */
   /* background: #f8f9fa; */
 }
 .content-container p {
-  font-family: Helvetica, Arial, sans-serif;
   margin-bottom: 0;
 }
 
@@ -394,7 +390,7 @@ export default {
   flex-direction: row;
   align-items: center;
   padding: 32px 32px 0;
-  color: rgb(22, 24, 35);
+  color: var(--text-main-color);
 }
 
 .user-avatar {
@@ -417,10 +413,9 @@ export default {
   /* width: 50%; */
 }
 .username {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   font-size: 1.25rem;
-  line-height: 25px;
+  line-height: 1.25;
   margin-bottom: 0px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -428,10 +423,9 @@ export default {
   align-items: center;
 }
 .user-nickname {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 0.875rem;
-  line-height: 20px;
+  line-height: 1.4;
   margin-bottom: 0px;
 }
 
@@ -443,13 +437,12 @@ export default {
   padding: 0 32px 0 64px;
 }
 .user-golf-container span {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 0.75rem;
-  line-height: 22px;
-  color: #495057;
+  line-height: 1.8;
+  color: var(--text-sub-color);
   border-radius: 5px;
-  background-color: #ffe3e3;
+  background-color: var(--accent-sub-color);
 }
 .golf-grade {
   min-width: 30px;
@@ -494,16 +487,15 @@ export default {
   margin: 0;
 }
 .info-text-decoration {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   display: inline-block;
   font-size: 0.875rem;
-  line-height: 22px;
+  line-height: 1.5;
   width: 100%;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  color: #495057;
+  color: var(--text-sub-color);
 }
 .info-text-decoration i {
   /* margin-right: 5px; */
@@ -519,7 +511,6 @@ export default {
   max-width: 100%;
   position: relative;
   overflow: hidden;
-  font-family: Helvetica, Arial, sans-serif;
 }
 .club-info-tags {
   display: flex;
@@ -534,23 +525,21 @@ export default {
 .club-info-tags a {
   padding: 6px;
   margin: 0 5px;
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   font-size: 0.875rem;
-  line-height: 22px;
-  background-color: rgba(22, 24, 35, 0.03);
+  line-height: 1.5;
+  background-color: var(--supplement-color);
   border-radius: 4px;
-  color: #495057;
+  color: var(--text-sub-color);
 }
 .club-info-tags a:hover {
-  color: #fa5252;
+  color: var(--accent-main-color);
 }
 
 .video-meta-title {
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 1rem;
-  line-height: 24px;
-  color: rgb(18, 18, 18);
+  line-height: 1.5;
+  color: var(--text-main-color);
   flex: 0 0 auto;
   font-weight: normal;
   word-break: break-word;
@@ -566,12 +555,9 @@ export default {
   position: relative;
   flex: 0 0 auto;
   margin-bottom: 16px;
-
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   font-size: 0.875rem;
   height: 40px;
-  line-height: 40px;
 }
 .action-wrapper {
   display: flex;
@@ -584,7 +570,7 @@ export default {
   flex: 1 1 auto;
   position: relative;
   display: flex;
-  background-color: rgb(248, 248, 248);
+  background-color: var(--supplement-color);
   padding: 0px 32px;
   border-top: 0.5px solid rgba(18, 18, 18, 0.12);
   border-bottom: 0.5px solid rgba(18, 18, 18, 0.12);
@@ -594,6 +580,6 @@ export default {
 .comment-input-container {
   margin: 0 32px;
   padding: 21px 0;
-  background-color: #fff;
+  background-color: var(--background-color);
 }
 </style>

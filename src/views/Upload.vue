@@ -88,9 +88,6 @@ export default {
     async addPost(newCaption, newClub, newLocation) {
       // 새로고침 방지
       event.preventDefault();
-
-      console.log('addPost');
-
       try {
         // 만약 파일 선택창에서 선택한 파일이 있다면
         if (this.newFile !== '') {
@@ -175,18 +172,17 @@ export default {
 }
 
 .upload-title {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 700;
   font-size: 3.5rem;
   line-height: 1;
   margin-top: 3vh;
 }
 .upload-sub-title {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
-  font-size: 18px;
-  line-height: 24px;
-  color: rgb(138, 139, 145);
+  font-size: 1.125rem;
+  line-height: 1.3;
+  color: var(--text-sub-color);
+  opacity: 0.7;
   margin-top: 8px;
 }
 

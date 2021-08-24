@@ -78,7 +78,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: Helvetica, Arial, sans-serif;
 }
 
 .nasmo-modal-mask {
@@ -95,7 +94,7 @@ export default {
   width: 70%;
   height: 80%;
   min-height: 700px;
-  background-color: #fff;
+  background-color: var(--background-color);
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.5);
 }
@@ -113,7 +112,7 @@ export default {
   width: 100%;
   height: 48px;
   font-size: 1.5rem;
-  line-height: 32px;
+  line-height: 1.3;
   margin-bottom: 0;
   flex-shrink: 0;
   padding: 0 20px 90px 22px;
@@ -130,12 +129,12 @@ export default {
   top: 48px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 1.5rem;
+  line-height: 1.3;
   flex: 1;
   text-align: center;
   font-weight: bolder;
-  color: #000;
+  color: var(--text-main-color);
 }
 .nasmo-modal-close-btn {
   position: absolute;
@@ -204,21 +203,20 @@ export default {
 .nasmo-modal-footer button {
   border: none;
   cursor: pointer;
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 700;
 }
 .another-video-btn {
   right: 20%;
   bottom: 12px;
   font-size: 1rem;
-  line-height: 18px;
-  color: #161823;
+  line-height: 1.125;
+  color: var(--text-main-color);
   padding: 0 24px;
-  background-color: #fff;
+  background-color: var(--background-color);
 }
 .another-video-btn:hover {
   text-decoration: underline;
-  color: #fa5252;
+  color: var(--accent-main-color);
 }
 .select-video-btn {
   right: 10%;
@@ -226,13 +224,13 @@ export default {
   width: 200px;
   height: 40px;
   font-size: 1rem;
-  line-height: 22px;
+  line-height: 1.4;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   border-radius: 4px;
-  background-color: #fa5252;
+  background-color: var(--accent-main-color);
   color: #fff;
 }
 .select-video-btn:hover {

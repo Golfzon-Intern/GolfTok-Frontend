@@ -134,7 +134,7 @@ export default {
           fontSize: '1.5rem',
           textAlign: 'center',
           overflow: 'hidden',
-          background: '#dee2e6',
+          background: '#f7f7f7',
           borderRadius: '100%',
         };
       } else if (this.styleType === 1) {
@@ -146,7 +146,7 @@ export default {
           fontSize: '1.25rem',
           textAlign: 'center',
           overflow: 'hidden',
-          background: '#dee2e6',
+          background: '#f7f7f7',
           borderRadius: '100%',
         };
       } else if (this.styleType === 2) {
@@ -196,9 +196,8 @@ export default {
 }
 .like-wrapper strong {
   text-align: center;
-  color: #343a40;
+  color: var(--text-main-color);
   font-weight: 500;
-  font-family: Helvetica, Arial, sans-serif;
 }
 
 .like-icon {

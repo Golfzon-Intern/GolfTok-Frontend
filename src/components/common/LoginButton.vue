@@ -73,11 +73,10 @@ export default {
 
 <style>
 .login-btn {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 700;
   height: 40px;
   font-size: 1rem;
-  line-height: 22px;
+  line-height: 1.4;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -220,7 +220,6 @@ export default {
 }
 
 .form-title-container {
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 1.5rem;
   font-weight: 400;
   line-height: 1;
@@ -242,27 +241,26 @@ export default {
   position: relative;
   width: 100%;
   padding: 0px 80px 0px 16px;
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 1rem;
-  line-height: 18px;
+  line-height: 1.125;
   color: inherit;
   cursor: text;
   outline: none;
   /* background-color: aqua; */
 }
 .placeholder {
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 1rem;
   font-weight: 300;
   line-height: 1;
-  color: rgba(22, 24, 35, 0.5);
+  color: var(--text-sub-color);
+  opacity: 0.5;
 }
 [contenteditable='true'] {
-  caret-color: #fa5252;
+  caret-color: var(--accent-main-color);
 }
 .form-text-editor .statement {
-  color: #fa5252;
+  color: var(--accent-main-color);
 }
 
 .hash-icon {
@@ -287,11 +285,11 @@ export default {
   border: none;
 }
 .form-input-container input::placeholder {
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 1rem;
   font-weight: 300;
   line-height: 1;
-  color: rgba(22, 24, 35, 0.5);
+  color: var(--text-sub-color);
+  opacity: 0.5;
 }
 
 .club-tag-container {
@@ -302,9 +300,9 @@ export default {
 
 .club-tags {
   pointer-events: none;
-  background-color: rgba(22, 24, 35, 0.03);
+  background-color: var(--supplement-color);
   border-radius: 4px;
-  color: #fa5252;
+  color: var(--accent-main-color);
   padding: 6px;
   margin: 5px;
 }
@@ -317,7 +315,7 @@ export default {
   width: 20px;
   margin-right: 6px;
   text-align: center;
-  color: #fa5252;
+  color: var(--accent-main-color);
   background-color: none;
   cursor: pointer;
 }
@@ -341,7 +339,6 @@ export default {
   width: 100%;
   height: 55px;
   padding: 4px;
-  font-family: Helvetica, Arial, sans-serif;
   cursor: pointer;
   border-bottom: 1px solid rgba(22, 24, 35, 0.12);
 }
@@ -350,18 +347,18 @@ export default {
   margin-right: 12px;
   font-size: 1rem;
   font-weight: 600;
-  color: #fa5252;
+  color: var(--accent-main-color);
 }
 .location-item-category {
   font-size: 0.75rem;
   font-weight: 400;
-  color: rgba(22, 24, 35, 0.8);
+  color: var(--text-sub-color);
 }
 .location-item-address {
   margin-top: 4px;
   font-size: 0.875rem;
   font-weight: 500;
-  color: rgba(22, 24, 35, 0.8);
+  color: var(--text-sub-color);
 }
 
 .form-bottom-container {
@@ -373,10 +370,9 @@ export default {
   margin-top: 30px;
 }
 .form-bottom-container button {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
-  font-size: 15px;
-  line-height: 18px;
+  font-size: 1rem;
+  line-height: 1.125;
   outline: none;
   border: 1px solid transparent;
   border-radius: 2px;
@@ -386,13 +382,13 @@ export default {
 .upload-cancle-btn {
   margin-right: 32px;
   background-color: transparent;
-  color: rgb(22, 24, 35);
+  color: var(--text-sub-color);
 }
 .upload-post-btn {
   width: 164px;
   height: 44px;
-  background-color: #fa5252;
-  color: rgb(255, 255, 255);
+  background-color: var(--accent-main-color);
+  color: #fff;
   cursor: pointer;
 }
 .upload-post-btn:disabled {
