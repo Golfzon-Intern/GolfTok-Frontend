@@ -1,6 +1,6 @@
 <template>
   <div class="side-bar-wrapper">
-    <div class="side-scroll-wrapper" @mouseenter="setIsHover(true)" @mouseleave="setIsHover(false)" :class="{ sidebarHover: isHover === true }">
+    <div class="side-scroll-wrapper">
       <div class="upper-contents">
         <div class="nav-wrapper">
           <div class="nav-item" :class="{ navActive: isActive === 0 }" @click="movePage(0)">
@@ -134,9 +134,6 @@ export default {
         console.log(error);
       }
     },
-    setIsHover(state) {
-      this.isHover = state;
-    },
   },
   components: {
     LoginButton,
@@ -202,11 +199,10 @@ export default {
   overflow: hidden;
 }
 .nav-item h2 {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 700;
   margin-left: 8px;
   font-size: 1.125rem;
-  line-height: 32px;
+  line-height: 1.7;
 }
 
 .login-wrapper {
@@ -215,11 +211,11 @@ export default {
   margin: 0;
 }
 .login-wrapper span {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 1rem;
-  line-height: 22px;
-  color: #868e96;
+  line-height: 1.3;
+  color: var(--text-sub-color);
+  opacity: 0.5;
 }
 .login-wrapper button {
   margin-top: 20px;
@@ -240,14 +236,13 @@ export default {
   box-sizing: border-box;
 }
 .user-list-header span {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   padding: 16px 8px 8px 8px;
   margin-bottom: 0;
   font-size: 0.875rem;
-  line-height: 20px;
+  line-height: 1.4;
   text-align: left;
-  color: #495057;
+  color: var(--text-sub-color);
 }
 
 .user-list .user-item {
@@ -276,11 +271,10 @@ export default {
   align-items: flex-start;
   height: 48px;
   padding-left: 0;
-  font-family: Helvetica, Arial, sans-serif;
 }
 .user-item-inner .user-infos h4 {
   font-weight: 700;
-  color: #212529;
+  color: var(--text-main-color);
   display: flex;
   align-items: center;
   height: 22px;
@@ -288,18 +282,18 @@ export default {
   margin-bottom: 0;
   margin-right: 4px;
   font-size: 1rem;
-  line-height: 22px;
+  line-height: 1.4;
   max-width: 260px;
 }
 .user-item-inner .user-infos p {
   font-weight: 400;
-  color: #495057;
+  color: var(--text-sub-color);
   display: flex;
   align-items: center;
   height: 15px;
   margin-right: 4px;
   font-size: 0.75rem;
-  line-height: 15px;
+  line-height: 1.25;
   max-width: 260px;
 }
 
@@ -316,14 +310,12 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  background-color: rgba(22, 24, 35, 0.06);
+  background-color: var(--supplement-color);
 }
 .user-grade span {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 700;
   font-size: 0.75rem;
-  /* line-height: 22px; */
-  color: #495057;
+  color: var(--text-sub-color);
   text-align: center;
   margin: 0;
 }
@@ -338,7 +330,7 @@ export default {
   cursor: pointer;
 }
 .see-all p {
-  color: #fa5252;
+  color: var(--accent-main-color);
 }
 
 .bottom-wrapper {
@@ -348,14 +340,14 @@ export default {
   box-sizing: border-box;
 }
 .bottom-wrapper span {
-  color: #868e96;
-  font-family: Helvetica, Arial, sans-serif;
+  color: var(--text-sub-color);
+  opacity: 0.5;
   margin-bottom: 12px;
   margin-right: 6px;
   margin-top: 5px;
   font-weight: 600;
   font-size: 0.875rem;
-  line-height: 12px;
+  line-height: 0.85;
 }
 
 .upper-contents .login-wrapper::before,
@@ -369,29 +361,5 @@ export default {
   background: #ced4da;
   transform: scaleY(0.5);
   top: 0;
-}
-
-/* .side-bar-wrapper::-webkit-scrollbar {
-  display: none;
-} */
-
-.sidebarHover {
-  display: block;
-  overflow: scroll;
-}
-/* width */
-.sidebarHover::-webkit-scrollbar {
-  width: 8px;
-}
-
-/* Track */
-.sidebarHover::-webkit-scrollbar-track {
-  background: #fff;
-}
-
-/* Handle */
-.sidebarHover::-webkit-scrollbar-thumb {
-  background: #f1f3f5;
-  border-radius: 8px;
 }
 </style>

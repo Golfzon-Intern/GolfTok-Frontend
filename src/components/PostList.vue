@@ -7,12 +7,8 @@
         </a>
         <div class="feed-item-content">
           <div class="author-info-content">
-            <a href="#">
-              <h3 class="author-uniqueId">{{ post.userNickname }}</h3>
-            </a>
-            <a href="#">
-              <h4 class="author-nickname">@{{ post.userName }}</h4>
-            </a>
+            <h3 class="author-uniqueId">{{ post.userNickname }}</h3>
+            <h4 class="author-nickname">@{{ post.userName }}</h4>
           </div>
           <div class="author-golf-info">
             <span class="golf-grade">등급 - {{ post.userGrade }}</span>
@@ -20,24 +16,20 @@
             <span class="golf-rolmodel">{{ post.roleModel }}처럼 되려고 노력 중</span>
           </div>
           <div class="location-info" v-if="post.locations">
-            <h4>
-              <div class="info-text-decoration">
-                <i class="fas fa-map-marker-alt"></i>
-                {{ post.locations }}
-              </div>
-            </h4>
+            <div class="info-text-decoration">
+              <i class="fas fa-map-marker-alt"></i>
+              {{ post.locations }}
+            </div>
           </div>
           <div class="club-info" v-if="post.golfClub.length">
-            <h4>
-              <div class="info-text-decoration">
-                <div class="club-info-tags">
-                  <i class="fas fa-thumbs-up"></i>
-                  <span v-for="(tag, id) of post.golfClub" :key="id">
-                    <a :href="`/search/${tag.substring(1)}`">{{ tag }}</a>
-                  </span>
-                </div>
+            <div class="info-text-decoration">
+              <div class="club-info-tags">
+                <i class="fas fa-thumbs-up"></i>
+                <span v-for="(tag, id) of post.golfClub" :key="id">
+                  <a :href="`/search/${tag.substring(1)}`">{{ tag }}</a>
+                </span>
               </div>
-            </h4>
+            </div>
           </div>
           <div class="video-meta-caption">
             <strong v-html="post.postContent" />
@@ -157,8 +149,6 @@ export default {
               isMuted: true,
               isPlaying: true,
             };
-
-            console.log(postObj);
             this.postInfos.push(postObj);
           }
           this.pageNum += 1;
@@ -271,11 +261,6 @@ export default {
 </script>
 
 <style scoped>
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
 .video-feed-container {
   display: flex;
   flex-direction: column;
@@ -304,7 +289,6 @@ a {
 .feed-item-content {
   position: relative;
   margin-left: 68px;
-  /* width: 100%; */
 }
 
 .author-info-content {
@@ -316,22 +300,17 @@ a {
   display: flex;
   align-items: flex-start;
   margin-right: 150px;
-  font-family: Helvetica, Arial, sans-serif;
-}
-.author-info-content a:hover {
-  color: #fa5252;
 }
 .author-info-content h3 {
   margin-right: 4px;
   font-weight: 700;
   font-size: 1.125rem;
-  line-height: 24px;
   margin-bottom: 0;
 }
 .author-info-content h4 {
-  line-height: 28px;
-  font-weight: 400;
   font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.7;
   margin-bottom: 0;
 }
 
@@ -341,13 +320,12 @@ a {
   margin-bottom: 24px;
 }
 .author-golf-info span {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 0.75rem;
-  line-height: 22px;
-  color: #495057;
+  line-height: 1.8;
+  color: var(--text-sub-color);
   border-radius: 5px;
-  background-color: #ffe3e3;
+  background-color: var(--accent-sub-color);
 }
 .golf-grade {
   min-width: 30px;
@@ -378,19 +356,17 @@ a {
   margin: 0;
 }
 .info-text-decoration {
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   display: inline-block;
   font-size: 0.875rem;
-  line-height: 22px;
+  line-height: 1.5;
   width: 100%;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  color: #495057;
+  color: var(--text-sub-color);
 }
 .info-text-decoration i {
-  /* margin-right: 5px; */
   width: 18px;
   height: 18px;
   position: relative;
@@ -403,56 +379,38 @@ a {
   max-width: 100%;
   position: relative;
   overflow: hidden;
-  font-family: Helvetica, Arial, sans-serif;
 }
 .club-info-tags {
   display: flex;
   flex-flow: row wrap;
   min-height: 30px;
 }
-.club-info-tags i {
-  position: relative;
-  top: 10px;
-  margin-right: 4px;
-}
 .club-info-tags a {
   padding: 6px;
   margin: 0 5px;
-  font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
   font-size: 0.875rem;
-  line-height: 22px;
-  background-color: rgba(22, 24, 35, 0.03);
+  line-height: 1.5;
+  background-color: var(--supplement-color);
   border-radius: 4px;
-  color: #495057;
+  color: var(--text-sub-color);
 }
 .club-info-tags a:hover {
-  color: #fa5252;
+  color: var(--text-main-color);
 }
 
 .video-meta-caption {
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 1rem;
-  line-height: 22px;
-  color: #343a40;
+  line-height: 1.4;
+  color: var(--text-main-color);
   flex: 0 0 auto;
   margin-top: 24px;
   margin-bottom: 12px;
   margin-right: 150px;
   word-break: break-word;
 }
-/* .video-meta-caption p {
-  font-weight: normal;
-  font-size: 0.875rem;
-} */
 .video-meta-caption strong {
   font-weight: normal;
-
-  /* overflow: hidden; */
-  /* text-overflow: ellipsis; */
-  /* display: -webkit-box; */
-  /* -webkit-line-clamp: 2; */
-  /* -webkit-box-orient: vertical; */
 }
 
 .item-follow-wrapper {
@@ -489,7 +447,6 @@ a {
   cursor: pointer;
   overflow: hidden;
   border-radius: 4px;
-  /* background-image: url(https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/sample_video%2Fsample-stamp-grunge-texture-vector-260nw-1389188336.jpeg?alt=media&token=733fe998-be3e-45e6-b62a-92352a8888c3); */
   background-color: black;
   background-size: 35vw;
 }

@@ -66,7 +66,7 @@ export default {
   top: 0;
   right: 0;
   height: 60px;
-  background: #fff;
+  background: var(--background-color);
   border-bottom: 1px solid #ced4da;
   box-sizing: border-box;
   z-index: 1000;
@@ -118,7 +118,7 @@ export default {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #fff;
+  background: var(--background-color);
 }
 
 /* Handle */

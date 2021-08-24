@@ -69,8 +69,6 @@ export default {
             this.results.push(resultObj);
           }
         }
-
-        console.log(this.results);
       } catch (error) {
         console.log(error);
       }
