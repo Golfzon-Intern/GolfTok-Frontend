@@ -11,9 +11,16 @@
             <h4 class="author-nickname">@{{ post.userName }}</h4>
           </div>
           <div class="author-golf-info">
-            <span class="golf-grade">등급 - {{ post.userGrade }}</span>
-            <span class="golf-handicap">핸디캡 - {{ post.handicap }}</span>
-            <span class="golf-rolmodel">{{ post.roleModel }}처럼 되려고 노력 중</span>
+            <span class="golf-grade"
+              >등급 - <b>{{ post.userGrade }}</b></span
+            >
+            <span class="golf-handicap"
+              >핸디캡 - <b>{{ post.handicap }}</b></span
+            >
+            <span class="golf-rolmodel"
+              ><b>{{ post.roleModel }}</b
+              >처럼 되려고 노력 중</span
+            >
           </div>
           <div class="location-info" v-if="post.locations">
             <div class="info-text-decoration">
@@ -278,7 +285,6 @@ export default {
   float: left;
   position: relative;
   cursor: pointer;
-  background-color: lawngreen;
 }
 .feed-item-avatar .user-pic {
   width: 56px;
@@ -292,26 +298,26 @@ export default {
 }
 
 .author-info-content {
+  margin-right: 150px;
+  display: flex;
+  align-items: flex-start;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   flex-flow: row wrap;
   cursor: default;
-  display: flex;
-  align-items: flex-start;
-  margin-right: 150px;
 }
 .author-info-content h3 {
   margin-right: 4px;
+  margin-bottom: 0;
   font-weight: 700;
   font-size: 1.125rem;
-  margin-bottom: 0;
 }
 .author-info-content h4 {
   font-size: 0.875rem;
+  margin-bottom: 0;
   font-weight: 400;
   line-height: 1.7;
-  margin-bottom: 0;
 }
 
 .author-golf-info {
@@ -320,6 +326,8 @@ export default {
   margin-bottom: 24px;
 }
 .author-golf-info span {
+  padding: 0 8px;
+  text-align: center;
   font-weight: 400;
   font-size: 0.75rem;
   line-height: 1.8;
@@ -329,21 +337,12 @@ export default {
 }
 .golf-grade {
   min-width: 30px;
-  padding: 0 8px;
-  margin-right: 12px;
-  text-align: center;
 }
 .golf-handicap {
   min-width: 70px;
-  padding: 0 8px;
-  margin-right: 12px;
-  text-align: center;
 }
 .golf-rolmodel {
   min-width: 170px;
-  padding: 0 8px;
-  margin-right: 12px;
-  text-align: center;
 }
 
 .location-info {
@@ -416,7 +415,7 @@ export default {
 .item-follow-wrapper {
   position: absolute;
   right: 0;
-  top: 8px;
+  top: 0;
 }
 
 .item-video-container {
@@ -424,13 +423,12 @@ export default {
   width: 70%;
   display: flex;
 }
+
 .item-video-wrapper {
   width: 100%;
-}
-
-.video-card-wrapper {
-  width: 100%;
+  height: 35vh;
   min-height: 250px;
+  /* max-height: 400px; */
   position: relative;
   display: flex;
   justify-content: center;
@@ -439,6 +437,8 @@ export default {
   cursor: pointer;
   background-color: black;
   background-size: 35vw;
+  overflow: hidden;
+  border-radius: 12px;
 }
 .video-card {
   position: relative;
@@ -446,12 +446,10 @@ export default {
   justify-content: center;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  border-radius: 12px;
 }
 .video-card video {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   object-fit: cover;
 }
 .style-layer-mask {
@@ -488,7 +486,7 @@ export default {
 
 .item-action-bar {
   position: absolute;
-  right: -13%;
+  right: -56px;
   bottom: 0px;
   display: flex;
   flex-direction: column;
@@ -512,11 +510,36 @@ export default {
 
   .feed-item-content {
     margin-left: 48px;
-    background-color: lawngreen;
+  }
+
+  .author-info-content {
+    flex-direction: column;
+    margin-left: 4px;
+    margin-bottom: 8px;
+  }
+
+  .bar-item-wrapper .like-wrapper .like-icon,
+  .bar-item-wrapper .comment-wrapper .comment-icon {
+    width: 32px !important;
+    height: 32px !important;
+    margin-top: 4px !important;
+    font-size: 1.25rem !important;
+  }
+
+  .bar-item-wrapper .like-wrapper strong,
+  .bar-item-wrapper .comment-wrapper strong {
+    font-size: 0.75rem !important;
   }
 }
 
 @media screen and (max-width: 500px) {
+  .author-golf-info {
+    justify-content: space-between;
+  }
+  .author-golf-info span {
+    margin-right: 0;
+  }
+
   .item-video-container {
     width: 90%;
     flex-direction: column;
@@ -525,10 +548,9 @@ export default {
   .item-action-bar {
     position: relative;
     left: 0;
-    width: 40%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    /* justify-content: flex-end; */
   }
 }
 </style>

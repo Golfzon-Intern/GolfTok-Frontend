@@ -14,7 +14,6 @@
         </div>
         <div v-if="!this.$store.state.auth.userInfo" class="login-wrapper">
           <span>Log in to follow creators, like videos, and view comments.</span>
-          <!-- <button type="button" class="login-btn">Log in</button> -->
           <LoginButton :styleType="1" />
         </div>
         <div class="user-list">
@@ -371,23 +370,19 @@ export default {
     width: 50px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* background-color: yellow; */
+    justify-content: flex-start;
   }
 
   .nav-item,
   .user-item-inner {
     width: 50px;
-    /* margin-left: 8px; */
-    /* background-color: yellowgreen; */
   }
 
-  /* .nav-item {
-    width: 50px;
-  } */
-
   .nav-item h2 {
+    display: none;
+  }
+
+  .login-wrapper {
     display: none;
   }
 
@@ -396,8 +391,6 @@ export default {
   }
 
   .user-item-inner .user-infos {
-    /* background-color: blue; */
-    /* color: #fff; */
     display: none;
   }
 

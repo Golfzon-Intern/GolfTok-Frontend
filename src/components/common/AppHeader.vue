@@ -5,9 +5,9 @@
         <img src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/assets%2Flogo-1.png?alt=media&token=c34366aa-9387-4d86-b9bc-9d2a992c7549" alt="logo" />
       </a>
     </div>
-    <div class="search-container">
+    <div class="search-input-container">
       <form class="search-input">
-        <input type="search" v-model="searchText" @keyup.enter="submitSearchText" />
+        <input type="search" v-model="searchText" @keyup.enter="submitSearchText" placeholder="Search #golf ..." />
         <span class="split"></span>
         <button type="submit" @click="submitSearchText">
           <i class="fas fa-search"></i>
@@ -15,10 +15,10 @@
       </form>
     </div>
     <div class="header-menu">
+      <button class="search-modal-btn" @click="setIsModalVisible">
+        <i class="fas fa-search"></i>
+      </button>
       <div class="menu-wrapper" v-if="this.$store.state.auth.userInfo">
-        <button class="search-input-btn">
-          <i class="fas fa-search"></i>
-        </button>
         <button class="upload-cloud-btn" @click="clickUploadBtn">
           <i class="fas fa-cloud-upload-alt"></i>
         </button>
@@ -30,6 +30,13 @@
         <LoginButton :styleType="0" @clickButton="openLoginModal" />
       </div>
     </div>
+    <div v-if="isModalVisible" class="search-modal-container">
+      <form class="search-modal-input">
+        <input type="search" v-model="searchText" @keyup.enter="submitSearchText" placeholder="Search #golf ..." />
+        <span class="split"></span>
+      </form>
+      <button class="search-modal-submit" type="submit" @click="submitSearchText">Search</button>
+    </div>
   </div>
 </template>
 
@@ -40,6 +47,7 @@ export default {
   data: function() {
     return {
       searchText: '',
+      isModalVisible: false,
     };
   },
   methods: {
@@ -65,6 +73,9 @@ export default {
             throw error;
           });
       }
+    },
+    setIsModalVisible() {
+      this.isModalVisible = !this.isModalVisible;
     },
   },
   components: {
@@ -110,7 +121,7 @@ export default {
   height: 42px;
 }
 
-.search-container {
+.search-input-container {
   position: relative;
   display: block;
 }
@@ -123,7 +134,7 @@ export default {
   border-radius: 5rem;
   overflow: hidden;
   z-index: 1;
-  background: #f7f7f7;
+  background: var(--supplement-color);
 }
 .search-input input {
   width: 292px;
@@ -136,6 +147,10 @@ export default {
   background: transparent;
   outline: none;
   caret-color: var(--accent-main-color);
+}
+.search-input input::placeholder {
+  color: var(--text-sub-color);
+  opacity: 0.5;
 }
 .split {
   width: 1px;
@@ -153,22 +168,26 @@ export default {
   background: transparent;
 }
 
-.header-menu {
-  display: flex;
-  align-items: center;
+.search-modal-btn {
+  display: none;
+  background-color: var(--background-color);
+  border: none;
 }
-.header-menu .menu-wrapper button {
+
+.menu-wrapper {
+  width: 100px;
+  display: flex;
+  justify-content: space-around;
+}
+.menu-wrapper button {
   position: relative;
+  top: 0;
   width: 42px;
   height: 42px;
   padding: 0;
   background: var(--background-color);
   border: none;
   cursor: pointer;
-}
-
-.search-input-btn {
-  display: none;
 }
 
 .upload-cloud-btn {
@@ -181,9 +200,6 @@ export default {
   font-size: 1.5rem;
 }
 
-.user-pic-btn {
-  margin-left: 24px;
-}
 .user-pic-btn img {
   width: 80%;
   height: 80%;
@@ -193,23 +209,76 @@ export default {
   margin-left: 16px;
 }
 
+.search-modal-container {
+  display: none;
+}
+
 @media screen and (max-width: 768px) {
-  .search-container {
+  .search-input {
     display: none;
   }
 
-  .header-menu .menu-wrapper {
-    width: 150px;
+  .search-modal-btn {
+    position: absolute;
+    top: 19px;
+    right: 130px;
+    display: block;
+    z-index: 10;
+  }
+
+  .search-modal-container {
+    position: absolute;
+    left: 0;
+    bottom: -121px;
+    width: 100%;
+    height: 120px;
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--supplement-color);
+    z-index: 10;
   }
-  .header-menu .menu-wrapper button {
+
+  .search-modal-input {
     position: relative;
-    top: 0;
-    margin: 0;
+    margin-top: 0;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    border-radius: 5rem;
+    overflow: hidden;
+    box-shadow: 4px 5px 5px rgba(24, 24, 24, 0.1);
+    z-index: 1;
+    background: var(--background-color);
   }
-  .search-input-btn {
-    display: inline-block;
+  .search-modal-input input {
+    width: 292px;
+    box-sizing: border-box;
+    padding: 0;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.4;
+    border: none;
+    background: transparent;
+    outline: none;
+    caret-color: var(--accent-main-color);
+  }
+  .search-modal-input input::placeholder {
+    color: var(--text-sub-color);
+    opacity: 0.5;
+  }
+  .split {
+    width: 1px;
+    height: 28px;
+    margin: -3px 0;
+    background: #495057;
+  }
+  .search-modal-submit {
+    margin-left: 12px;
+    border: none;
+    background-color: inherit;
+    color: var(--text-sub-color);
+    opacity: 0.7;
   }
 }
 </style>

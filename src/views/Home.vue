@@ -108,7 +108,6 @@ export default {
   width: 80%;
   padding: 24px 0;
   margin-right: 24px;
-  background-color: khaki;
 }
 
 @media screen and (max-width: 1000px) {

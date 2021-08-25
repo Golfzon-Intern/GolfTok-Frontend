@@ -66,7 +66,7 @@ export default {
         console.log(error);
       }
     },
-    async updateLiked() {
+    updateLiked() {
       try {
         let likeCount = this.numOfLike;
 
@@ -76,12 +76,12 @@ export default {
           if (likeCount < 0) likeCount = 0;
           if (this.targetType === 'post') {
             // 게시물 좋아요 삭제
-            await likeApi.deletePostLiked(this.targetId);
+            likeApi.deletePostLiked(this.targetId);
             console.log('delete like of post');
           } else {
             // this.targetType === 'comment'
             // 댓글 좋아요 삭제
-            await likeApi.deleteCommentLiked(this.targetId);
+            likeApi.deleteCommentLiked(this.targetId);
             console.log('delete like of comment');
           }
         } else {
@@ -89,12 +89,12 @@ export default {
           likeCount += 1;
           if (this.targetType === 'post') {
             // 게시물 좋아요 추가
-            await likeApi.addPostLiked(this.targetId);
+            likeApi.addPostLiked(this.targetId);
             console.log('add like of post');
           } else {
             // this.targetType === 'comment'
             // 댓글 좋아요 추가
-            await likeApi.addCommentLike(this.targetId);
+            likeApi.addCommentLike(this.targetId);
             console.log('add like of comment');
           }
         }

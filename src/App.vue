@@ -15,7 +15,7 @@ export default {};
   --text-sub-color: #4a4a4a;
   --accent-main-color: #fa5252;
   --accent-sub-color: #ffe3e3;
-  --supplement-color: #f8f8f8;
+  --supplement-color: #f1f1f1;
 }
 
 body {
@@ -39,7 +39,8 @@ span,
 p,
 strong,
 div,
-a {
+a,
+input {
   font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -57,5 +58,11 @@ a {
 ::-webkit-scrollbar-thumb {
   background: #e9ecef;
   border-radius: 8px;
+}
+
+@media screen and (max-width: 500px) {
+  body {
+    overflow-x: hidden;
+  }
 }
 </style>
