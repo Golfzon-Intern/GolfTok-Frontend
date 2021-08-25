@@ -6,7 +6,7 @@
           <div class="comment-avatar">
             <b-avatar class="user-pic" :src="comment.userIcon" size="2.5rem" />
           </div>
-          <div class="content-container">
+          <div class="comment-content-container">
             <div class="user-info">{{ comment.userNickname }}</div>
             <div class="comment-text">
               <span>{{ comment.commentText }}</span>
@@ -26,7 +26,7 @@
         </div>
         <div class="more-contents">
           <div class="more-btn" v-if="!comment.isOpened" @click="toggleChildList(index, true)">
-            <span class="more-text">View more replies ({{ comment.childrenCount }})</span>
+            <span class="more-text">View more replies</span>
             <span class="more-icon">
               <i class="fas fa-chevron-down"></i>
             </span>
@@ -109,7 +109,7 @@ export default {
   text-align: center;
 }
 
-#parent-comments .content-container {
+#parent-comments .comment-content-container {
   display: block;
   width: 70%;
   background-color: inherit;
@@ -133,6 +133,7 @@ export default {
 }
 #parent-comments .bottom-container {
   display: flex;
+  margin-bottom: 12px;
 }
 #parent-comments .comment-time {
   font-size: 0.875rem;
@@ -187,7 +188,9 @@ export default {
 }
 
 #parent-comments .more-contents {
-  padding-left: 12%;
+  position: relative;
+  bottom: 12px;
+  padding-left: 11%;
 }
 #parent-comments .more-btn {
   margin-top: 14px;
@@ -216,8 +219,15 @@ export default {
 .list-leave-active {
   transition: all 1s;
 }
-.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+.list-enter,
+.list-leave-to {
   opacity: 0;
   transform: translateY(30px);
+}
+
+@media screen and (max-width: 1000px) {
+  #parent-comments .more-contents {
+    padding-left: 50px;
+  }
 }
 </style>

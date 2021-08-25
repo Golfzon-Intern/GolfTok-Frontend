@@ -541,7 +541,7 @@ export default {
   }
 
   .item-video-container {
-    width: 90%;
+    width: 100%;
     flex-direction: column;
   }
 
@@ -550,7 +550,6 @@ export default {
     left: 0;
     display: flex;
     flex-direction: row;
-    /* justify-content: flex-end; */
   }
 }
 </style>

@@ -83,7 +83,7 @@ export default {
           fontSize: '1.5rem',
           textAlign: 'center',
           overflow: 'hidden',
-          background: '#f7f7f7',
+          background: '#f1f1f1',
           borderRadius: '100%',
         };
       } else if (this.styleType === 1) {
@@ -95,7 +95,7 @@ export default {
           fontSize: '1.25rem',
           textAlign: 'center',
           overflow: 'hidden',
-          background: '#f7f7f7',
+          background: '#f1f1f1',
           borderRadius: '100%',
         };
       } else if (this.styleType === 2) {

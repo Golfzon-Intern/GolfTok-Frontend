@@ -124,7 +124,7 @@ export default {
   flex: 1;
   text-align: center;
   font-weight: bolder;
-  color: #000;
+  color: var(--text-main-color);
 }
 .login-modal-close-btn {
   position: absolute;

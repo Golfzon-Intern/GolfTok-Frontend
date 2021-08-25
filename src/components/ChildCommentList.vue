@@ -4,7 +4,7 @@
       <div class="comment-avatar">
         <b-avatar class="user-pic" :src="comment.userIcon" size="1.5rem" />
       </div>
-      <div class="content-container">
+      <div class="comment-content-container">
         <div class="user-info">{{ comment.userNickname }}</div>
         <div class="comment-text">
           <span>{{ comment.commentText }}</span>
@@ -66,6 +66,11 @@ export default {
 </script>
 
 <style scoped>
+#child-comments .bottom-container {
+  display: flex;
+  margin-bottom: 0px;
+}
+
 #child-comments .hide-btn {
   margin-top: 14px;
   font-size: 0.875rem;
@@ -77,19 +82,22 @@ export default {
   cursor: pointer;
   display: flex;
   align-items: center;
-  padding-left: 12%;
+  padding-left: 9%;
 }
-#child-comments .hide-text,
-#child-comments .hide-icon {
-  margin-bottom: 8px;
-}
+
 #child-comments .hide-text:hover {
   text-decoration: underline;
 }
 #child-comments .hide-icon {
-  width: 1rem;
-  height: 1rem;
+  position: relative;
+  top: 1px;
   font-size: 1rem;
   margin-left: 6px;
+}
+
+@media screen and (max-width: 1000px) {
+  #child-comments .hide-btn {
+    padding-left: 36px;
+  }
 }
 </style>

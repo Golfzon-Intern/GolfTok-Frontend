@@ -82,7 +82,7 @@ export default {
   align-items: center;
   flex-direction: column;
   cursor: pointer;
-  transition: 0.15s ease-in-out 0s;
+  /* transition: 0.15s ease-in-out 0s; */
 }
 .upload-video-btn .upload-video-card i {
   width: 40px;

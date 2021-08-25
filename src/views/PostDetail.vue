@@ -1,12 +1,12 @@
 <template>
   <div id="post-detail-view">
-    <div class="video-card-container" @click="setIsPlaying">
+    <div class="video-card-container">
       <div class="background-image">
         <img :src="postInfo.postThumbnail" />
       </div>
       <div class="video-card-big">
-        <video ref="videoRef" :src="postInfo.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="postInfo.postThumbnail"></video>
-        <div v-if="!isPlaying" class="play-btn">
+        <video ref="videoRef" :src="postInfo.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="postInfo.postThumbnail" @click="setIsPlaying"></video>
+        <div v-if="!isPlaying" class="play-btn" @click="setIsPlaying">
           <i class="fas fa-play"></i>
         </div>
       </div>
@@ -17,12 +17,6 @@
         <i v-if="isMuted" class="fas fa-volume-mute"></i>
         <i v-else class="fas fa-volume-up"></i>
       </button>
-      <!-- <button v-if="!isFirst" class="arrow-left-btn">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      <button v-if="!isLast" class="arrow-right-btn">
-        <i class="fas fa-chevron-right"></i>
-      </button> -->
     </div>
     <div class="content-container">
       <div class="user-info-container">
@@ -36,9 +30,16 @@
         <FollowButton :targetId="postInfo.userId" />
       </div>
       <div class="user-golf-container">
-        <span class="golf-grade">등급 - {{ postInfo.userGrade }}</span>
-        <span class="golf-handicap">핸디캡 - {{ postInfo.handicap }}</span>
-        <span class="golf-rolmodel">{{ postInfo.roleModel }}처럼 되려고 노력 중</span>
+        <span class="golf-grade"
+          >등급 - <b>{{ postInfo.userGrade }}</b></span
+        >
+        <span class="golf-handicap"
+          >핸디캡 - <b>{{ postInfo.handicap }}</b></span
+        >
+        <span class="golf-rolmodel"
+          ><b>{{ postInfo.roleModel }}</b
+          >처럼 되려고 노력 중</span
+        >
       </div>
       <div class="video-info-container">
         <div class="location-info" v-if="postInfo.locations">
@@ -71,11 +72,68 @@
           </div>
         </div>
       </div>
-      <div class="comment-container">
+      <button class="content-modal-btn" @click="setIsContentModalVisible(true)">
+        View content
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="comment-list-container">
         <CommentList :comments="comments" @toggleChildList="setIsOpened" @clickReplyParent="setReplyTo" @clickDeleteBtn="removeComment" />
       </div>
       <div class="comment-input-container">
         <CommentInput :replyTo="replyTo" @submitComment="addComment" />
+      </div>
+    </div>
+    <div v-if="isContentModalVisible" class="content-modal-container">
+      <div class="content-modal-header">
+        <h3 class="content-modal-header-title">Content</h3>
+        <button class="content-modal-close-btn" @click="setIsContentModalVisible(false)">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="content-modal-body">
+        <div class="content-modal-user-wrapper">
+          <span class="golf-grade"
+            >등급 - <b>{{ postInfo.userGrade }}</b></span
+          >
+          <span class="golf-handicap"
+            >핸디캡 - <b>{{ postInfo.handicap }}</b></span
+          >
+          <span class="golf-rolmodel"
+            ><b>{{ postInfo.roleModel }}</b
+            >처럼 되려고 노력 중</span
+          >
+        </div>
+        <div class="content-modal-video-wrapper">
+          <div class="location-info" v-if="postInfo.locations">
+            <h4>
+              <div class="info-text-decoration">
+                <i class="fas fa-map-marker-alt"></i>
+                {{ postInfo.locations }}
+              </div>
+            </h4>
+          </div>
+          <div class="club-info" v-if="postInfo.golfClub.length">
+            <h4>
+              <div class="info-text-decoration">
+                <div class="club-info-tags">
+                  <i class="fas fa-thumbs-up"></i>
+                  <span v-for="(tag, id) of postInfo.golfClub" :key="id">
+                    <a :href="`/search/${tag.substring(1)}`">{{ tag }}</a>
+                  </span>
+                </div>
+              </div>
+            </h4>
+          </div>
+          <h1 class="video-meta-title" v-html="postInfo.postContent" />
+          <!-- <div class="action-container">
+            <div class="action-wrapper">
+              <LikeButton :targetType="'post'" :targetId="Number(this.$route.params.postId)" :styleType="1"></LikeButton>
+            </div>
+            <div class="action-wrapper">
+              <CommentButton :targetId="Number(this.$route.params.postId)" :updateState="commentState" :styleType="1"></CommentButton>
+            </div>
+          </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -102,8 +160,7 @@ export default {
       isPlaying: true,
       replyTo: {},
       commentState: null, // 댓글 작성: 1, 댓글 삭제: 0
-      // isFirst: this.$route.params.isFirst,
-      // isLast: this.$route.params.isLast,
+      isContentModalVisible: false,
     };
   },
   created() {
@@ -247,6 +304,10 @@ export default {
       this.commentState = 0;
       commentApi.deleteComment(commentId);
     },
+    setIsContentModalVisible(state) {
+      this.isContentModalVisible = state;
+      console.log('hi');
+    },
   },
   components: {
     LikeButton,
@@ -261,11 +322,8 @@ export default {
 <style>
 #post-detail-view {
   position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1000;
   display: flex;
   flex-direction: row;
   background-color: #212529;
@@ -275,10 +333,7 @@ export default {
   padding: 0 80px;
   position: relative;
   flex: 1 1 auto;
-  /* width: 60%; */
-  /* display: flex; */
-  /* align-items: center; */
-  /* justify-content: center; */
+  z-index: -1;
 }
 
 .background-image {
@@ -311,62 +366,42 @@ export default {
   object-fit: contain;
 }
 .video-card-big .play-btn {
-  height: 100%;
-  cursor: pointer;
-}
-.video-card-big .play-btn i {
   position: absolute;
   top: 45%;
-  left: 45%;
+  left: 42.5%;
   width: 70px;
   height: 70px;
+  cursor: pointer;
   font-size: 4rem;
   color: #fff;
 }
 
-/* .video-card-container button {
-  position: absolute;
-  width: 45px;
-  height: 45px;
-  margin: 8px 12px;
-  border: none;
-  background: #343a40;
-  border-radius: 40px;
-}
-.video-card-container i {
-  font-size: 1.5rem;
-  color: #f8f9fa;
-} */
 .video-card-container button {
-  cursor: pointer;
+  width: 40px;
+  height: 40px;
   border: none;
   background: #343a40;
   border-radius: 100%;
+  font-size: 1.25rem;
+  color: #fff;
 }
 .video-card-container .close-btn {
   position: absolute;
   top: 20px;
   left: 20px;
-  width: 40px;
-  height: 40px;
+}
+.video-card-container .close-btn i {
+  position: relative;
+  top: 2px;
 }
 .video-card-container .mute-btn {
   bottom: 20px;
   right: 20px;
-  width: 40px;
-  height: 40px;
-  opacity: 1;
   position: absolute;
-  transition: opacity 0.3s ease 0s;
-  z-index: 10;
+  z-index: 50;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.video-card-container .close-btn i,
-.video-card-container .mute-btn i {
-  font-size: 1.25rem;
-  color: #fff;
 }
 
 .content-container {
@@ -376,8 +411,6 @@ export default {
   flex-direction: column;
   background-color: var(--background-color);
   z-index: 15;
-  /* padding: 8px 12px; */
-  /* background: #f8f9fa; */
 }
 .content-container p {
   margin-bottom: 0;
@@ -398,9 +431,6 @@ export default {
   flex: 0 0 auto;
   position: relative;
   cursor: pointer;
-
-  /* width: 20%;
-  text-align: center; */
 }
 
 .user-text-container {
@@ -410,7 +440,6 @@ export default {
   flex: 1 1 auto;
   overflow: hidden;
   margin-right: 12px;
-  /* width: 50%; */
 }
 .username {
   font-weight: 600;
@@ -434,9 +463,12 @@ export default {
   display: flex;
   margin-top: 8px;
   margin-bottom: 12px;
-  padding: 0 32px 0 64px;
+  padding-left: 32px;
 }
 .user-golf-container span {
+  padding: 0 8px;
+  margin-right: 8px;
+  text-align: center;
   font-weight: 400;
   font-size: 0.75rem;
   line-height: 1.8;
@@ -446,21 +478,12 @@ export default {
 }
 .golf-grade {
   min-width: 30px;
-  padding: 0 8px;
-  margin-right: 12px;
-  text-align: center;
 }
 .golf-handicap {
   min-width: 70px;
-  padding: 0 8px;
-  margin-right: 12px;
-  text-align: center;
 }
 .golf-rolmodel {
   min-width: 170px;
-  padding: 0 8px;
-  margin-right: 12px;
-  text-align: center;
 }
 
 .video-info-container {
@@ -469,19 +492,12 @@ export default {
   padding: 0px 32px;
   overflow: hidden;
   flex-shrink: 0;
-
-  /* height: 20%;
-  padding: 3%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; */
 }
 
 .location-info {
   max-width: 100%;
   position: relative;
   overflow: hidden;
-  /* margin-bottom: 4px; */
 }
 .location-info h4 {
   margin: 0;
@@ -498,7 +514,6 @@ export default {
   color: var(--text-sub-color);
 }
 .info-text-decoration i {
-  /* margin-right: 5px; */
   width: 18px;
   height: 18px;
   position: relative;
@@ -565,7 +580,11 @@ export default {
   margin-right: 16px;
 }
 
-.comment-container {
+.content-modal-btn {
+  display: none;
+}
+
+.comment-list-container {
   width: 100%;
   flex: 1 1 auto;
   position: relative;
@@ -581,5 +600,121 @@ export default {
   margin: 0 32px;
   padding: 21px 0;
   background-color: var(--background-color);
+}
+
+@media screen and (max-width: 1000px) {
+  #post-detail-view {
+    flex-direction: column;
+  }
+
+  .video-card-container {
+    width: 100%;
+    height: 35vh;
+  }
+
+  .content-container {
+    width: 100%;
+    height: 65vh;
+  }
+
+  .user-golf-container,
+  .video-info-container .location-info,
+  .video-info-container .club-info,
+  .video-info-container .video-meta-title {
+    display: none;
+  }
+
+  .user-info-container {
+    margin-bottom: 12px;
+    padding: 18px 32px 0;
+    align-items: flex-start;
+  }
+
+  .content-modal-btn {
+    display: block;
+    width: 150px;
+    margin-bottom: 12px;
+    position: absolute;
+    top: 350px;
+    right: 15px;
+    z-index: 10;
+    border: none;
+    background-color: var(--background-color);
+    color: var(--accent-main-color);
+    opacity: 0.7;
+    font-size: 0.875rem;
+  }
+  .content-modal-btn i {
+    margin-left: 12px;
+  }
+
+  .content-modal-container {
+    position: absolute;
+    bottom: 0;
+    left: 1%;
+    width: 98%;
+    height: 63vh;
+    padding: 12px 24px;
+    z-index: 50;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 2px 0px 5px 2px rgba(22, 22, 22, 0.4);
+    background-color: var(--background-color);
+  }
+
+  .content-modal-header {
+    height: 40px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ced4da;
+  }
+
+  .content-modal-header-title {
+    font-size: 1.5rem;
+    line-height: 1.3;
+    font-weight: bolder;
+    color: var(--text-main-color);
+  }
+
+  .content-modal-close-btn {
+    width: 32px;
+    height: 32px;
+    padding-top: 2px;
+    padding-left: 9px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(22, 24, 35, 0.05);
+    font-size: 1.25rem;
+  }
+
+  .content-modal-user-wrapper {
+    margin-bottom: 12px;
+  }
+  .content-modal-user-wrapper span {
+    padding: 0 8px;
+    text-align: center;
+    margin-right: 8px;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.8;
+    color: var(--text-sub-color);
+    border-radius: 5px;
+    background-color: var(--accent-sub-color);
+  }
+
+  .video-card-big .play-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 2rem;
+  }
+
+  .video-card-container button {
+    width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+  }
+  .video-card-container .close-btn i {
+    top: 0px;
+  }
 }
 </style>

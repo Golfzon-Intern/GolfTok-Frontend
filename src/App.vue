@@ -60,7 +60,7 @@ input {
   border-radius: 8px;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 768px) {
   body {
     overflow-x: hidden;
   }
