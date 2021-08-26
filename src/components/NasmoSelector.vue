@@ -8,7 +8,6 @@
             <i class="fas fa-times"></i>
           </button>
         </div>
-
         <div class="nasmo-modal-body">
           <div class="nasmo-video-list">
             <div class="nasmo-video-item" v-for="(video, index) in videos" v-bind:key="index">
@@ -17,7 +16,6 @@
             </div>
           </div>
         </div>
-
         <div class="nasmo-modal-footer">
           <div class="btn-wrapper">
             <button class="another-video-btn" @click="onClickFileBtn">Another video</button>
@@ -93,6 +91,7 @@ export default {
   position: relative;
   width: 70%;
   height: 80%;
+  min-width: 472px;
   min-height: 700px;
   background-color: var(--background-color);
   border-radius: 8px;
@@ -235,5 +234,18 @@ export default {
 }
 .select-video-btn:hover {
   background-color: #f03e3e;
+}
+
+@media screen and (max-width: 1000px) {
+  .nasmo-video-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nasmo-video-item {
+    width: 80%;
+    height: auto;
+  }
 }
 </style>

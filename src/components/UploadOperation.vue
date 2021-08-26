@@ -92,7 +92,7 @@ export default {
 }
 .upload-video-card h2 {
   font-weight: 400;
-  font-size: 1.25;
+  font-size: 1.5rem;
   text-align: center;
   color: var(--text-sub-color);
   opacity: 0.4;
