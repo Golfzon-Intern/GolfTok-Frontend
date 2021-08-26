@@ -125,4 +125,30 @@ export default {
   border: initial;
   overflow: hidden;
 }
+
+@media screen and (max-width: 768px) {
+  .upload-operation {
+    width: 100%;
+    height: 30vh;
+  }
+
+  .upload-video-btn {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .upload-video-card {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: rgba(22, 24, 35, 0.03);
+    border-radius: 8px;
+    cursor: pointer;
+  }
+}
 </style>

@@ -23,7 +23,7 @@
           <i class="fas fa-cloud-upload-alt"></i>
         </button>
         <button class="user-pic-btn">
-          <img src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/user_photo%2Fuser_photo_default.jpeg?alt=media&token=087db47b-26ea-4317-9bde-f6c7ac53c76d" alt="user" />
+          <b-avatar src="https://firebasestorage.googleapis.com/v0/b/golftok-29f49.appspot.com/o/user_icon%2Fimage42.jpg?alt=media&token=bd4bd985-ee7a-4c12-86ec-0851506b194d" size="2rem" />
         </button>
       </div>
       <div class="login-container" v-else>
@@ -178,6 +178,7 @@ export default {
   width: 100px;
   display: flex;
   justify-content: space-around;
+  /* background-color: blueviolet; */
 }
 .menu-wrapper button {
   position: relative;
@@ -198,11 +199,6 @@ export default {
   position: relative;
   top: 2px;
   font-size: 1.5rem;
-}
-
-.user-pic-btn img {
-  width: 80%;
-  height: 80%;
 }
 
 .login-container button {

@@ -198,4 +198,49 @@ export default {
   width: 50vw;
   max-width: 756px;
 }
+
+@media screen and (max-width: 768px) {
+  #upload-view {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  .upload-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+  }
+
+  .upload-title {
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-top: 1vh;
+  }
+  .upload-sub-title {
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.3;
+    color: var(--text-sub-color);
+    opacity: 0.7;
+    margin-top: 8px;
+  }
+
+  .upload-contents {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .upload-form-container {
+    width: 100%;
+    margin: 0;
+    max-width: 1200px;
+  }
+}
 </style>

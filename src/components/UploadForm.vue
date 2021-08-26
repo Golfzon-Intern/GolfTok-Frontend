@@ -399,4 +399,18 @@ export default {
 .upload-post-btn:hover {
   background: #f03e3e;
 }
+
+@media screen and (max-width: 768px) {
+  .upload-form-wrapper {
+    margin-top: 24px;
+  }
+
+  .form-bottom-container {
+    position: relative;
+    left: 0;
+    margin: 32px 0 16px 0;
+    display: flex;
+    justify-content: center;
+  }
+}
 </style>
