@@ -167,7 +167,13 @@ export default {
     this.getPostInfo();
     this.setComments();
   },
+  watch: {
+    commentState: 'test',
+  },
   methods: {
+    test() {
+      console.log('post detail watch');
+    },
     async getPostInfo() {
       try {
         const response = await postApi.getPostDetail(this.$route.params.postId, 0);
@@ -281,9 +287,15 @@ export default {
 
           this.comments = [newComment, ...this.comments];
         }
-        this.commentState = 1;
 
-        console.log(this.comments);
+        this.commentState = {
+          id: response.data.comment.commentId,
+          state: 1,
+        };
+        console.log('post detail state');
+        console.log(this.commentState);
+
+        // console.log(this.comments);
       } catch (error) {
         console.log(error);
       }
@@ -305,7 +317,11 @@ export default {
         // 부모 댓글 삭제
         this.comments.splice(index, 1);
       }
-      this.commentState = 0;
+
+      this.commentState = {
+        id: commentId,
+        state: 0,
+      };
       commentApi.deleteComment(commentId);
     },
     setIsContentModalVisible(state) {

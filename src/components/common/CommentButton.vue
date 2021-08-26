@@ -17,18 +17,9 @@ export default {
     };
   },
   props: {
-    targetId: {
-      type: Number,
-      default: 0,
-    },
-    updateState: {
-      type: Number,
-      default: null,
-    },
-    styleType: {
-      type: Number,
-      default: 0,
-    },
+    targetId: Number,
+    updateState: null || Object,
+    styleType: Number,
   },
   created() {
     this.getNumOfComments();
@@ -47,7 +38,7 @@ export default {
     },
     setNumOfComments() {
       if (this.updateState !== null) {
-        if (this.updateState) {
+        if (this.updateState.state) {
           this.numOfComments += 1;
         } else {
           this.numOfComments -= 1;
