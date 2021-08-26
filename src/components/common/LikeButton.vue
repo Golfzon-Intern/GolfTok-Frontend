@@ -27,7 +27,6 @@ export default {
     targetType: String,
     targetId: Number,
     styleType: Number,
-    targetOrder: Number,
   },
   created() {
     this.getLiked();
@@ -36,7 +35,6 @@ export default {
     async getLiked() {
       try {
         let response = null;
-        console.log('target order: ' + this.targetOrder);
 
         if (this.targetType === 'post') {
           // 게시물 좋아요 수 조회

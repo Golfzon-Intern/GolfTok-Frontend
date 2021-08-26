@@ -1,7 +1,7 @@
 <template>
   <div id="parent-comments">
     <transition-group name="list" tag="div">
-      <div class="comment-item" v-for="(comment, index) in comments" v-bind:key="index">
+      <div class="comment-item" v-for="(comment, index) in comments" v-bind:key="comment.commentId">
         <div class="comment-content">
           <div class="comment-avatar">
             <b-avatar class="user-pic" :src="comment.userIcon" size="2.5rem" />
@@ -21,7 +21,7 @@
               <i class="fas fa-trash"></i>
               <strong>del</strong>
             </div>
-            <LikeButton :targetType="'comment'" :targetId="comments[index].commentId" :targetOrder="index" :styleType="2" />
+            <LikeButton :targetType="'comment'" :targetId="comment.commentId" :styleType="2" />
           </div>
         </div>
         <div class="more-contents">
