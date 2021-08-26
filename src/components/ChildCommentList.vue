@@ -1,11 +1,11 @@
 <template>
   <div id="child-comments">
     <div class="comment-content" v-for="(comment, index) in childcomments" :key="index">
-      <div class="comment-avatar">
+      <a :href="`/profile/${comment.userId}`" class="comment-avatar">
         <b-avatar class="user-pic" :src="comment.userIcon" size="1.5rem" />
-      </div>
+      </a>
       <div class="comment-content-container">
-        <div class="user-info">{{ comment.userNickname }}</div>
+        <a :href="`/profile/${comment.userId}`" class="user-info">{{ comment.userNickname }}</a>
         <div class="comment-text">
           <span>{{ comment.commentText }}</span>
           <div class="bottom-container">

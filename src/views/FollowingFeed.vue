@@ -1,12 +1,12 @@
 <template>
-  <div id="following-feed-view" :style="styleObj">
+  <div id="following-feed-view">
     <div class="header-container">
       <AppHeader></AppHeader>
     </div>
     <div class="body-container">
       <div class="side-bar-container">
         <div class="scroll-container">
-          <SideBar :isActive="this.navIndex" @openModal="toggleModal"></SideBar>
+          <SideBar :isActive="this.navIndex"></SideBar>
         </div>
       </div>
       <div class="trending-container">

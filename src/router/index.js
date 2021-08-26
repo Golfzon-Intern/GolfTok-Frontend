@@ -5,6 +5,7 @@ import Upload from '@/views/Upload.vue';
 import PostDetail from '@/views/PostDetail.vue';
 import FollowingFeed from '@/views/FollowingFeed.vue';
 import SearchResult from '@/views/SearchResult.vue';
+import Profile from '@/views/Profile.vue';
 
 Vue.use(VueRouter);
 
@@ -35,6 +36,11 @@ const router = new VueRouter({
       path: '/search/:keyword',
       name: 'SearchResult',
       component: SearchResult,
+    },
+    {
+      path: '/profile/:userId',
+      name: 'Profile',
+      component: Profile,
     },
   ],
 });

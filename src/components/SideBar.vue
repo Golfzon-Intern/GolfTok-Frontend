@@ -20,7 +20,7 @@
           <div class="user-list-header">
             <span>Suggested accounts</span>
           </div>
-          <a href="#" class="user-item" v-for="(user, index) in recommendations" :key="index">
+          <a :href="`/profile/${user.userId}`" class="user-item" v-for="(user, index) in recommendations" :key="index">
             <span class="user-item-inner">
               <div class="user-avatar">
                 <b-avatar class="user-pic" :src="user.userIcon" size="2rem" />
@@ -42,7 +42,7 @@
           <div class="user-list-header">
             <span>Following accounts</span>
           </div>
-          <a href="#" class="user-item" v-for="(user, index) in followings" :key="index">
+          <a :href="`/profile/${user.userId}`" class="user-item" v-for="(user, index) in followings" :key="index">
             <span class="user-item-inner">
               <div class="user-avatar">
                 <b-avatar class="user-pic" :src="user.userIcon" size="2rem" />

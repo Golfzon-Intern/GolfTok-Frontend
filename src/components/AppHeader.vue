@@ -22,8 +22,8 @@
         <button class="upload-cloud-btn" @click="openUploadPage">
           <i class="fas fa-cloud-upload-alt"></i>
         </button>
-        <button class="user-pic-btn">
-          <b-avatar src="https://firebasestorage.googleapis.com/v0/b/golftok-29f49.appspot.com/o/user_icon%2Fimage42.jpg?alt=media&token=bd4bd985-ee7a-4c12-86ec-0851506b194d" size="2rem" />
+        <button class="user-pic-btn" @click="openProfilePage">
+          <b-avatar :src="userImg" size="2rem" />
         </button>
       </div>
       <div class="login-container" v-else>
@@ -40,16 +40,29 @@
 </template>
 
 <script>
+import * as profileApi from '@/api/profile';
+
 import LoginButton from '@/components/common/LoginButton.vue';
+
+const USER_DEFAULT_IMG = 'https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/user_photo%2Fuser_photo_default.jpeg?alt=media&token=087db47b-26ea-4317-9bde-f6c7ac53c76d';
 
 export default {
   data: function() {
     return {
+      userImg: USER_DEFAULT_IMG,
       searchText: '',
       isModalVisible: false,
     };
   },
+  created() {
+    this.getUserInfo();
+  },
   methods: {
+    /* 프로필 사용자 정보 받아오는 함수 */
+    async getUserInfo() {
+      const response = await profileApi.getProfileInfo(true);
+      this.userImg = response.data.user.userIcon;
+    },
     /* 로그인 모달 여는 함수 */
     openLoginModal() {
       this.$emit('openModal', true);
@@ -59,6 +72,20 @@ export default {
       this.$router.push({
         name: 'Upload',
       });
+    },
+    /* 프로필 페이지 여는 함수 */
+    openProfilePage(event) {
+      event.preventDefault();
+
+      this.$router
+        .push({
+          name: 'Profile',
+          params: { userId: this.$store.state.auth.userInfo.userId },
+        })
+        .catch((error) => {
+          this.$router.go(this.$router.currentRoute);
+          throw error;
+        });
     },
     /* 검색 함수 */
     submitSearchText(event) {

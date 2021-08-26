@@ -20,12 +20,16 @@
     </div>
     <div class="content-container">
       <div class="user-info-container">
-        <div class="user-avatar">
+        <a :href="`/profile/${postInfo.userId}`" class="user-avatar">
           <b-avatar class="user-pic" :src="postInfo.userIcon" size="3rem" />
-        </div>
+        </a>
         <div class="user-text-container">
-          <p class="username">{{ postInfo.userName }}</p>
-          <p class="user-nickname">{{ postInfo.userNickname }}</p>
+          <a :href="`/profile/${postInfo.userId}`">
+            <p class="username">{{ postInfo.userNickname }}</p>
+          </a>
+          <a :href="`/profile/${postInfo.userId}`">
+            <p class="user-nickname">@{{ postInfo.userName }}</p>
+          </a>
         </div>
         <FollowButton :targetId="postInfo.userId" />
       </div>
@@ -388,6 +392,14 @@ export default {
   flex-direction: row;
   align-items: center;
   padding: 32px 32px 0;
+  color: var(--text-main-color);
+}
+.user-info-container a {
+  text-decoration: none;
+  color: var(--text-main-color);
+}
+.user-info-container a:hover {
+  text-decoration: underline;
   color: var(--text-main-color);
 }
 

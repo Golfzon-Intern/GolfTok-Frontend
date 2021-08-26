@@ -2,13 +2,17 @@
   <div class="post-list-wrapper">
     <div v-if="postInfos" class="video-feed-container">
       <div class="video-feed-item" v-for="(post, index) in postInfos" :key="index">
-        <a href="#" class="feed-item-avatar">
+        <a :href="`/profile/${post.userId}`" class="feed-item-avatar">
           <b-avatar class="user-pic" :src="post.userIcon" />
         </a>
         <div class="feed-item-content">
           <div class="author-info-content">
-            <h3 class="author-uniqueId">{{ post.userNickname }}</h3>
-            <h4 class="author-nickname">@{{ post.userName }}</h4>
+            <a :href="`/profile/${post.userId}`">
+              <h3 class="author-uniqueId">{{ post.userNickname }}</h3>
+            </a>
+            <a :href="`/profile/${post.userId}`">
+              <h4 class="author-nickname">@{{ post.userName }}</h4>
+            </a>
           </div>
           <div class="author-golf-info">
             <span class="golf-grade"
@@ -42,7 +46,7 @@
             <strong v-html="post.postContent" />
           </div>
           <div v-if="!postType" class="item-follow-wrapper">
-            <FollowButton :targetId="post.userId" />
+            <FollowButton :targetId="post.userId" v-if="$store.state.auth.userInfo" />
           </div>
           <div class="item-video-container">
             <div class="item-video-wrapper">
@@ -309,6 +313,14 @@ export default {
   white-space: nowrap;
   flex-flow: row wrap;
   cursor: default;
+}
+.author-info-content a {
+  text-decoration: none;
+  color: var(--text-main-color);
+}
+.author-info-content a:hover {
+  color: var(--text-main-color);
+  text-decoration: underline;
 }
 .author-info-content h3 {
   margin-right: 4px;

@@ -3,11 +3,11 @@
     <transition-group name="list" tag="div">
       <div class="comment-item" v-for="(comment, index) in comments" :key="comment.commentId">
         <div class="comment-content">
-          <div class="comment-avatar">
+          <a :href="`/profile/${comment.userId}`" class="comment-avatar">
             <b-avatar class="user-pic" :src="comment.userIcon" size="2.5rem" />
-          </div>
+          </a>
           <div class="comment-content-container">
-            <div class="user-info">{{ comment.userNickname }}</div>
+            <a :href="`/profile/${comment.userId}`" class="user-info">{{ comment.userNickname }}</a>
             <div class="comment-text">
               <span>{{ comment.commentText }}</span>
               <div class="bottom-container">
@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="more-contents">
-          <div class="more-btn" v-if="!comment.isOpened" @click="toggleChildList(index, true)">
+          <div class="more-btn" v-if="!comment.isReplyOpened" @click="toggleChildList(index, true)">
             <span class="more-text">View more replies</span>
             <span class="more-icon">
               <i class="fas fa-chevron-down"></i>
@@ -90,6 +90,14 @@ export default {
   position: relative;
   display: flex;
   flex-direction: row;
+}
+#parent-comments .comment-content a {
+  text-decoration: none;
+  color: var(--text-main-color);
+}
+#parent-comments .comment-content a:hover {
+  text-decoration: underline;
+  color: var(--text-main-color);
 }
 
 #parent-comments .comment-avatar {
