@@ -282,6 +282,8 @@ export default {
           this.comments = [newComment, ...this.comments];
         }
         this.commentState = 1;
+
+        console.log(this.comments);
       } catch (error) {
         console.log(error);
       }
