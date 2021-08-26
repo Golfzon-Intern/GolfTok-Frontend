@@ -21,6 +21,7 @@ export default {
     this.getFollowing();
   },
   methods: {
+    /* 팔로잉 데이터 받아오는 함수 */
     async getFollowing() {
       try {
         const response = await followApi.getFollowing(this.targetId);
@@ -29,6 +30,7 @@ export default {
         console.log(error);
       }
     },
+    /* 팔로잉 데이터 변경하는 함수 */
     updateFollowing() {
       try {
         if (this.isFollowing) {

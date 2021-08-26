@@ -5,15 +5,15 @@
         <img :src="postInfo.postThumbnail" />
       </div>
       <div class="video-card-big">
-        <video ref="videoRef" :src="postInfo.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="postInfo.postThumbnail" @click="setIsPlaying"></video>
-        <div v-if="!isPlaying" class="play-btn" @click="setIsPlaying">
+        <video ref="videoRef" :src="postInfo.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="postInfo.postThumbnail" @click="toggleVideoPlay"></video>
+        <div v-if="!isPlaying" class="play-btn" @click="toggleVideoPlay">
           <i class="fas fa-play"></i>
         </div>
       </div>
       <button class="close-btn" @click="closePage">
         <i class="fas fa-times"></i>
       </button>
-      <button class="mute-btn" @click="setIsMuted">
+      <button class="mute-btn" @click="toggleVideoMute">
         <i v-if="isMuted" class="fas fa-volume-mute"></i>
         <i v-else class="fas fa-volume-up"></i>
       </button>
@@ -72,69 +72,19 @@
           </div>
         </div>
       </div>
-      <button class="content-modal-btn" @click="setIsContentModalVisible(true)">
+      <button class="content-modal-btn" @click="setIsModalVisible(true)">
         View content
         <i class="fas fa-chevron-down"></i>
       </button>
       <div class="comment-list-container">
-        <CommentList :comments="comments" @toggleChildList="setIsOpened" @clickReplyParent="setReplyTo" @clickDeleteBtn="removeComment" />
+        <CommentList :comments="comments" @toggleChildList="toggleReplyOpen" @clickReplyParent="setReplyTo" @clickDeleteBtn="removeComment" />
       </div>
       <div class="comment-input-container">
         <CommentInput :replyTo="replyTo" @submitComment="addComment" />
       </div>
     </div>
-    <div v-if="isContentModalVisible" class="content-modal-container">
-      <div class="content-modal-header">
-        <h3 class="content-modal-header-title">Content</h3>
-        <button class="content-modal-close-btn" @click="setIsContentModalVisible(false)">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="content-modal-body">
-        <div class="content-modal-user-wrapper">
-          <span class="golf-grade"
-            >등급 - <b>{{ postInfo.userGrade }}</b></span
-          >
-          <span class="golf-handicap"
-            >핸디캡 - <b>{{ postInfo.handicap }}</b></span
-          >
-          <span class="golf-rolmodel"
-            ><b>{{ postInfo.roleModel }}</b
-            >처럼 되려고 노력 중</span
-          >
-        </div>
-        <div class="content-modal-video-wrapper">
-          <div class="location-info" v-if="postInfo.locations">
-            <h4>
-              <div class="info-text-decoration">
-                <i class="fas fa-map-marker-alt"></i>
-                {{ postInfo.locations }}
-              </div>
-            </h4>
-          </div>
-          <div class="club-info" v-if="postInfo.golfClub && postInfo.golfClub.length">
-            <h4>
-              <div class="info-text-decoration">
-                <div class="club-info-tags">
-                  <i class="fas fa-thumbs-up"></i>
-                  <span v-for="(tag, id) of postInfo.golfClub" :key="id">
-                    <a :href="`/search/${tag.substring(1)}`">{{ tag }}</a>
-                  </span>
-                </div>
-              </div>
-            </h4>
-          </div>
-          <h1 class="video-meta-title" v-html="postInfo.postContent" />
-          <!-- <div class="action-container">
-            <div class="action-wrapper">
-              <LikeButton :targetType="'post'" :targetId="Number(this.$route.params.postId)" :styleType="1"></LikeButton>
-            </div>
-            <div class="action-wrapper">
-              <CommentButton :targetId="Number(this.$route.params.postId)" :updateState="commentState" :styleType="1"></CommentButton>
-            </div>
-          </div> -->
-        </div>
-      </div>
+    <div v-if="isModalVisible" class="content-modal-container">
+      <ContentModal :postInfo="postInfo" @closeModal="setIsModalVisible" />
     </div>
   </div>
 </template>
@@ -148,6 +98,7 @@ import LikeButton from '@/components/common/LikeButton.vue';
 import CommentButton from '@/components/common/CommentButton.vue';
 import CommentList from '@/components/CommentList.vue';
 import CommentInput from '@/components/CommentInput.vue';
+import ContentModal from '@/components/PostContentModal.vue';
 
 export default {
   data: function() {
@@ -155,25 +106,19 @@ export default {
       postInfo: {},
       comments: [],
       video: null,
-      isHover: false,
       isMuted: true,
       isPlaying: true,
       replyTo: {},
       commentState: null, // 댓글 작성: 1, 댓글 삭제: 0
-      isContentModalVisible: false,
+      isModalVisible: false,
     };
   },
   created() {
     this.getPostInfo();
-    this.setComments();
-  },
-  watch: {
-    commentState: 'test',
+    this.getComments();
   },
   methods: {
-    test() {
-      console.log('post detail watch');
-    },
+    /* 게시물 정보 받아오는 함수 */
     async getPostInfo() {
       try {
         const response = await postApi.getPostDetail(this.$route.params.postId, 0);
@@ -197,6 +142,7 @@ export default {
         console.log(error);
       }
     },
+    /* 게시물에 있는 해시태그 분리하는 함수 */
     separateHashtag(text, type) {
       let newText = text;
       if (!newText) return type ? [] : '';
@@ -211,7 +157,8 @@ export default {
       newText = newText.toString().replace(hashReg, '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>');
       return newText;
     },
-    async setComments() {
+    /* 댓글 정보 받아오는 함수 */
+    async getComments() {
       try {
         const response = await commentApi.getParentComments(this.$route.params.postId);
         const parents = response.data.parentList;
@@ -223,7 +170,7 @@ export default {
           const parentObj = {
             ...parent,
             children: childList ? childList : [],
-            isOpened: false,
+            isReplyOpened: false,
           };
           this.comments.push(parentObj);
         }
@@ -231,13 +178,12 @@ export default {
         console.log(error);
       }
     },
+    /* 현재 페이지 닫는 함수 */
     closePage() {
       this.$router.back();
     },
-    setIsHover(state) {
-      this.isHover = state;
-    },
-    setIsPlaying() {
+    /* 비디오 재생, 일시정지 설정하는 함수 */
+    toggleVideoPlay(event) {
       event.preventDefault();
       this.isPlaying = !this.isPlaying;
 
@@ -247,7 +193,8 @@ export default {
         this.$refs.videoRef.pause();
       }
     },
-    setIsMuted() {
+    /* 비디오 음소거 설정하는 함수 */
+    toggleVideoMute(event) {
       event.preventDefault();
       this.isMuted = !this.isMuted;
 
@@ -257,9 +204,11 @@ export default {
         this.$refs.videoRef.muted = false;
       }
     },
-    setIsOpened(index, state) {
-      this.comments[index].isOpened = state;
+    /* 비디오 음소거 설정하는 함수 */
+    toggleReplyOpen(index, state) {
+      this.comments[index].isReplyOpened = state;
     },
+    /* 댓글 추가하는 함수 */
     async addComment(text, isChild, parentIndex) {
       try {
         const newObj = {
@@ -275,16 +224,14 @@ export default {
           const newComment = response.data.comment;
 
           this.comments[parentIndex].children.push(newComment);
-          this.setIsOpened(parentIndex, true);
+          this.toggleReplyOpen(parentIndex, true);
         } else {
           // 추가하려는 댓글이 댓글(부모 댓글)일 경우
           const newComment = {
             ...response.data.comment,
             children: [],
-            isOpened: false,
+            isReplyOpened: false,
           };
-          console.log(newComment);
-
           this.comments = [newComment, ...this.comments];
         }
 
@@ -292,14 +239,11 @@ export default {
           id: response.data.comment.commentId,
           state: 1,
         };
-        console.log('post detail state');
-        console.log(this.commentState);
-
-        // console.log(this.comments);
       } catch (error) {
         console.log(error);
       }
     },
+    /* 답글 보내는 계정 설정하는 함수 */
     setReplyTo(userName, group, parentIndex) {
       this.replyTo = {
         userName: userName,
@@ -307,8 +251,8 @@ export default {
         parentIndex: parentIndex,
       };
     },
+    /* 댓글 삭제하는 함수 */
     removeComment(commentId, parentIndex, index) {
-      console.log('remove');
       if (parentIndex !== null) {
         // 부모 인덱스가 있으면 (자식 댓글이라는 의미)
         // 자식 댓글 삭제
@@ -324,9 +268,9 @@ export default {
       };
       commentApi.deleteComment(commentId);
     },
-    setIsContentModalVisible(state) {
-      this.isContentModalVisible = state;
-      console.log('hi');
+    /* 화면 크기 작아졌을 때, 콘텐츠 모달 보이는 여부 설정하는 함수 */
+    setIsModalVisible(state) {
+      this.isModalVisible = state;
     },
   },
   components: {
@@ -335,6 +279,7 @@ export default {
     CommentList,
     CommentInput,
     FollowButton,
+    ContentModal,
   },
 };
 </script>
@@ -666,60 +611,6 @@ export default {
   }
   .content-modal-btn i {
     margin-left: 12px;
-  }
-
-  .content-modal-container {
-    position: absolute;
-    bottom: 0;
-    left: 1%;
-    width: 98%;
-    height: 63vh;
-    padding: 12px 24px;
-    z-index: 50;
-    border-radius: 12px 12px 0 0;
-    box-shadow: 2px 0px 5px 2px rgba(22, 22, 22, 0.4);
-    background-color: var(--background-color);
-  }
-
-  .content-modal-header {
-    height: 40px;
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #ced4da;
-  }
-
-  .content-modal-header-title {
-    font-size: 1.5rem;
-    line-height: 1.3;
-    font-weight: bolder;
-    color: var(--text-main-color);
-  }
-
-  .content-modal-close-btn {
-    width: 32px;
-    height: 32px;
-    padding-top: 2px;
-    padding-left: 9px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(22, 24, 35, 0.05);
-    font-size: 1.25rem;
-  }
-
-  .content-modal-user-wrapper {
-    margin-bottom: 12px;
-  }
-  .content-modal-user-wrapper span {
-    padding: 0 8px;
-    text-align: center;
-    margin-right: 8px;
-    font-weight: 400;
-    font-size: 0.875rem;
-    line-height: 1.8;
-    color: var(--text-sub-color);
-    border-radius: 5px;
-    background-color: var(--accent-sub-color);
   }
 
   .video-card-big .play-btn {

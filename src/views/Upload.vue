@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <NasmoSelector v-if="isSelectorVisible" @toggleVisible="toggleSelectorVisible" @onClickFileBtn="openFileSelector" @saveSelected="selectNasmo"></NasmoSelector>
+    <NasmoSelector v-if="isSelectorVisible" @closeModal="toggleSelectorVisible" @clickFileBtn="openFileSelector" @submitSelected="selectNasmo"></NasmoSelector>
   </div>
 </template>
 
@@ -26,7 +26,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { storageService } from '@/lib/firebase';
 import * as postApi from '@/api/post';
 
-import AppHeader from '@/components/common/AppHeader.vue';
+import AppHeader from '@/components/AppHeader.vue';
 import NasmoSelector from '@/components/NasmoSelector.vue';
 import UploadOperation from '@/components/UploadOperation.vue';
 import UploadForm from '@/components/UploadForm.vue';
@@ -44,27 +44,25 @@ export default {
     };
   },
   methods: {
-    // 나스모 영상 선택
+    /* 나스모 영상 선택하는 함수 */
     selectNasmo(videoRoot) {
       this.newVideoUrl = videoRoot;
       this.toggleDisabled();
     },
-    // 파일 선택창 열기
+    /* 파일 선택창 여는 함수 */
     openFileSelector() {
       // 나스모 선택창 닫고
       this.toggleSelectorVisible();
-
       // 파일 선택창 열기
       let input = document.createElement('input');
       input.type = 'file';
       input.accept = 'video/*';
       input.onchange = (event) => {
-        // you can use this method to get file and perform respective operations
         this.handleFileChange(event);
       };
       input.click();
     },
-    // 파일 선택창에서 선택한 파일 바꾸기
+    /* 파일 선택창에서 선택한 파일 바꾸는 함수 */
     handleFileChange(event) {
       const {
         target: { files },
@@ -84,7 +82,7 @@ export default {
         reader.readAsDataURL(file);
       }
     },
-    // 게시물 업로드 하기
+    /* 게시물 업로드 하는 함수 */
     async addPost(newCaption, newClub, newLocation) {
       // 새로고침 방지
       event.preventDefault();
@@ -105,8 +103,6 @@ export default {
           golfClub: newClub,
         };
 
-        console.log(postObj);
-
         // 서버로 전달
         const response = await postApi.uploadPost(postObj);
 
@@ -119,26 +115,27 @@ export default {
         console.log(error);
       }
     },
-    // 모든 내용 삭제
+    /* 작성한 모든 내용을 삭제하는 함수 */
     deleteAll() {
       this.newFile = '';
       this.newVideoUrl = '';
       this.toggleDisabled();
     },
-    // 비디오 삭제
+    /* 비디오만 삭제하는 함수 */
     deleteVideo() {
       this.newFile = '';
       this.newVideoUrl = '';
       this.toggleDisabled();
     },
-    // 나스모 선택 모달창 토글
+    /* 나스모 선택창 보이는 여부 설정하는 함수 */
     toggleSelectorVisible() {
       this.isSelectorVisible = !this.isSelectorVisible;
     },
+    /*  위치 검색 결과 리스트 보이는 여부 설정하는 함수 */
     toggleLocationVisible(state) {
       this.isLocationVisible = state;
     },
-    // 게시 버튼 활성화 토글
+    /* 게시 버튼 활성화 여부 설정하는 함수 */
     toggleDisabled() {
       this.isDisabled = !this.isDisabled;
     },

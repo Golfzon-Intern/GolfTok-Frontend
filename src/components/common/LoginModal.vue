@@ -8,7 +8,6 @@
             <i class="fas fa-times"></i>
           </button>
         </div>
-
         <div class="login-modal-body">
           <form>
             <h4 class="login-form-title">Username</h4>
@@ -23,7 +22,6 @@
             <LoginButton :styleType="2" @clickButton="login" />
           </form>
         </div>
-
         <div class="login-modal-footer">
           <div class="signup-btn-wrapper">
             <span>Don’t have an account? </span>
@@ -47,9 +45,11 @@ export default {
     };
   },
   methods: {
+    /* 모달 닫는 함수 */
     closeModal() {
       this.$emit('closeModal', false);
     },
+    /* 로그인 함수 */
     login() {
       this.$store.dispatch('auth/login', { userId: this.userId, password: this.userPw });
       this.closeModal();

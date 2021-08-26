@@ -20,7 +20,6 @@
           @click="openPostDetail(result.postId)"
         >
           <div class="result-video-card">
-            <!-- <video :src="result.videoRoot" type="video/mp4" preload="metadata" :poster="result.postThumbnail"></video> -->
             <img :src="result.postThumbnail" alt="thumbnail" />
           </div>
           <div class="result-video-mask" v-if="result.isHover">
@@ -55,6 +54,7 @@ export default {
     this.getResults();
   },
   methods: {
+    /* 검색 결과 데이터 받아오는 함수 */
     async getResults() {
       try {
         const response = await searchApi.getSearchResult(this.keyword);
@@ -74,9 +74,11 @@ export default {
         console.log(error);
       }
     },
+    /* hover 했을 때, 호출되는 함수 */
     setIsHover(state, index) {
       this.results[index].isHover = state;
     },
+    /* 게시물 상세보기 페이지 여는 함수 */
     openPostDetail(postId) {
       if (this.$store.state.auth.userInfo) {
         this.$emit('openPage', postId);

@@ -1,12 +1,11 @@
 <template>
-  <button class="login-btn" :style="styleObj" @mouseenter="setIsHover(true)" @mouseleave="setIsHover(false)" @click="onClick">Log in</button>
+  <button class="login-btn" :style="styleObj" @mouseenter="setIsHover(true)" @mouseleave="setIsHover(false)" @click="clickButton">Log in</button>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      //   styleObj: {},
       buttonColor: {
         fullBackd: '#f03e3e',
         fullBackdHover: '#e03131',
@@ -33,10 +32,12 @@ export default {
     },
   },
   methods: {
+    /* hover 여부 설정하는 함수 */
     setIsHover(state) {
       this.isHover = state;
     },
-    onClick() {
+    /* click 했을 때, 호출되는 함수 */
+    clickButton() {
       this.$emit('clickButton');
     },
   },

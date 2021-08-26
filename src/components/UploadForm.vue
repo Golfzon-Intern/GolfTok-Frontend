@@ -17,18 +17,12 @@
             How was your golf today?
           </div>
         </div>
-        <!-- <div class="hash-icon">
-          <i class="fas fa-hashtag"></i>
-        </div> -->
       </div>
     </div>
     <div class="upload-club-container">
       <h3 class="form-title-container">Club</h3>
       <div class="form-input-container">
         <input class="form-text-editor" @keyup.space="addClubTag" placeholder="What club did you use today?" />
-        <!-- <div class="hash-icon">
-          <i class="fas fa-hashtag"></i>
-        </div> -->
       </div>
       <div class="club-tag-container">
         <div class="club-tags" v-for="(tag, index) of newClubTags" :key="index" @click="deleteClubTag(index)">{{ tag }}</div>
@@ -76,7 +70,7 @@ export default {
     isListVisible: 'clearLocationList',
   },
   methods: {
-    // [caption] 텍스트 입력 동작 설정 (@input)
+    /* 텍스트 입력 동작 설정 (@input) */
     handleCaptionInput(event) {
       this.newCaption = event.target.outerText;
 
@@ -105,7 +99,7 @@ export default {
         this.setCursorPosition(event);
       }
     },
-    // [caption] 스페이스바 누를 때 동작 설정 (@keyup.space)
+    /* 스페이스바 누를 때 동작 설정 (@keyup.space) */
     handleSpaceKey(event) {
       this.newCaption = event.target.outerText;
 
@@ -117,7 +111,7 @@ export default {
         this.setCursorPosition(event);
       }
     },
-    // [caption] 텍스트 입력할 때, 커서 위치 설정
+    /* 텍스트 입력할 때, 커서 위치 설정하는 함수 */
     setCursorPosition(event) {
       // Set cursor postion to end of text
       var child = event.target.children;
@@ -129,15 +123,15 @@ export default {
       sel.addRange(range);
       event.target.focus();
     },
-    // [caption] 엔터키 기본 동작인 줄바꿈 막기 (@keyup.enter)
+    /* 엔터키 기본 동작인 줄바꿈 막기 (@keyup.enter) */
     preventTextNewLine(event) {
       event.preventDefault();
     },
-    // [caption] 텍스트 입력칸 클릭 시, 포커싱
+    /* 텍스트 입력칸 클릭 시, 포커싱하는 함수 */
     setIsInputFocused(state) {
       this.isInputFocused = state;
     },
-    // [club] 클럽 태그 추가
+    /* 클럽 태그 추가하는 함수 */
     addClubTag(event) {
       event.preventDefault();
       let value = event.target.value.trim();
@@ -150,15 +144,16 @@ export default {
         event.target.value = '';
       }
     },
-    // [club] 클럽 태그 삭제
+    /* 클럽 태그 삭제하는 함수 */
     deleteClubTag(id) {
       event.target.remove();
       this.newClubTags = this.newClubTags.filter((tag, index) => id !== index);
     },
-    // [location] 위치 검색 결과 리스트 보이기
+    /* 위치 검색 결과 리스트 보이는 여부 설정하는 함수 */
     setIsListVisible(state) {
       this.$emit('setIsListVisible', state);
     },
+    /* 위치 검색 결과 정보 받아오는 함수 */
     async getLocationInfos() {
       try {
         const response = await searchApi.getLocation(this.newLocation);
@@ -180,6 +175,7 @@ export default {
         console.log(error);
       }
     },
+    /* 위치 검색 결과 텍스트 설정 함수 (<b></b> 태그 지우기) */
     setLocationText(text) {
       const locReg = /<[b]>|<[\\/][b]>/g;
       const newText = text
@@ -188,22 +184,24 @@ export default {
         .trim();
       return newText;
     },
+    /* 위치 선택 함수 */
     selectLocation(selectedIndex) {
       const selected = this.LocationSearchList[selectedIndex].title + ' (' + this.LocationSearchList[selectedIndex].address + ')';
 
       this.newLocation = selected;
     },
+    /* 위치 검색 결과 리스트 초기화 함수 */
     clearLocationList() {
       if (!this.isListVisible) this.LocationSearchList = [];
     },
-    // 전체 삭제
+    /* 작성한 내용 초기화 함수 */
     clearContents() {
       this.newCaption = '';
       this.newLocation = '';
 
       this.$emit('clearContents');
     },
-    // 게시글 작성 완료 (제출)
+    /* 작성한 내용 submit 함수 */
     submitPost() {
       const newClubInfo = this.newClubTags.join(' ');
       this.$emit('submitPost', this.newCaption, newClubInfo, this.newLocation);
@@ -261,17 +259,6 @@ export default {
 }
 .form-text-editor .statement {
   color: var(--accent-main-color);
-}
-
-.hash-icon {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 20px;
-  height: 20px;
-  margin-left: 8px;
-  text-align: center;
-  cursor: pointer;
 }
 
 .upload-club-container {

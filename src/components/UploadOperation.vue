@@ -33,9 +33,11 @@ export default {
     videoUrl: String,
   },
   methods: {
+    /* 비디오 삭제 함수 */
     clearVideo() {
       this.$emit('clearVideo');
     },
+    /* 비디오 선택 모달 여는 함수 */
     openVideoSelector() {
       this.$emit('openVideoSelector');
     },

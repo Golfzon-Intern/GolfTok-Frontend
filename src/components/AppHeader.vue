@@ -15,11 +15,11 @@
       </form>
     </div>
     <div class="header-menu">
-      <button class="search-modal-btn" @click="setIsModalVisible">
+      <button class="search-modal-btn" @click="toggleSearchModal">
         <i class="fas fa-search"></i>
       </button>
       <div class="menu-wrapper" v-if="this.$store.state.auth.userInfo">
-        <button class="upload-cloud-btn" @click="clickUploadBtn">
+        <button class="upload-cloud-btn" @click="openUploadPage">
           <i class="fas fa-cloud-upload-alt"></i>
         </button>
         <button class="user-pic-btn">
@@ -50,14 +50,17 @@ export default {
     };
   },
   methods: {
+    /* 로그인 모달 여는 함수 */
     openLoginModal() {
       this.$emit('openModal', true);
     },
-    clickUploadBtn() {
+    /* 업로드 페이지 여는 함수 */
+    openUploadPage() {
       this.$router.push({
         name: 'Upload',
       });
     },
+    /* 검색 함수 */
     submitSearchText(event) {
       event.preventDefault();
 
@@ -69,17 +72,16 @@ export default {
           })
           .catch((error) => {
             this.$router.go(this.$router.currentRoute);
-            // console.log(error);
             throw error;
           });
       }
     },
-    setIsModalVisible() {
+    /* 검색 모달 보이는 여부 설정 함수 */
+    toggleSearchModal() {
       this.isModalVisible = !this.isModalVisible;
     },
   },
   components: {
-    // LoginModal,
     LoginButton,
   },
 };

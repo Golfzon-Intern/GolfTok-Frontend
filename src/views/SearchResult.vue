@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import AppHeader from '@/components/common/AppHeader.vue';
+import AppHeader from '@/components/AppHeader.vue';
 import SideBar from '@/components/SideBar.vue';
 import SearchResultList from '@/components/SearchResultList.vue';
 import LoginModal from '@/components/common/LoginModal.vue';
@@ -26,31 +26,25 @@ import LoginModal from '@/components/common/LoginModal.vue';
 export default {
   data() {
     return {
-      isOpenedPage: false,
       styleObj: {},
       isVisibleModal: false,
     };
   },
-  watch: {
-    // 라우트가 변경되면 메소드를 다시 호출
-    $route: 'checkIsOpenedPage',
-    isVisibleModal: 'checkIsOpenedPage',
-  },
   methods: {
+    /* 게시물 상세보기 페이지 여는 함수 */
     openDetailPage(postId) {
       this.$router.push({
         name: 'PostDetail',
         params: { postId: postId },
       });
     },
-    checkIsOpenedPage() {
-      if (this.$route.path === '/search') {
-        this.isOpenedPage = false;
-      } else {
-        this.isOpenedPage = true;
-      }
+    /* 로그인 모달 보이는 여부 설정하는 함수 */
+    toggleModal(state) {
+      this.isVisibleModal = state;
 
-      if (this.isOpenedPage || this.isVisibleModal) {
+      // 만약 로그인 모달이 열렸다면
+      // 검색 결과 페이지가 스크롤 되지 않도록 함
+      if (this.isVisibleModal) {
         this.styleObj = {
           position: 'fixed',
           overflow: 'hidden',
@@ -58,9 +52,6 @@ export default {
       } else {
         this.styleObj = {};
       }
-    },
-    toggleModal(state) {
-      this.isVisibleModal = state;
     },
   },
   components: {

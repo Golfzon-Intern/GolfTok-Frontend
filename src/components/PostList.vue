@@ -1,9 +1,9 @@
 <template>
   <div class="post-list-wrapper">
     <div v-if="postInfos" class="video-feed-container">
-      <div class="video-feed-item" v-for="(post, index) in postInfos" v-bind:key="index">
+      <div class="video-feed-item" v-for="(post, index) in postInfos" :key="index">
         <a href="#" class="feed-item-avatar">
-          <b-avatar class="user-pic" v-bind:src="post.userIcon" />
+          <b-avatar class="user-pic" :src="post.userIcon" />
         </a>
         <div class="feed-item-content">
           <div class="author-info-content">
@@ -49,11 +49,11 @@
               <div class="video-card" @mouseenter="setIsHover(true, index)" @mouseleave="setIsHover(false, index)">
                 <video ref="videoRef" :src="post.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="post.Thumbnail" @click="openPostDetail(post.postId, false)"></video>
                 <span class="style-layer-mask"></span>
-                <div class="volume-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setIsMuted(index)">
+                <div class="volume-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="toggleVideoMute(index)">
                   <i v-if="post.isMuted" class="fas fa-volume-mute"></i>
                   <i v-else class="fas fa-volume-up"></i>
                 </div>
-                <div class="play-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="setIsPlaying(index)">
+                <div class="play-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="toggleVideoPlay(index)">
                   <i v-if="post.isPlaying" class="fas fa-pause"></i>
                   <i v-else class="fas fa-play"></i>
                 </div>
@@ -128,7 +128,7 @@ export default {
     },
   },
   methods: {
-    // 무한 스크롤링
+    /* 무한스크롤링 핸들러 함수 (게시물 정보 받아옴) */
     async infiniteHandler($state) {
       try {
         let response;
@@ -159,13 +159,13 @@ export default {
         } else {
           $state.complete();
         }
-
         // video 태그로 추가된 동영상 정보 가져오기
         this.videos = document.getElementsByTagName('video');
       } catch (error) {
         console.log(error);
       }
     },
+    /* 게시물에 있는 해시태그 분리하는 함수 */
     separateHashtag(text, type) {
       let newText = text;
       if (!newText) return type ? [] : '';
@@ -180,7 +180,7 @@ export default {
       newText = newText.toString().replace(hashReg, '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>');
       return newText;
     },
-    // 게시물 상세보기
+    /* 게시물 상세보기 페이지 여는 함수 */
     openPostDetail(postId, isComment) {
       if (isComment && !this.$store.state.auth.userInfo) {
         // 로그인 모달 열기
@@ -189,7 +189,7 @@ export default {
         this.$emit('openPage', postId);
       }
     },
-    // 스크롤에 따라 동영상 자동재생
+    /* 스크롤 핸들러 함수 (스크롤 될 때, 동영상 자동재생) */
     handleScroll() {
       const fraction = 0.8;
 
@@ -230,10 +230,12 @@ export default {
         }
       }
     },
+    /* hover 했을 때, 호출되는 함수 */
     setIsHover(state, index) {
       this.postInfos[index].isHover = state;
     },
-    setIsPlaying(index) {
+    /* 비디오 재생, 일시정지 설정하는 함수 */
+    toggleVideoPlay(index) {
       event.preventDefault();
       this.postInfos[index].isPlaying = !this.postInfos[index].isPlaying;
 
@@ -243,7 +245,8 @@ export default {
         this.$refs.videoRef[index].pause();
       }
     },
-    setIsMuted(index) {
+    /* 비디오 음소거 설정하는 함수 */
+    toggleVideoMute(index) {
       event.preventDefault();
       this.postInfos[index].isMuted = !this.postInfos[index].isMuted;
 

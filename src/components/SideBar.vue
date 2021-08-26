@@ -3,11 +3,11 @@
     <div class="side-scroll-wrapper">
       <div class="upper-contents">
         <div class="nav-wrapper">
-          <div class="nav-item" :class="{ navActive: isActive === 0 }" @click="movePage(0)">
+          <div class="nav-item" :class="{ navActive: isActive === 0 }" @click="handleNavigation(0)">
             <i class="fas fa-home"></i>
             <h2 class="nav-name">For You</h2>
           </div>
-          <div class="nav-item" :class="{ navActive: isActive === 1 }" @click="movePage(1)">
+          <div class="nav-item" :class="{ navActive: isActive === 1 }" @click="handleNavigation(1)">
             <i class="fas fa-user-friends"></i>
             <h2 class="nav-name">Following</h2>
           </div>
@@ -99,7 +99,8 @@ export default {
     });
   },
   methods: {
-    movePage(state) {
+    /* 내비게이션 핸들러 함수 */
+    handleNavigation(state) {
       if (state) {
         if (this.$store.state.auth.userInfo) {
           this.$router.push({
@@ -114,9 +115,11 @@ export default {
         });
       }
     },
+    /* 로그인 모달 여는 함수 */
     openLoginModal() {
       this.$emit('openModal', true);
     },
+    /* 추천 계정 정보 받아오는 함수 */
     async getRecommended() {
       try {
         const response = await friendApi.getRecFriendShort();
@@ -125,6 +128,7 @@ export default {
         console.log(error);
       }
     },
+    /* 팔로잉 계정 정보 받아오는 함수 */
     async getFollowing() {
       try {
         const response = await friendApi.getFowFriendShort();

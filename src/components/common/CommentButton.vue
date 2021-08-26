@@ -28,6 +28,7 @@ export default {
     updateState: 'setNumOfComments',
   },
   methods: {
+    /* 댓글 수 받아오는 함수 */
     async getNumOfComments() {
       try {
         const response = await commentApi.getNumOfComments(this.targetId);
@@ -36,6 +37,7 @@ export default {
         console.log(error);
       }
     },
+    /* 댓글 수 변경하는 함수 */
     setNumOfComments() {
       if (this.updateState !== null) {
         if (this.updateState.state) {

@@ -17,44 +17,23 @@
 </template>
 
 <script>
-import AppHeader from '@/components/common/AppHeader.vue';
+import AppHeader from '@/components/AppHeader.vue';
 import SideBar from '@/components/SideBar.vue';
 import PostList from '@/components/PostList.vue';
 
 export default {
   data() {
     return {
-      isOpenedPage: false,
-      styleObj: {},
       navIndex: 1,
     };
   },
-  watch: {
-    // 라우트가 변경되면 메소드를 다시 호출
-    $route: 'checkIsOpenedPage',
-  },
   methods: {
+    /* 게시물 상세보기 페이지 여는 함수 */
     openDetailPage(postId) {
       this.$router.push({
         name: 'PostDetail',
         params: { postId: postId },
       });
-    },
-    checkIsOpenedPage() {
-      if (this.$route.path === '/following') {
-        this.isOpenedPage = false;
-      } else {
-        this.isOpenedPage = true;
-      }
-
-      if (this.isOpenedPage) {
-        this.styleObj = {
-          position: 'fixed',
-          overflow: 'hidden',
-        };
-      } else {
-        this.styleObj = {};
-      }
     },
   },
   components: {

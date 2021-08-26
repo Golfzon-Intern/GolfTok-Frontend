@@ -1,6 +1,6 @@
 <template>
   <div class="like-wrapper" :style="boxStyleObj">
-    <div class="like-icon" @click="updateLiked" :style="iconStyleObj">
+    <div class="like-icon" @click="updateLikeInfo" :style="iconStyleObj">
       <div v-if="isLiked">
         <i class="fas fa-heart full-heart" :style="{ color: '#f03e3e', textShadow: '1px 1px 2px #868e96' }"></i>
       </div>
@@ -29,10 +29,11 @@ export default {
     styleType: Number,
   },
   created() {
-    this.getLiked();
+    this.getLikeInfo();
   },
   methods: {
-    async getLiked() {
+    /* 좋아요 정보 받아오는 함수 */
+    async getLikeInfo() {
       try {
         let response = null;
 
@@ -42,10 +43,7 @@ export default {
         } else {
           // this.targetType === 'comment'
           // 댓글 좋아요 수 조회
-          console.log('comment id: ' + this.targetId);
           response = await likeApi.getCommentLike(this.targetId);
-          console.log('response');
-          console.log(response);
         }
 
         // 0: 좋아요 되어있는 상태, 1: 좋아요 안 되어 있는 상태
@@ -56,12 +54,12 @@ export default {
         }
 
         this.numOfLike = response.data.likeCount !== null ? response.data.likeCount : 0;
-        console.log('num of like: ' + this.numOfLike);
       } catch (error) {
         console.log(error);
       }
     },
-    updateLiked() {
+    /* 좋아요 정보 변경하는 함수 */
+    updateLikeInfo() {
       try {
         let likeCount = this.numOfLike;
 

@@ -13,12 +13,12 @@
         <PostList :postType="0" @openPage="openDetailPage" @openLoginModal="toggleModal"></PostList>
       </div>
     </div>
-    <LoginModal v-if="isVisibleModal" @close="isVisibleModal = false" :isVisible="isVisibleModal" @closeModal="toggleModal"> </LoginModal>
+    <LoginModal v-if="isModalVisible" @close="isModalVisible = false" :isVisible="isModalVisible" @closeModal="toggleModal"> </LoginModal>
   </div>
 </template>
 
 <script>
-import AppHeader from '@/components/common/AppHeader.vue';
+import AppHeader from '@/components/AppHeader.vue';
 import SideBar from '@/components/SideBar.vue';
 import PostList from '@/components/PostList.vue';
 import LoginModal from '@/components/common/LoginModal.vue';
@@ -27,18 +27,20 @@ export default {
   data() {
     return {
       navIndex: 0,
-      isVisibleModal: false,
+      isModalVisible: false,
     };
   },
   methods: {
+    /* 게시물 상세보기 페이지 여는 함수 */
     openDetailPage(postId) {
       this.$router.push({
         name: 'PostDetail',
         params: { postId: postId },
       });
     },
+    /* 로그인 모달 보이는 여부 설정하는 함수 */
     toggleModal(state) {
-      this.isVisibleModal = state;
+      this.isModalVisible = state;
     },
   },
   components: {

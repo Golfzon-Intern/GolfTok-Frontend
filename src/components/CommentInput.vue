@@ -51,15 +51,18 @@ export default {
     },
   },
   methods: {
+    /* 댓글 작성 함수 */
     submitText() {
       if (this.newText.length) {
         this.$emit('submitComment', this.newText, this.isChild, this.parentIndex);
         this.clearText();
       }
     },
+    /* 텍스트 인풋 비우는 함수 */
     clearText() {
       this.newText = '';
     },
+    /* 포커스 여부 설정하는 함수 */
     setIsFocus() {
       this.isFocus = !this.isFocus;
     },

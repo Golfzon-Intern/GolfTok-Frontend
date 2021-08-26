@@ -1,7 +1,7 @@
 <template>
   <div id="parent-comments">
     <transition-group name="list" tag="div">
-      <div class="comment-item" v-for="(comment, index) in comments" v-bind:key="comment.commentId">
+      <div class="comment-item" v-for="(comment, index) in comments" :key="comment.commentId">
         <div class="comment-content">
           <div class="comment-avatar">
             <b-avatar class="user-pic" :src="comment.userIcon" size="2.5rem" />
@@ -12,7 +12,7 @@
               <span>{{ comment.commentText }}</span>
               <div class="bottom-container">
                 <span class="comment-time">{{ comment.uploadDate }}</span>
-                <span class="reply-btn" @click="clickReply(comment.userName, comment.commentGroup, index)">reply</span>
+                <span class="reply-btn" @click="clickReplyBtn(comment.userName, comment.commentGroup, index)">reply</span>
               </div>
             </div>
           </div>
@@ -31,7 +31,7 @@
               <i class="fas fa-chevron-down"></i>
             </span>
           </div>
-          <childCommentList v-else :targetOrder="index" :childcomments="comment.children" @clickReplyChild="clickReply" @clickDelete="clickDeleteBtn" @clickHideList="toggleChildList" />
+          <childCommentList v-else :targetOrder="index" :childcomments="comment.children" @clickReplyChild="clickReplyBtn" @clickDelete="clickDeleteBtn" @clickHideList="toggleChildList" />
         </div>
       </div>
     </transition-group>
@@ -51,22 +51,18 @@ export default {
   props: {
     comments: [],
   },
-  watch: {
-    comments: 'test',
-  },
   methods: {
+    /* 자식 댓글 리스트 보이는 여부 설정하는 함수 */
     toggleChildList(index, state) {
       this.$emit('toggleChildList', index, state);
     },
-    clickReply(userName, group, parentIndex) {
+    /* 답글 버튼 눌렀을 때, 호출되는 함수 */
+    clickReplyBtn(userName, group, parentIndex) {
       this.$emit('clickReplyParent', userName, group, parentIndex);
     },
+    /* 삭제 버튼 눌렀을 때, 호출되는 함수 */
     clickDeleteBtn(commentId, parentIndex, index) {
       this.$emit('clickDeleteBtn', commentId, parentIndex, index);
-    },
-    test() {
-      console.log('comment list log');
-      console.log(this.comments);
     },
   },
   components: {

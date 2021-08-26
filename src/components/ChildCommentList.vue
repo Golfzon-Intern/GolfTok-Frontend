@@ -1,6 +1,6 @@
 <template>
   <div id="child-comments">
-    <div class="comment-content" v-for="(comment, index) in childcomments" v-bind:key="index">
+    <div class="comment-content" v-for="(comment, index) in childcomments" :key="index">
       <div class="comment-avatar">
         <b-avatar class="user-pic" :src="comment.userIcon" size="1.5rem" />
       </div>
@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="action-container">
-        <div v-if="loginUser === comment.userName" class="delete-btn" @click="clickDel(comment.commentId, index)">
+        <div v-if="loginUser === comment.userName" class="delete-btn" @click="clickDelete(comment.commentId, index)">
           <i class="fas fa-trash"></i>
           <strong>del</strong>
         </div>
@@ -49,12 +49,15 @@ export default {
     childcomments: [],
   },
   methods: {
+    /* 답글 버튼 눌렀을 때, 호출되는 함수 */
     clickReply(userName, group) {
       this.$emit('clickReplyChild', userName, group, this.targetOrder);
     },
-    clickDel(commentId, index) {
+    /* 삭제 버튼 눌렀을 때, 호출되는 함수 */
+    clickDelete(commentId, index) {
       this.$emit('clickDelete', commentId, this.targetOrder, index);
     },
+    /* 숨김 버튼 눌렀을 때, 호출되는 함수 */
     clickHide() {
       this.$emit('clickHideList', this.targetOrder, false);
     },

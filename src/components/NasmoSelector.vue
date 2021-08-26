@@ -4,22 +4,22 @@
       <div class="nasmo-modal-container">
         <div class="nasmo-modal-header">
           <h3 class="nasmo-modal-title">Nasmo videos</h3>
-          <button class="nasmo-modal-close-btn" @click="toggleVisible">
+          <button class="nasmo-modal-close-btn" @click="closeModal">
             <i class="fas fa-times"></i>
           </button>
         </div>
         <div class="nasmo-modal-body">
           <div class="nasmo-video-list">
-            <div class="nasmo-video-item" v-for="(video, index) in videos" v-bind:key="index">
+            <div class="nasmo-video-item" v-for="(video, index) in videos" :key="index">
               <b-form-radio v-model="selectedIndex" :aria-describedby="video" name="some-radios" :value="index" @change="changeSelected(index)" />
-              <img v-bind:src="video.nasmoThumbnail" />
+              <img :src="video.nasmoThumbnail" />
             </div>
           </div>
         </div>
         <div class="nasmo-modal-footer">
           <div class="btn-wrapper">
-            <button class="another-video-btn" @click="onClickFileBtn">Another video</button>
-            <button class="select-video-btn" @click="saveSelected">Select</button>
+            <button class="another-video-btn" @click="clickFileBtn">Another video</button>
+            <button class="select-video-btn" @click="submitSelected">Select</button>
           </div>
         </div>
       </div>
@@ -42,7 +42,7 @@ export default {
     this.getNasmoList();
   },
   methods: {
-    // 서버로부터 나스모 영상 데이터 받음
+    /* 나스모 영상 데이터 받는 함수 */
     async getNasmoList() {
       try {
         const response = await postApi.getNasmos();
@@ -51,18 +51,20 @@ export default {
         console.log(error);
       }
     },
-    toggleVisible() {
-      this.$emit('toggleVisible');
+    /* 모달창 닫는 함수 */
+    closeModal() {
+      this.$emit('closeModal');
     },
-    onClickFileBtn() {
-      this.$emit('onClickFileBtn');
+    /* 파일 버튼 눌렀을 때, 호출되는 함수 */
+    clickFileBtn() {
+      this.$emit('clickFileBtn');
     },
     changeSelected(index) {
       this.selectedIndex = index;
     },
-    saveSelected() {
-      this.$emit('saveSelected', this.videos[this.selectedIndex].videoRoot);
-      this.toggleVisible();
+    submitSelected() {
+      this.$emit('submitSelected', this.videos[this.selectedIndex].videoRoot);
+      this.closeModal();
     },
   },
 };
