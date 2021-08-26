@@ -83,8 +83,7 @@ export default {
 }
 
 .results-container {
-  width: 692px;
-  max-width: 692px;
+  width: 80%;
   padding: 24px 0;
   margin-right: 24px;
 }

@@ -31,11 +31,10 @@
       </div>
     </div>
     <div v-if="isModalVisible" class="search-modal-container">
-      <form class="search-modal-input">
+      <form class="search-modal-input" @submit="submitSearchText">
         <input type="search" v-model="searchText" @keyup.enter="submitSearchText" placeholder="Search #golf ..." />
-        <span class="split"></span>
       </form>
-      <button class="search-modal-submit" type="submit" @click="submitSearchText">Search</button>
+      <button class="search-modal-submit" @click="submitSearchText">Search</button>
     </div>
   </div>
 </template>
@@ -59,8 +58,9 @@ export default {
         name: 'Upload',
       });
     },
-    submitSearchText() {
+    submitSearchText(event) {
       event.preventDefault();
+
       if (this.searchText.length) {
         this.$router
           .push({
@@ -266,12 +266,6 @@ export default {
   .search-modal-input input::placeholder {
     color: var(--text-sub-color);
     opacity: 0.5;
-  }
-  .split {
-    width: 1px;
-    height: 28px;
-    margin: -3px 0;
-    background: #495057;
   }
   .search-modal-submit {
     margin-left: 12px;

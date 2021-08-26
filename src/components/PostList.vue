@@ -327,6 +327,7 @@ export default {
 }
 .author-golf-info span {
   padding: 0 8px;
+  margin-right: 12px;
   text-align: center;
   font-weight: 400;
   font-size: 0.75rem;

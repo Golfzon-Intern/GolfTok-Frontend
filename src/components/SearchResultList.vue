@@ -20,7 +20,8 @@
           @click="openPostDetail(result.postId)"
         >
           <div class="result-video-card">
-            <video :src="result.videoRoot" type="video/mp4" preload="metadata" :poster="result.postThumbnail"></video>
+            <!-- <video :src="result.videoRoot" type="video/mp4" preload="metadata" :poster="result.postThumbnail"></video> -->
+            <img :src="result.postThumbnail" alt="thumbnail" />
           </div>
           <div class="result-video-mask" v-if="result.isHover">
             <div class="result-info-wrapper">
@@ -89,17 +90,17 @@ export default {
 
 <style>
 .search-results-wrapper {
-  padding-right: 48px;
+  padding-right: 5%;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
 }
 
 .search-results-header {
+  width: 100%;
   margin-bottom: 20px;
-  width: 594px;
-  box-sizing: border-box;
   padding-right: 52px;
+  box-sizing: border-box;
   flex: 0 0 auto;
   position: relative;
   display: flex;
@@ -109,12 +110,12 @@ export default {
 .hash-tag-icon {
   width: 120px;
   height: 120px;
+  margin: 0;
+  padding: 0;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
   overflow: hidden;
   white-space: nowrap;
   text-align: center;
@@ -154,12 +155,11 @@ export default {
 }
 
 .search-result-body {
-  width: 650px;
+  width: 100%;
   flex: 1 1 auto;
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
-  min-height: 490px;
 }
 
 .result-feed-container {
@@ -168,25 +168,34 @@ export default {
 }
 
 .result-feed-item {
-  width: 300px;
-  margin-right: 12px;
+  position: relative;
+  width: 48%;
+  min-height: 25vh;
+  max-height: 35vh;
+  margin-right: 2%;
   margin-bottom: 12px;
-  display: flex;
-  flex-direction: column;
-  float: left;
+  overflow: hidden;
+  background-color: rgba(24, 24, 24, 0.9);
 }
 
 .result-video-card {
   width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: blueviolet; */
 }
-.result-video-card video {
-  width: 100%;
+.result-video-card img {
+  height: 100%;
 }
 
 .result-video-mask {
   position: absolute;
-  width: 300px;
-  height: 165px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,5 +212,12 @@ export default {
 }
 .result-info-wrapper strong {
   font-weight: 500;
+}
+
+@media screen and (max-width: 768px) {
+  .result-feed-item {
+    width: 100%;
+    margin-right: 0;
+  }
 }
 </style>
