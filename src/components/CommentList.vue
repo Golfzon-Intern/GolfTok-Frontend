@@ -51,6 +51,9 @@ export default {
   props: {
     comments: [],
   },
+  watch: {
+    comments: 'test',
+  },
   methods: {
     toggleChildList(index, state) {
       this.$emit('toggleChildList', index, state);
@@ -60,6 +63,10 @@ export default {
     },
     clickDeleteBtn(commentId, parentIndex, index) {
       this.$emit('clickDeleteBtn', commentId, parentIndex, index);
+    },
+    test() {
+      console.log('comment list log');
+      console.log(this.comments);
     },
   },
   components: {
