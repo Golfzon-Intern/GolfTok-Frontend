@@ -277,7 +277,7 @@ export default {
             children: [],
             isOpened: false,
           };
-          // console.log(newComment);
+          console.log(newComment);
 
           this.comments = [newComment, ...this.comments];
         }

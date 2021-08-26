@@ -168,7 +168,7 @@ export default {
     },
     separateHashtag(text, type) {
       let newText = text;
-      if (!newText) return '';
+      if (!newText) return type ? [] : '';
 
       if (type) {
         // 텍스트에 해시태그만 있는 경우

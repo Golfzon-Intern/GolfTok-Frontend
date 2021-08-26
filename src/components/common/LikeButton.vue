@@ -24,18 +24,9 @@ export default {
     };
   },
   props: {
-    targetType: {
-      type: String,
-      default: '',
-    },
-    targetId: {
-      type: Number,
-      default: 0,
-    },
-    styleType: {
-      type: Number,
-      default: 0,
-    },
+    targetType: String,
+    targetId: Number,
+    styleType: Number,
   },
   created() {
     this.getLiked();
@@ -51,7 +42,10 @@ export default {
         } else {
           // this.targetType === 'comment'
           // 댓글 좋아요 수 조회
+          console.log('comment id: ' + this.targetId);
           response = await likeApi.getCommentLike(this.targetId);
+          console.log('response');
+          console.log(response);
         }
 
         // 0: 좋아요 되어있는 상태, 1: 좋아요 안 되어 있는 상태
@@ -62,6 +56,7 @@ export default {
         }
 
         this.numOfLike = response.data.likeCount !== null ? response.data.likeCount : 0;
+        console.log('num of like: ' + this.numOfLike);
       } catch (error) {
         console.log(error);
       }
