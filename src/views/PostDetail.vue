@@ -50,7 +50,7 @@
             </div>
           </h4>
         </div>
-        <div class="club-info" v-if="postInfo.golfClub.length">
+        <div class="club-info" v-if="postInfo.golfClub && postInfo.golfClub.length">
           <h4>
             <div class="info-text-decoration">
               <div class="club-info-tags">
@@ -112,7 +112,7 @@
               </div>
             </h4>
           </div>
-          <div class="club-info" v-if="postInfo.golfClub.length">
+          <div class="club-info" v-if="postInfo.golfClub && postInfo.golfClub.length">
             <h4>
               <div class="info-text-decoration">
                 <div class="club-info-tags">
@@ -180,6 +180,8 @@ export default {
             golfClub: this.separateHashtag(data.golfClub, 1),
           };
 
+          console.log(postObj.golfClub.length);
+
           this.postInfo = postObj;
         }
 
@@ -191,7 +193,7 @@ export default {
     },
     separateHashtag(text, type) {
       let newText = text;
-      if (!newText) return '';
+      if (!newText) return type ? [] : '';
 
       if (type) {
         // 텍스트에 해시태그만 있는 경우
