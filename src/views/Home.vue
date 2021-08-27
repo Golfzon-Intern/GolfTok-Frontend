@@ -10,18 +10,29 @@
         </div>
       </div>
       <div class="trending-container">
-        <PostList :postType="0" @openPage="openDetailPage" @openLoginModal="toggleModal" :key="this.$store.state.auth.userInfo"></PostList>
+        <PostList
+          :postType="0"
+          @openPage="openDetailPage"
+          @openLoginModal="toggleModal"
+          :key="this.$store.state.auth.userInfo.userId"
+        ></PostList>
       </div>
     </div>
-    <LoginModal v-if="isModalVisible" @close="isModalVisible = false" :isVisible="isModalVisible" @closeModal="toggleModal"> </LoginModal>
+    <LoginModal
+      v-if="isModalVisible"
+      @close="isModalVisible = false"
+      :isVisible="isModalVisible"
+      @closeModal="toggleModal"
+    >
+    </LoginModal>
   </div>
 </template>
 
 <script>
-import AppHeader from '@/components/AppHeader.vue';
-import SideBar from '@/components/SideBar.vue';
-import PostList from '@/components/PostList.vue';
-import LoginModal from '@/components/common/LoginModal.vue';
+import AppHeader from "@/components/AppHeader.vue";
+import SideBar from "@/components/SideBar.vue";
+import PostList from "@/components/PostList.vue";
+import LoginModal from "@/components/common/LoginModal.vue";
 
 export default {
   data() {
@@ -34,7 +45,7 @@ export default {
     /* 게시물 상세보기 페이지 여는 함수 */
     openDetailPage(postId) {
       this.$router.push({
-        name: 'PostDetail',
+        name: "PostDetail",
         params: { postId: postId },
       });
     },
