@@ -5,17 +5,7 @@
         <img :src="postInfo.postThumbnail" />
       </div>
       <div class="video-card-big">
-        <video
-          ref="videoRef"
-          :src="postInfo.videoRoot"
-          type="video/mp4"
-          autoplay
-          loop
-          muted
-          preload="metadata"
-          :poster="postInfo.postThumbnail"
-          @click="toggleVideoPlay"
-        ></video>
+        <video ref="videoRef" :src="postInfo.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="postInfo.postThumbnail" @click="toggleVideoPlay"></video>
         <div v-if="!isPlaying" class="play-btn" @click="toggleVideoPlay">
           <i class="fas fa-play"></i>
         </div>
@@ -41,7 +31,7 @@
             <p class="user-nickname">@{{ postInfo.userName }}</p>
           </a>
         </div>
-        <FollowButton :targetId="postInfo.userId" />
+        <FollowButton :targetId="postInfo.userId" :key="postInfo.userId" />
       </div>
       <div class="user-golf-container">
         <span class="golf-grade"
@@ -64,10 +54,7 @@
             </div>
           </h4>
         </div>
-        <div
-          class="club-info"
-          v-if="postInfo.golfClub && postInfo.golfClub.length"
-        >
+        <div class="club-info" v-if="postInfo.golfClub && postInfo.golfClub.length">
           <h4>
             <div class="info-text-decoration">
               <div class="club-info-tags">
@@ -82,18 +69,10 @@
         <h1 class="video-meta-title" v-html="postInfo.postContent" />
         <div class="action-container">
           <div class="action-wrapper">
-            <LikeButton
-              :targetType="'post'"
-              :targetId="Number(this.$route.params.postId)"
-              :styleType="1"
-            ></LikeButton>
+            <LikeButton :targetType="'post'" :targetId="Number(this.$route.params.postId)" :styleType="1"></LikeButton>
           </div>
           <div class="action-wrapper">
-            <CommentButton
-              :targetId="Number(this.$route.params.postId)"
-              :updateState="commentState"
-              :styleType="1"
-            ></CommentButton>
+            <CommentButton :targetId="Number(this.$route.params.postId)" :updateState="commentState" :styleType="1"></CommentButton>
           </div>
         </div>
       </div>
@@ -102,12 +81,7 @@
         <i class="fas fa-chevron-down"></i>
       </button>
       <div class="comment-list-container">
-        <CommentList
-          :comments="comments"
-          @toggleChildList="toggleReplyOpen"
-          @clickReplyParent="setReplyTo"
-          @clickDeleteBtn="removeComment"
-        />
+        <CommentList :comments="comments" @toggleChildList="toggleReplyOpen" @clickReplyParent="setReplyTo" @clickDeleteBtn="removeComment" />
       </div>
       <div class="comment-input-container">
         <CommentInput :replyTo="replyTo" @submitComment="addComment" />
@@ -120,15 +94,15 @@
 </template>
 
 <script>
-import * as postApi from "@/api/post";
-import * as commentApi from "@/api/comment";
+import * as postApi from '@/api/post';
+import * as commentApi from '@/api/comment';
 
-import FollowButton from "@/components/common/FollowButton.vue";
-import LikeButton from "@/components/common/LikeButton.vue";
-import CommentButton from "@/components/common/CommentButton.vue";
-import CommentList from "@/components/CommentList.vue";
-import CommentInput from "@/components/CommentInput.vue";
-import ContentModal from "@/components/PostContentModal.vue";
+import FollowButton from '@/components/common/FollowButton.vue';
+import LikeButton from '@/components/common/LikeButton.vue';
+import CommentButton from '@/components/common/CommentButton.vue';
+import CommentList from '@/components/CommentList.vue';
+import CommentInput from '@/components/CommentInput.vue';
+import ContentModal from '@/components/PostContentModal.vue';
 
 export default {
   data: function() {
@@ -151,10 +125,7 @@ export default {
     /* 게시물 정보 받아오는 함수 */
     async getPostInfo() {
       try {
-        const response = await postApi.getPostDetail(
-          this.$route.params.postId,
-          0
-        );
+        const response = await postApi.getPostDetail(this.$route.params.postId, 0);
         const data = response.data.postList[0];
 
         if (data) {
@@ -170,7 +141,7 @@ export default {
         }
 
         // video 태그로 추가된 동영상 정보 가져오기
-        this.video = document.getElementsByTagName("video");
+        this.video = document.getElementsByTagName('video');
       } catch (error) {
         console.log(error);
       }
@@ -178,29 +149,22 @@ export default {
     /* 게시물에 있는 해시태그 분리하는 함수 */
     separateHashtag(text, type) {
       let newText = text;
-      if (!newText) return type ? [] : "";
+      if (!newText) return type ? [] : '';
 
       if (type) {
         // 텍스트에 해시태그만 있는 경우
-        const newTags = newText.split(" ");
+        const newTags = newText.split(' ');
         return newTags;
       }
 
       let hashReg = /#(\w+|[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+)/g;
-      newText = newText
-        .toString()
-        .replace(
-          hashReg,
-          '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>'
-        );
+      newText = newText.toString().replace(hashReg, '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>');
       return newText;
     },
     /* 댓글 정보 받아오는 함수 */
     async getComments() {
       try {
-        const response = await commentApi.getParentComments(
-          this.$route.params.postId
-        );
+        const response = await commentApi.getParentComments(this.$route.params.postId);
         const parents = response.data.parentList;
 
         for (const parent of parents) {
