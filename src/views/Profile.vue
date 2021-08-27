@@ -36,7 +36,7 @@
           <h2 class="content-bio-info">{{ userInfo.introductionMessage }}</h2>
         </header>
         <main class="contents-main">
-          <PostList :userId="userInfo.userId" :isMine="isMine" @openPage="openDetailPage" @openLoginModal="toggleModal" :key="userId" />
+          <PostList @openPage="openDetailPage" @openLoginModal="toggleModal" :key="userId" />
         </main>
       </div>
     </div>

@@ -31,13 +31,33 @@ import * as commnetApi from '@/api/comment';
 export default {
   data() {
     return {
+      userId: Number(this.$route.params.userId),
       postInfos: [],
     };
   },
-  props: {
-    userId: Number,
-    isMine: Boolean,
+  computed: {
+    isMine() {
+      if (this.$store.state.auth.userInfo !== null) {
+        if (this.userId === this.$store.state.auth.userInfo.userId) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    },
   },
+  //   watch: {
+  //   '$route.params.userId': {
+  //     handler: function(value) {
+  //       this.userId = value;
+  //       this.getUserInfo();
+  //     },
+  //     deep: true,
+  //     immediate: true,
+  //   },
+  // },
   created() {
     this.getPostInfo();
   },

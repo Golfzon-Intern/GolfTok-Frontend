@@ -1,7 +1,7 @@
 // import axios from 'axios';
 import http from '@/api/http';
 
-// 키워드 검색
+// 사용자 정보 조회
 export function getProfileInfo(flag, userId) {
   if (flag) {
     // 자기 자신의 데이터 조회
@@ -14,6 +14,7 @@ export function getProfileInfo(flag, userId) {
   }
 }
 
+// 사용자가 업로드한 게시물 조회
 export function getProfilePost(flag, userId) {
   if (flag) {
     // 자기 자신의 데이터 조회
