@@ -41,7 +41,7 @@
             <p class="user-nickname">@{{ postInfo.userName }}</p>
           </a>
         </div>
-        <FollowButton :targetId="postInfo.userId" />
+        <FollowButton :targetId="postInfo.userId" :key="postInfo.userId" />
       </div>
       <div class="user-golf-container">
         <span class="golf-grade"

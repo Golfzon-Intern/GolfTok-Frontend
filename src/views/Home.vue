@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="trending-container">
-        <PostList :postType="0" @openPage="openDetailPage" @openLoginModal="toggleModal"></PostList>
+        <PostList :postType="0" @openPage="openDetailPage" @openLoginModal="toggleModal" :key="this.$store.state.auth.userInfo"></PostList>
       </div>
     </div>
     <LoginModal v-if="isModalVisible" @close="isModalVisible = false" :isVisible="isModalVisible" @closeModal="toggleModal"> </LoginModal>
