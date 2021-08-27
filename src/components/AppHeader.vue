@@ -64,7 +64,7 @@ const USER_DEFAULT_IMG =
   "https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/user_photo%2Fuser_photo_default.jpeg?alt=media&token=087db47b-26ea-4317-9bde-f6c7ac53c76d";
 
 export default {
-  data: function () {
+  data: function() {
     return {
       userImg: USER_DEFAULT_IMG,
       searchText: "",
@@ -83,7 +83,9 @@ export default {
     /* 프로필 사용자 정보 받아오는 함수 */
     async getUserInfo() {
       const response = await profileApi.getProfileInfo(true);
-      this.userImg = response.data.user.userIcon;
+      this.userImg = response.data.user.userIcon
+        ? response.data.user.userIcon
+        : USER_DEFAULT_IMG;
     },
     /* 로그인 모달 여는 함수 */
     openLoginModal() {
