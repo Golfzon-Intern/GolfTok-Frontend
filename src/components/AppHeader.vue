@@ -2,12 +2,20 @@
   <div class="header-content-wrapper">
     <div class="header-logo">
       <a href="/">
-        <img src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/assets%2Flogo-1.png?alt=media&token=c34366aa-9387-4d86-b9bc-9d2a992c7549" alt="logo" />
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/assets%2Flogo-1.png?alt=media&token=c34366aa-9387-4d86-b9bc-9d2a992c7549"
+          alt="logo"
+        />
       </a>
     </div>
     <div class="search-input-container">
       <form class="search-input">
-        <input type="search" v-model="searchText" @keyup.enter="submitSearchText" placeholder="Search #golf ..." />
+        <input
+          type="search"
+          v-model="searchText"
+          @keyup.enter="submitSearchText"
+          placeholder="Search #golf ..."
+        />
         <span class="split"></span>
         <button type="submit" @click="submitSearchText">
           <i class="fas fa-search"></i>
@@ -32,35 +40,43 @@
     </div>
     <div v-if="isModalVisible" class="search-modal-container">
       <form class="search-modal-input" @submit="submitSearchText">
-        <input type="search" v-model="searchText" @keyup.enter="submitSearchText" placeholder="Search #golf ..." />
+        <input
+          type="search"
+          v-model="searchText"
+          @keyup.enter="submitSearchText"
+          placeholder="Search #golf ..."
+        />
       </form>
-      <button class="search-modal-submit" @click="submitSearchText">Search</button>
+      <button class="search-modal-submit" @click="submitSearchText">
+        Search
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import * as profileApi from '@/api/profile';
-import EventBus from '@/lib/eventBus';
+import * as profileApi from "@/api/profile";
+import EventBus from "@/lib/eventBus";
 
-import LoginButton from '@/components/common/LoginButton.vue';
+import LoginButton from "@/components/common/LoginButton.vue";
 
-const USER_DEFAULT_IMG = 'https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/user_photo%2Fuser_photo_default.jpeg?alt=media&token=087db47b-26ea-4317-9bde-f6c7ac53c76d';
+const USER_DEFAULT_IMG =
+  "https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/user_photo%2Fuser_photo_default.jpeg?alt=media&token=087db47b-26ea-4317-9bde-f6c7ac53c76d";
 
 export default {
-  data: function() {
+  data: function () {
     return {
       userImg: USER_DEFAULT_IMG,
-      searchText: '',
+      searchText: "",
       isModalVisible: false,
     };
   },
   created() {
     this.getUserInfo();
 
-    EventBus.$on('login-success', () => {
+    EventBus.$on("login-success", () => {
       this.getUserInfo();
-      console.log('login success header');
+      console.log("login success header");
     });
   },
   methods: {
@@ -71,13 +87,18 @@ export default {
     },
     /* 로그인 모달 여는 함수 */
     openLoginModal() {
-      this.$emit('openModal', true);
+      this.$emit("openModal", true);
     },
     /* 업로드 페이지 여는 함수 */
     openUploadPage() {
-      this.$router.push({
-        name: 'Upload',
-      });
+      this.$router
+        .push({
+          name: "Upload",
+        })
+        .catch((error) => {
+          this.$router.go(this.$router.currentRoute);
+          throw error;
+        });
     },
     /* 프로필 페이지 여는 함수 */
     openProfilePage(event) {
@@ -85,7 +106,7 @@ export default {
 
       this.$router
         .push({
-          name: 'Profile',
+          name: "Profile",
           params: { userId: this.$store.state.auth.userInfo.userId },
         })
         .catch((error) => {
@@ -100,7 +121,7 @@ export default {
       if (this.searchText.length) {
         this.$router
           .push({
-            name: 'SearchResult',
+            name: "SearchResult",
             params: { keyword: this.searchText },
           })
           .catch((error) => {
