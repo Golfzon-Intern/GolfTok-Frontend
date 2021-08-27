@@ -1,5 +1,5 @@
 <template>
-  <div class="follow-btn-wrapper">
+  <div class="follow-btn-wrapper" v-if="$store.state.auth.userInfo.userId !== postInfo.userId">
     <button v-if="isFollowing" class="follow-basic-btn" @click="updateFollowing">Following</button>
     <button v-else class="follow-active-btn" @click="updateFollowing">Follow</button>
   </div>

@@ -31,7 +31,7 @@
             <p class="user-nickname">@{{ postInfo.userName }}</p>
           </a>
         </div>
-        <FollowButton v-if="$store.state.auth.userInfo.userId !== postInfo.userId" :targetId="postInfo.userId" :key="postInfo.userId" />
+        <FollowButton :targetId="postInfo.userId" :key="postInfo.userId" />
       </div>
       <div class="user-golf-container">
         <span class="golf-grade"
