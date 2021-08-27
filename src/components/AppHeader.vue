@@ -83,9 +83,10 @@ export default {
     /* 프로필 사용자 정보 받아오는 함수 */
     async getUserInfo() {
       const response = await profileApi.getProfileInfo(true);
-      this.userImg = response.data.user.userIcon
-        ? response.data.user.userIcon
-        : USER_DEFAULT_IMG;
+      this.userImg =
+        response.data.user.userIcon !== null
+          ? response.data.user.userIcon
+          : USER_DEFAULT_IMG;
     },
     /* 로그인 모달 여는 함수 */
     openLoginModal() {
