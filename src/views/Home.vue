@@ -14,7 +14,11 @@
           :postType="0"
           @openPage="openDetailPage"
           @openLoginModal="toggleModal"
-          :key="this.$store.state.auth.userInfo.userId"
+          :key="
+            this.$store.state.auth.userInfo
+              ? this.$store.state.auth.userInfo.userId
+              : null
+          "
         ></PostList>
       </div>
     </div>
