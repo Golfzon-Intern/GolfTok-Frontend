@@ -48,16 +48,6 @@ export default {
       }
     },
   },
-  //   watch: {
-  //   '$route.params.userId': {
-  //     handler: function(value) {
-  //       this.userId = value;
-  //       this.getUserInfo();
-  //     },
-  //     deep: true,
-  //     immediate: true,
-  //   },
-  // },
   created() {
     this.getPostInfo();
   },

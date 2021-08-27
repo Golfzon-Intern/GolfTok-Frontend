@@ -22,7 +22,7 @@
     <div class="upload-club-container">
       <h3 class="form-title-container">Club</h3>
       <div class="form-input-container">
-        <input class="form-text-editor" @keyup.space="addClubTag" placeholder="What club did you use today?" />
+        <input class="form-text-editor" @keyup.space="addClubTag" @keyup.enter="addClubTag" placeholder="What club did you use today?" />
       </div>
       <div class="club-tag-container">
         <div class="club-tags" v-for="(tag, index) of newClubTags" :key="index" @click="deleteClubTag(index)">{{ tag }}</div>

@@ -108,12 +108,26 @@ export default {
 
         // 만약 성공하면 (서버로부터 응답 받으면)
         if (response.status === 201) {
-          // 마이 페이지로 이동. 일단 메인 페이지로 이동하도록 함
-          this.$router.push('/');
+          // 마이 페이지로 이동
+          this.openProfilePage();
         }
       } catch (error) {
         console.log(error);
       }
+    },
+    /* 프로필 페이지 여는 함수 */
+    openProfilePage(event) {
+      event.preventDefault();
+
+      this.$router
+        .push({
+          name: 'Profile',
+          params: { userId: this.$store.state.auth.userInfo.userId },
+        })
+        .catch((error) => {
+          this.$router.go(this.$router.currentRoute);
+          throw error;
+        });
     },
     /* 작성한 모든 내용을 삭제하는 함수 */
     deleteAll() {

@@ -19,7 +19,7 @@
               <h2 class="user-title">{{ userInfo.userName }}</h2>
               <h3 class="user-sub-title">{{ userInfo.userNickname }}</h3>
               <div class="user-follow-container" v-if="!isMine">
-                <FollowButton :targetId="userInfo.userId" v-if="$store.state.auth.userInfo" />
+                <FollowButton :targetId="Number(this.$route.params.userId)" v-if="$store.state.auth.userInfo" />
               </div>
             </div>
           </div>
