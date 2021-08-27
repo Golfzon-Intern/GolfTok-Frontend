@@ -11,7 +11,7 @@
           @blur="setIsInputFocused(false)"
           @keyup.space="handleSpaceKey"
           @keydown.enter="preventTextNewLine"
-          style="white-space: nowrap; overflow: hidden;"
+          style="white-space: nowrap; overflow: hidden"
         >
           <div v-if="!isInputFocused && !newCaption.length" class="placeholder">
             How was your golf today?
@@ -22,19 +22,42 @@
     <div class="upload-club-container">
       <h3 class="form-title-container">Club</h3>
       <div class="form-input-container">
-        <input class="form-text-editor" @keyup.space="addClubTag" @keyup.enter="addClubTag" placeholder="What club did you use today?" />
+        <input
+          class="form-text-editor"
+          @keyup.space="addClubTag"
+          @keyup.enter="addClubTag"
+          placeholder="What club did you use today?"
+        />
       </div>
       <div class="club-tag-container">
-        <div class="club-tags" v-for="(tag, index) of newClubTags" :key="index" @click="deleteClubTag(index)">{{ tag }}</div>
+        <div
+          class="club-tags"
+          v-for="(tag, index) of newClubTags"
+          :key="index"
+          @click="deleteClubTag(index)"
+        >
+          {{ tag }}
+        </div>
       </div>
     </div>
     <div class="upload-location-container">
       <h3 class="form-title-container">Location</h3>
       <div class="form-input-container">
-        <input class="form-text-editor" type="search" v-model="newLocation" @keyup.enter="getLocationInfos()" placeholder="Where did you play golf today?" />
+        <input
+          class="form-text-editor"
+          type="search"
+          v-model="newLocation"
+          @keyup.enter="getLocationInfos()"
+          placeholder="Where did you play golf today?"
+        />
       </div>
       <div class="location-list-wrapper" v-if="isListVisible">
-        <div class="location-item-wrapper" v-for="(item, index) of LocationSearchList" :key="index" @click="selectLocation(index)">
+        <div
+          class="location-item-wrapper"
+          v-for="(item, index) of LocationSearchList"
+          :key="index"
+          @click="selectLocation(index)"
+        >
           <span class="location-item-title">{{ item.title }}</span>
           <span class="location-item-category">{{ item.category }}</span>
           <p class="location-item-address">{{ item.address }}</p>
@@ -43,20 +66,26 @@
     </div>
     <div class="form-bottom-container">
       <button class="upload-cancle-btn" @click="clearContents">Discard</button>
-      <button class="upload-post-btn" @click="submitPost" :disabled="isBtnDisabled">Post</button>
+      <button
+        class="upload-post-btn"
+        @click="submitPost"
+        :disabled="isBtnDisabled"
+      >
+        Post
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import * as searchApi from '@/api/search';
+import * as searchApi from "@/api/search";
 
 export default {
   data() {
     return {
-      newCaption: '',
+      newCaption: "",
       newClubTags: [],
-      newLocation: '',
+      newLocation: "",
       LocationSearchList: [],
       isHashActive: false,
       isInputFocused: false,
@@ -67,32 +96,32 @@ export default {
     isBtnDisabled: Boolean,
   },
   watch: {
-    isListVisible: 'clearLocationList',
+    isListVisible: "clearLocationList",
   },
   methods: {
     /* 텍스트 입력 동작 설정 (@input) */
     handleCaptionInput(event) {
       this.newCaption = event.target.outerText;
 
-      if (event.data === '#' && this.isHashActive === false) {
+      if (event.data === "#" && this.isHashActive === false) {
         this.isHashActive = true;
 
-        var newHTML = '';
+        var newHTML = "";
         this.newCaption
-          .replace(/[\s]+/g, ' ')
+          .replace(/[\s]+/g, " ")
           .trim()
-          .split(' ')
+          .split(" ")
           .forEach((val, index, arr) => {
-            if (val[0] === '#') {
+            if (val[0] === "#") {
               // 해시태그를 분리하는 조건
               if (index === arr.length - 1) {
                 // 만약 마지막 해시태그라면 공백을 추가하지 않는다. # 뒤에 문자가 올 거기 때문에
-                newHTML += "<span class='statement'>" + val + '</span>';
+                newHTML += "<span class='statement'>" + val + "</span>";
               } else {
                 // 이미 # 뒤에 문자가 있는 해시태그는 뒤에 공백을 추가한다.
-                newHTML += "<span class='statement'>" + val + ' ' + '</span>';
+                newHTML += "<span class='statement'>" + val + " " + "</span>";
               }
-            } else newHTML += "<span class='other'>" + val + ' ' + '</span>';
+            } else newHTML += "<span class='other'>" + val + " " + "</span>";
           });
         event.target.innerHTML = newHTML;
 
@@ -137,11 +166,11 @@ export default {
       let value = event.target.value.trim();
 
       if (value.length > 0) {
-        value = value[0] === '#' ? value : '#' + value;
+        value = value[0] === "#" ? value : "#" + value;
 
         this.newClubTags.push(value);
 
-        event.target.value = '';
+        event.target.value = "";
       }
     },
     /* 클럽 태그 삭제하는 함수 */
@@ -151,7 +180,7 @@ export default {
     },
     /* 위치 검색 결과 리스트 보이는 여부 설정하는 함수 */
     setIsListVisible(state) {
-      this.$emit('setIsListVisible', state);
+      this.$emit("setIsListVisible", state);
     },
     /* 위치 검색 결과 정보 받아오는 함수 */
     async getLocationInfos() {
@@ -178,16 +207,16 @@ export default {
     /* 위치 검색 결과 텍스트 설정 함수 (<b></b> 태그 지우기) */
     setLocationText(text) {
       const locReg = /<[b]>|<[\\/][b]>/g;
-      const newText = text
-        .split(locReg)
-        .join(' ')
-        .trim();
+      const newText = text.split(locReg).join(" ").trim();
       return newText;
     },
     /* 위치 선택 함수 */
     selectLocation(selectedIndex) {
-      const selected = this.LocationSearchList[selectedIndex].title + ' (' + this.LocationSearchList[selectedIndex].address + ')';
-
+      const selected =
+        this.LocationSearchList[selectedIndex].title +
+        " (" +
+        this.LocationSearchList[selectedIndex].address +
+        ")";
       this.newLocation = selected;
     },
     /* 위치 검색 결과 리스트 초기화 함수 */
@@ -196,15 +225,15 @@ export default {
     },
     /* 작성한 내용 초기화 함수 */
     clearContents() {
-      this.newCaption = '';
-      this.newLocation = '';
+      this.newCaption = "";
+      this.newLocation = "";
 
-      this.$emit('clearContents');
+      this.$emit("clearContents");
     },
     /* 작성한 내용 submit 함수 */
     submitPost() {
-      const newClubInfo = this.newClubTags.join(' ');
-      this.$emit('submitPost', this.newCaption, newClubInfo, this.newLocation);
+      const newClubInfo = this.newClubTags.join(" ");
+      this.$emit("submitPost", this.newCaption, newClubInfo, this.newLocation);
     },
   },
 };
@@ -254,7 +283,7 @@ export default {
   color: var(--text-sub-color);
   opacity: 0.5;
 }
-[contenteditable='true'] {
+[contenteditable="true"] {
   caret-color: var(--accent-main-color);
 }
 .form-text-editor .statement {
@@ -297,7 +326,7 @@ export default {
 .club-tags::before {
   pointer-events: all;
   display: inline-block;
-  content: 'x';
+  content: "x";
   height: 20px;
   width: 20px;
   margin-right: 6px;

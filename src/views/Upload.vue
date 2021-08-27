@@ -7,37 +7,58 @@
       <div class="upload-container">
         <div class="upload-title">
           Upload Video
-          <div class="upload-sub-title">This video will be published to @{{ this.$store.state.auth.userInfo.userName }}</div>
+          <div class="upload-sub-title">
+            This video will be published to @{{
+              this.$store.state.auth.userInfo.userName
+            }}
+          </div>
         </div>
         <div class="upload-contents">
-          <UploadOperation :videoFile="newFile" :videoUrl="newVideoUrl" @clearVideo="deleteVideo" @openVideoSelector="toggleSelectorVisible" />
+          <UploadOperation
+            :videoFile="newFile"
+            :videoUrl="newVideoUrl"
+            @clearVideo="deleteVideo"
+            @openVideoSelector="toggleSelectorVisible"
+          />
           <div class="upload-form-container">
-            <UploadForm :isListVisible="isLocationVisible" :isBtnDisabled="isDisabled" @setIsListVisible="toggleLocationVisible" @clearContents="deleteAll" @submitPost="addPost" />
+            <UploadForm
+              :isListVisible="isLocationVisible"
+              :isBtnDisabled="isDisabled"
+              @setIsListVisible="toggleLocationVisible"
+              @clearContents="deleteAll"
+              @submitPost="addPost"
+            />
           </div>
         </div>
       </div>
     </div>
-    <NasmoSelector v-if="isSelectorVisible" @closeModal="toggleSelectorVisible" @clickFileBtn="openFileSelector" @submitSelected="selectNasmo"></NasmoSelector>
+    <NasmoSelector
+      v-if="isSelectorVisible"
+      @closeModal="toggleSelectorVisible"
+      @clickFileBtn="openFileSelector"
+      @submitSelected="selectNasmo"
+    ></NasmoSelector>
   </div>
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid';
-import { storageService } from '@/lib/firebase';
-import * as postApi from '@/api/post';
+import { v4 as uuidv4 } from "uuid";
+import { storageService } from "@/lib/firebase";
+import * as postApi from "@/api/post";
 
-import AppHeader from '@/components/AppHeader.vue';
-import NasmoSelector from '@/components/NasmoSelector.vue';
-import UploadOperation from '@/components/UploadOperation.vue';
-import UploadForm from '@/components/UploadForm.vue';
+import AppHeader from "@/components/AppHeader.vue";
+import NasmoSelector from "@/components/NasmoSelector.vue";
+import UploadOperation from "@/components/UploadOperation.vue";
+import UploadForm from "@/components/UploadForm.vue";
 
-const THUMBNAIL_URL = 'https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/thumbnails%2Fthumbnail1.png?alt=media&token=693a8a6a-d028-4561-96af-50be2d8b17cc';
+const THUMBNAIL_URL =
+  "https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/thumbnails%2Fthumbnail1.png?alt=media&token=693a8a6a-d028-4561-96af-50be2d8b17cc";
 
 export default {
   data() {
     return {
-      newFile: '',
-      newVideoUrl: '',
+      newFile: "",
+      newVideoUrl: "",
       isSelectorVisible: false,
       isLocationVisible: false,
       isDisabled: true,
@@ -54,9 +75,9 @@ export default {
       // 나스모 선택창 닫고
       this.toggleSelectorVisible();
       // 파일 선택창 열기
-      let input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'video/*';
+      let input = document.createElement("input");
+      input.type = "file";
+      input.accept = "video/*";
       input.onchange = (event) => {
         this.handleFileChange(event);
       };
@@ -88,9 +109,11 @@ export default {
       event.preventDefault();
       try {
         // 만약 파일 선택창에서 선택한 파일이 있다면
-        if (this.newFile !== '') {
-          const storageRef = storageService.ref().child(`post-video/${uuidv4()}`);
-          const response = await storageRef.putString(this.newFile, 'data_url');
+        if (this.newFile !== "") {
+          const storageRef = storageService
+            .ref()
+            .child(`post-video/${uuidv4()}`);
+          const response = await storageRef.putString(this.newFile, "data_url");
           this.newVideoUrl = await response.ref.getDownloadURL();
         }
 
@@ -116,12 +139,10 @@ export default {
       }
     },
     /* 프로필 페이지 여는 함수 */
-    openProfilePage(event) {
-      event.preventDefault();
-
+    openProfilePage() {
       this.$router
         .push({
-          name: 'Profile',
+          name: "Profile",
           params: { userId: this.$store.state.auth.userInfo.userId },
         })
         .catch((error) => {
@@ -131,14 +152,14 @@ export default {
     },
     /* 작성한 모든 내용을 삭제하는 함수 */
     deleteAll() {
-      this.newFile = '';
-      this.newVideoUrl = '';
+      this.newFile = "";
+      this.newVideoUrl = "";
       this.toggleDisabled();
     },
     /* 비디오만 삭제하는 함수 */
     deleteVideo() {
-      this.newFile = '';
-      this.newVideoUrl = '';
+      this.newFile = "";
+      this.newVideoUrl = "";
       this.toggleDisabled();
     },
     /* 나스모 선택창 보이는 여부 설정하는 함수 */
