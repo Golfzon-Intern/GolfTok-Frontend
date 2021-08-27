@@ -41,6 +41,7 @@
 
 <script>
 import * as profileApi from '@/api/profile';
+import EventBus from '@/lib/eventBus';
 
 import LoginButton from '@/components/common/LoginButton.vue';
 
@@ -56,6 +57,11 @@ export default {
   },
   created() {
     this.getUserInfo();
+
+    EventBus.$on('login-success', () => {
+      this.getUserInfo();
+      console.log('login success header');
+    });
   },
   methods: {
     /* 프로필 사용자 정보 받아오는 함수 */

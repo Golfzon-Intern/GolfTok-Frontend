@@ -95,7 +95,7 @@ export default {
     EventBus.$on('login-success', () => {
       this.getRecommended();
       this.getFollowing();
-      console.log('login success');
+      console.log('login success sidebar');
     });
   },
   methods: {
