@@ -144,7 +144,8 @@ export default {
   created() {
     window.addEventListener("scroll", this.handleScroll);
     EventBus.$on("login-success", () => {
-      this.$router.go(this.$router.currentRoute);
+      this.postInfos = [];
+      this.getPostInfos(1);
       console.log("login success postlist");
     });
   },
@@ -179,38 +180,50 @@ export default {
     /* 무한스크롤링 핸들러 함수 (게시물 정보 받아옴) */
     async infiniteHandler($state) {
       try {
-        let response;
-        let posts;
+        const flag = this.getPostInfos(this.pageNum);
 
-        if (this.postType === 0) {
-          response = await postApi.getPosts(this.pageNum);
-          posts = response.data.allPostList;
-        } else {
-          response = await postApi.getFowPosts(this.pageNum);
-          posts = response.data.postList;
-        }
-
-        if (posts.length) {
-          for (const post of posts) {
-            const postObj = {
-              ...post,
-              postContent: this.separateHashtag(post.postContent, 0),
-              golfClub: this.separateHashtag(post.golfClub, 1),
-              isHover: false,
-              isMuted: true,
-              isPlaying: true,
-            };
-            this.postInfos.push(postObj);
-          }
+        if (flag) {
           this.pageNum += 1;
           $state.loaded();
         } else {
           $state.complete();
         }
+
         // video 태그로 추가된 동영상 정보 가져오기
         this.videos = document.getElementsByTagName("video");
       } catch (error) {
         console.log(error);
+      }
+    },
+    /* 게시물 정보 받아오는 함수 */
+    async getPostInfos(numOfPage) {
+      let response;
+      let posts;
+
+      if (this.postType === 0) {
+        response = await postApi.getPosts(numOfPage);
+        posts = response.data.allPostList;
+      } else {
+        response = await postApi.getFowPosts(numOfPage);
+        posts = response.data.postList;
+      }
+
+      if (posts.length) {
+        for (const post of posts) {
+          const postObj = {
+            ...post,
+            postContent: this.separateHashtag(post.postContent, 0),
+            golfClub: this.separateHashtag(post.golfClub, 1),
+            isHover: false,
+            isMuted: true,
+            isPlaying: true,
+          };
+          this.postInfos.push(postObj);
+        }
+
+        return true;
+      } else {
+        return false;
       }
     },
     /* 게시물에 있는 해시태그 분리하는 함수 */
