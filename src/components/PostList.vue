@@ -1,7 +1,11 @@
 <template>
   <div class="post-list-wrapper">
     <div v-if="postInfos" class="video-feed-container">
-      <div class="video-feed-item" v-for="(post, index) in postInfos" :key="index">
+      <div
+        class="video-feed-item"
+        v-for="(post, index) in postInfos"
+        :key="index"
+      >
         <a :href="`/profile/${post.userId}`" class="feed-item-avatar">
           <b-avatar class="user-pic" :src="post.userIcon" />
         </a>
@@ -46,18 +50,43 @@
             <strong v-html="post.postContent" />
           </div>
           <div v-if="!postType" class="item-follow-wrapper">
-            <FollowButton :targetId="post.userId" v-if="$store.state.auth.userInfo" />
+            <FollowButton
+              :targetId="post.userId"
+              v-if="$store.state.auth.userInfo"
+            />
           </div>
           <div class="item-video-container">
             <div class="item-video-wrapper">
-              <div class="video-card" @mouseenter="setIsHover(true, index)" @mouseleave="setIsHover(false, index)">
-                <video ref="videoRef" :src="post.videoRoot" type="video/mp4" autoplay loop muted preload="metadata" :poster="post.Thumbnail" @click="openPostDetail(post.postId, false)"></video>
+              <div
+                class="video-card"
+                @mouseenter="setIsHover(true, index)"
+                @mouseleave="setIsHover(false, index)"
+              >
+                <video
+                  ref="videoRef"
+                  :src="post.videoRoot"
+                  type="video/mp4"
+                  autoplay
+                  loop
+                  muted
+                  preload="metadata"
+                  :poster="post.Thumbnail"
+                  @click="openPostDetail(post.postId, false)"
+                ></video>
                 <span class="style-layer-mask"></span>
-                <div class="volume-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="toggleVideoMute(index)">
+                <div
+                  class="volume-btn"
+                  :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]"
+                  @click="toggleVideoMute(index)"
+                >
                   <i v-if="post.isMuted" class="fas fa-volume-mute"></i>
                   <i v-else class="fas fa-volume-up"></i>
                 </div>
-                <div class="play-btn" :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]" @click="toggleVideoPlay(index)">
+                <div
+                  class="play-btn"
+                  :style="[post.isHover ? { opacity: '1' } : { opacity: '0' }]"
+                  @click="toggleVideoPlay(index)"
+                >
                   <i v-if="post.isPlaying" class="fas fa-pause"></i>
                   <i v-else class="fas fa-play"></i>
                 </div>
@@ -65,10 +94,20 @@
             </div>
             <div class="item-action-bar">
               <div class="bar-item-wrapper">
-                <LikeButton :targetType="'post'" :targetId="post.postId" :styleType="0"></LikeButton>
+                <LikeButton
+                  :targetType="'post'"
+                  :targetId="post.postId"
+                  :styleType="0"
+                ></LikeButton>
               </div>
-              <div class="bar-item-wrapper" @click="openPostDetail(post.postId, true)">
-                <CommentButton :targetId="post.postId" :styleType="0"></CommentButton>
+              <div
+                class="bar-item-wrapper"
+                @click="openPostDetail(post.postId, true)"
+              >
+                <CommentButton
+                  :targetId="post.postId"
+                  :styleType="0"
+                ></CommentButton>
               </div>
             </div>
           </div>
@@ -80,12 +119,13 @@
 </template>
 
 <script>
-import InfiniteLoading from 'vue-infinite-loading';
-import * as postApi from '@/api/post';
+import InfiniteLoading from "vue-infinite-loading";
+import EventBus from "@/lib/eventBus";
+import * as postApi from "@/api/post";
 
-import LikeButton from '@/components/common/LikeButton.vue';
-import CommentButton from '@/components/common/CommentButton.vue';
-import FollowButton from '@/components/common/FollowButton.vue';
+import LikeButton from "@/components/common/LikeButton.vue";
+import CommentButton from "@/components/common/CommentButton.vue";
+import FollowButton from "@/components/common/FollowButton.vue";
 
 export default {
   data: function() {
@@ -102,31 +142,35 @@ export default {
     },
   },
   created() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
+    EventBus.$on("login-success", () => {
+      this.$router.go(this.$router.currentRoute);
+      console.log("login success postlist");
+    });
   },
   destroyed() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   },
   computed: {
     volumnBtnStyle() {
       if (this.isVideoHover) {
         return {
-          opacity: '1',
+          opacity: "1",
         };
       } else {
         return {
-          opacity: '0',
+          opacity: "0",
         };
       }
     },
     playBtnStyle() {
       if (this.isVideoHover) {
         return {
-          opacity: '1',
+          opacity: "1",
         };
       } else {
         return {
-          opacity: '0',
+          opacity: "0",
         };
       }
     },
@@ -164,7 +208,7 @@ export default {
           $state.complete();
         }
         // video 태그로 추가된 동영상 정보 가져오기
-        this.videos = document.getElementsByTagName('video');
+        this.videos = document.getElementsByTagName("video");
       } catch (error) {
         console.log(error);
       }
@@ -172,25 +216,30 @@ export default {
     /* 게시물에 있는 해시태그 분리하는 함수 */
     separateHashtag(text, type) {
       let newText = text;
-      if (!newText) return type ? [] : '';
+      if (!newText) return type ? [] : "";
 
       if (type) {
         // 텍스트에 해시태그만 있는 경우
-        const newTags = newText.split(' ');
+        const newTags = newText.split(" ");
         return newTags;
       }
 
       let hashReg = /#(\w+|[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+)/g;
-      newText = newText.toString().replace(hashReg, '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>');
+      newText = newText
+        .toString()
+        .replace(
+          hashReg,
+          '<a href="/search/$1" style="text-decoration:none; color:#fa5252;">#$1</a>'
+        );
       return newText;
     },
     /* 게시물 상세보기 페이지 여는 함수 */
     openPostDetail(postId, isComment) {
       if (isComment && !this.$store.state.auth.userInfo) {
         // 로그인 모달 열기
-        this.$emit('openLoginModal', true);
+        this.$emit("openLoginModal", true);
       } else {
-        this.$emit('openPage', postId);
+        this.$emit("openPage", postId);
       }
     },
     /* 스크롤 핸들러 함수 (스크롤 될 때, 동영상 자동재생) */
@@ -220,8 +269,22 @@ export default {
         r = x + parseInt(w);
         b = y + parseInt(h);
 
-        visibleX = Math.max(0, Math.min(w, window.pageXOffset + window.innerWidth - x, r - window.pageXOffset));
-        visibleY = Math.max(0, Math.min(h, window.pageYOffset + window.innerHeight - y, b - window.pageYOffset));
+        visibleX = Math.max(
+          0,
+          Math.min(
+            w,
+            window.pageXOffset + window.innerWidth - x,
+            r - window.pageXOffset
+          )
+        );
+        visibleY = Math.max(
+          0,
+          Math.min(
+            h,
+            window.pageYOffset + window.innerHeight - y,
+            b - window.pageYOffset
+          )
+        );
 
         visible = (visibleX * visibleY) / (w * h);
 
