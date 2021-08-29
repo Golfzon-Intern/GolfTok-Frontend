@@ -3,39 +3,24 @@
     <div class="side-scroll-wrapper">
       <div class="upper-contents">
         <div class="nav-wrapper">
-          <div
-            class="nav-item"
-            :class="{ navActive: isActive === 0 }"
-            @click="handleNavigation(0)"
-          >
+          <div class="nav-item" :class="{ navActive: isActive === 0 }" @click="handleNavigation(0)">
             <i class="fas fa-home"></i>
             <h2 class="nav-name">For You</h2>
           </div>
-          <div
-            class="nav-item"
-            :class="{ navActive: isActive === 1 }"
-            @click="handleNavigation(1)"
-          >
+          <div class="nav-item" :class="{ navActive: isActive === 1 }" @click="handleNavigation(1)">
             <i class="fas fa-user-friends"></i>
             <h2 class="nav-name">Following</h2>
           </div>
         </div>
         <div v-if="!this.$store.state.auth.userInfo" class="login-wrapper">
-          <span
-            >Log in to follow creators, like videos, and view comments.</span
-          >
+          <span>Log in to follow creators, like videos, and view comments.</span>
           <LoginButton :styleType="1" />
         </div>
         <div class="user-list">
           <div class="user-list-header">
             <span>Suggested accounts</span>
           </div>
-          <a
-            :href="`/profile/${user.userId}`"
-            class="user-item"
-            v-for="(user, index) in recommendations"
-            :key="index"
-          >
+          <a :href="`/profile/${user.userId}`" class="user-item" v-for="(user, index) in recommendations" :key="index">
             <span class="user-item-inner">
               <div class="user-avatar">
                 <b-avatar class="user-pic" :src="user.userIcon" size="2rem" />
@@ -57,12 +42,7 @@
           <div class="user-list-header">
             <span>Following accounts</span>
           </div>
-          <a
-            :href="`/profile/${user.userId}`"
-            class="user-item"
-            v-for="(user, index) in followings"
-            :key="index"
-          >
+          <a :href="`/profile/${user.userId}`" class="user-item" v-for="(user, index) in followings" :key="index">
             <span class="user-item-inner">
               <div class="user-avatar">
                 <b-avatar class="user-pic" :src="user.userIcon" size="2rem" />
@@ -80,6 +60,17 @@
             <p>See all</p>
           </div>
         </div>
+        <div class="discover-list-container">
+          <div class="discover-list-header">Discover</div>
+          <div class="discover-list">
+            <a :href="`/search/${discovery.hashtagContent}`" v-for="(discovery, index) in discoveries" :key="index">
+              <div class="discover-item-container">
+                <i class="fas fa-hashtag"></i>
+                <span class="discover-item-text">{{ discovery.hashtagContent }}</span>
+              </div>
+            </a>
+          </div>
+        </div>
       </div>
       <div class="bottom-wrapper">
         <span class="copyright">&copy; 2021 GolfTok</span>
@@ -89,16 +80,18 @@
 </template>
 
 <script>
-import * as friendApi from "@/api/friend";
-import EventBus from "@/lib/eventBus";
+import * as friendApi from '@/api/friend';
+import * as searchApi from '@/api/search';
+import EventBus from '@/lib/eventBus';
 
-import LoginButton from "@/components/common/LoginButton.vue";
+import LoginButton from '@/components/common/LoginButton.vue';
 
 export default {
   data() {
     return {
       recommendations: [],
       followings: [],
+      discoveries: [],
       isHover: false,
     };
   },
@@ -111,11 +104,12 @@ export default {
   created() {
     this.getRecommended();
     this.getFollowing();
+    this.getDiscovery();
 
-    EventBus.$on("login-success", () => {
+    EventBus.$on('login-success', () => {
       this.getRecommended();
       this.getFollowing();
-      console.log("login success sidebar");
+      console.log('login success sidebar');
     });
   },
   methods: {
@@ -125,7 +119,7 @@ export default {
         if (this.$store.state.auth.userInfo) {
           this.$router
             .push({
-              name: "Following",
+              name: 'Following',
             })
             .catch((error) => {
               this.$router.go(this.$router.currentRoute);
@@ -137,7 +131,7 @@ export default {
       } else {
         this.$router
           .push({
-            name: "Home",
+            name: 'Home',
           })
           .catch((error) => {
             this.$router.go(this.$router.currentRoute);
@@ -147,7 +141,7 @@ export default {
     },
     /* 로그인 모달 여는 함수 */
     openLoginModal() {
-      this.$emit("openModal", true);
+      this.$emit('openModal', true);
     },
     /* 추천 계정 정보 받아오는 함수 */
     async getRecommended() {
@@ -163,6 +157,14 @@ export default {
       try {
         const response = await friendApi.getFowFriendShort();
         this.followings = response.data.followingList;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getDiscovery() {
+      try {
+        const response = await searchApi.getTrendKeyword();
+        this.discoveries = response.data.hasgtagList;
       } catch (error) {
         console.log(error);
       }
@@ -369,6 +371,67 @@ export default {
   color: var(--accent-main-color);
 }
 
+.discover-list-container {
+  padding: 16px 8px 8px 8px;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.discover-list-header {
+  font-weight: 600;
+  padding-bottom: 16px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--text-sub-color);
+}
+
+.discover-list {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.discover-list a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.discover-item-container {
+  width: fit-content;
+  max-width: 100%;
+  height: 24px;
+  box-sizing: border-box;
+  margin-right: 8px;
+  margin-bottom: 12px;
+  padding: 3px 10px;
+  display: flex;
+  border: 1px solid rgba(22, 24, 35, 0.12);
+  border-radius: 12px;
+  background: var(--background-color);
+  transition: all 200ms ease 0s;
+}
+.discover-item-container:hover {
+  background-color: rgba(22, 24, 35, 0.06);
+  border-color: rgba(22, 24, 35, 0.2);
+}
+.discover-item-container i {
+  display: flex;
+  align-items: center;
+  color: var(--text-sub-color);
+}
+
+.discover-item-text {
+  padding-left: 6px;
+  align-self: center;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--text-sub-color);
+}
+
 .bottom-wrapper {
   position: relative;
   padding: 16px 8px 24px 8px;
@@ -388,8 +451,9 @@ export default {
 
 .upper-contents .login-wrapper::before,
 .user-list::before,
+.discover-list-container::before,
 .bottom-wrapper::before {
-  content: "";
+  content: '';
   position: absolute;
   height: 1px;
   left: 8px;
@@ -433,6 +497,10 @@ export default {
   }
 
   .see-all {
+    display: none;
+  }
+
+  .discover-list-container {
     display: none;
   }
 
