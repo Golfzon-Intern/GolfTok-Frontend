@@ -64,7 +64,7 @@
           <div class="discover-list-header">Discover</div>
           <div class="discover-list">
             <a :href="`/search/${discovery.hashtagContent}`" v-for="(discovery, index) in discoveries" :key="index">
-              <div class="discover-item-container">
+              <div class="discover-item-wrapper">
                 <i class="fas fa-hashtag"></i>
                 <span class="discover-item-text">{{ discovery.hashtagContent }}</span>
               </div>
@@ -161,6 +161,7 @@ export default {
         console.log(error);
       }
     },
+    /* 트랜딩 키워드 정보 받아오는 함수 */
     async getDiscovery() {
       try {
         const response = await searchApi.getTrendKeyword();
@@ -396,7 +397,7 @@ export default {
   cursor: pointer;
 }
 
-.discover-item-container {
+.discover-item-wrapper {
   width: fit-content;
   max-width: 100%;
   height: 24px;
@@ -409,15 +410,17 @@ export default {
   border-radius: 12px;
   background: var(--background-color);
   transition: all 200ms ease 0s;
+  color: var(--text-sub-color);
 }
-.discover-item-container:hover {
-  background-color: rgba(22, 24, 35, 0.06);
-  border-color: rgba(22, 24, 35, 0.2);
+.discover-item-wrapper:hover {
+  /* background-color: rgba(53, 66, 136, 0.06); */
+  /* border-color: rgba(22, 24, 35, 0.2); */
+  /* text-decoration: underline; */
+  color: var(--accent-main-color);
 }
-.discover-item-container i {
+.discover-item-wrapper i {
   display: flex;
   align-items: center;
-  color: var(--text-sub-color);
 }
 
 .discover-item-text {
@@ -429,7 +432,6 @@ export default {
   white-space: nowrap;
   font-size: 0.875rem;
   line-height: 1.4;
-  color: var(--text-sub-color);
 }
 
 .bottom-wrapper {

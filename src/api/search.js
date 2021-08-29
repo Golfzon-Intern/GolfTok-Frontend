@@ -1,6 +1,12 @@
 import axios from 'axios';
 import http from '@/api/http';
 
+// 인기 키워드 조회
+export function getTrendKeyword() {
+  return http.get('/post/hashtag');
+  // return axios.get('https://gist.githubusercontent.com/Joie-Kim/0442d4ddc6ed71b9a7cca2c9f8428f33/raw/8483ee37c6983d176edbc653c0bddebb1c5c302e/dummy_trendKeyword.json');
+}
+
 // 키워드 검색
 export function getSearchResult(keyword) {
   return http.get('/post/search', { params: { keyword: keyword } });

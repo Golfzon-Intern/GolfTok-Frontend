@@ -2,20 +2,12 @@
   <div class="header-content-wrapper">
     <div class="header-logo">
       <a href="/">
-        <img
-          src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/assets%2Flogo-1.png?alt=media&token=c34366aa-9387-4d86-b9bc-9d2a992c7549"
-          alt="logo"
-        />
+        <img src="https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/assets%2Flogo-1.png?alt=media&token=c34366aa-9387-4d86-b9bc-9d2a992c7549" alt="logo" />
       </a>
     </div>
     <div class="search-input-container">
       <form class="search-input">
-        <input
-          type="search"
-          v-model="searchText"
-          @keyup.enter="submitSearchText"
-          placeholder="Search #golf ..."
-        />
+        <input type="search" v-model="searchText" @keyup.enter="submitSearchText" placeholder="Search #golf ..." />
         <span class="split"></span>
         <button type="submit" @click="submitSearchText">
           <i class="fas fa-search"></i>
@@ -39,64 +31,84 @@
       </div>
     </div>
     <div v-if="isModalVisible" class="search-modal-container">
-      <form class="search-modal-input" @submit="submitSearchText">
-        <input
-          type="search"
-          v-model="searchText"
-          @keyup.enter="submitSearchText"
-          placeholder="Search #golf ..."
-        />
-      </form>
-      <button class="search-modal-submit" @click="submitSearchText">
-        Search
-      </button>
+      <div class="search-modal-form">
+        <form class="search-modal-input" @submit="submitSearchText">
+          <input type="search" v-model="searchText" @keyup.enter="submitSearchText" placeholder="Search #golf ..." />
+        </form>
+        <button class="search-modal-submit" @click="submitSearchText">
+          Search
+        </button>
+      </div>
+      <div class="keyword-list-container">
+        <div class="keyword-list-header">Trend keyword</div>
+        <div class="keyword-list">
+          <a :href="`/search/${keyword.hashtagContent}`" v-for="(keyword, index) in trendKeywords" :key="index">
+            <div class="keyword-item-wrapper">
+              <i class="fas fa-hashtag"></i>
+              <div class="keyword-item-text">{{ keyword.hashtagContent }}</div>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import * as profileApi from "@/api/profile";
-import EventBus from "@/lib/eventBus";
+import * as profileApi from '@/api/profile';
+import * as searchApi from '@/api/search';
+import EventBus from '@/lib/eventBus';
 
-import LoginButton from "@/components/common/LoginButton.vue";
+import LoginButton from '@/components/common/LoginButton.vue';
 
-const USER_DEFAULT_IMG =
-  "https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/user_photo%2Fuser_photo_default.jpeg?alt=media&token=087db47b-26ea-4317-9bde-f6c7ac53c76d";
+const USER_DEFAULT_IMG = 'https://firebasestorage.googleapis.com/v0/b/golftok-3275c.appspot.com/o/user_photo%2Fuser_photo_default.jpeg?alt=media&token=087db47b-26ea-4317-9bde-f6c7ac53c76d';
 
 export default {
   data: function() {
     return {
       userImg: USER_DEFAULT_IMG,
-      searchText: "",
+      trendKeywords: [],
+      searchText: '',
       isModalVisible: false,
     };
   },
   created() {
     this.getUserInfo();
+    this.getTrendKeyword();
 
-    EventBus.$on("login-success", () => {
+    EventBus.$on('login-success', () => {
       this.getUserInfo();
-      console.log("login success header");
+      console.log('login success header');
     });
   },
   methods: {
     /* 프로필 사용자 정보 받아오는 함수 */
     async getUserInfo() {
-      const response = await profileApi.getProfileInfo(true);
-      this.userImg =
-        response.data.user.userIcon !== null
-          ? response.data.user.userIcon
-          : USER_DEFAULT_IMG;
+      try {
+        const response = await profileApi.getProfileInfo(true);
+        this.userImg = response.data.user.userIcon !== null ? response.data.user.userIcon : USER_DEFAULT_IMG;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    /* 트랜딩 키워드 정보 받아오는 함수 */
+    async getTrendKeyword() {
+      try {
+        const response = await searchApi.getTrendKeyword();
+        this.trendKeywords = response.data.hasgtagList;
+      } catch (error) {
+        console.log(error);
+      }
     },
     /* 로그인 모달 여는 함수 */
     openLoginModal() {
-      this.$emit("openModal", true);
+      this.$emit('openModal', true);
     },
     /* 업로드 페이지 여는 함수 */
     openUploadPage() {
       this.$router
         .push({
-          name: "Upload",
+          name: 'Upload',
         })
         .catch((error) => {
           this.$router.go(this.$router.currentRoute);
@@ -109,7 +121,7 @@ export default {
 
       this.$router
         .push({
-          name: "Profile",
+          name: 'Profile',
           params: { userId: this.$store.state.auth.userInfo.userId },
         })
         .catch((error) => {
@@ -124,7 +136,7 @@ export default {
       if (this.searchText.length) {
         this.$router
           .push({
-            name: "SearchResult",
+            name: 'SearchResult',
             params: { keyword: this.searchText },
           })
           .catch((error) => {
@@ -284,18 +296,29 @@ export default {
   .search-modal-container {
     position: absolute;
     left: 0;
-    bottom: -121px;
+    bottom: -201px;
     width: 100%;
-    height: 120px;
+    height: 200px;
+    box-sizing: border-box;
+    padding: 12px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
     background-color: var(--supplement-color);
     z-index: 10;
   }
 
+  .search-modal-form {
+    display: flex;
+    /* flex-direction: row; */
+    align-items: center;
+    justify-content: center;
+    /* background-color: aquamarine; */
+  }
+
   .search-modal-input {
     position: relative;
+    width: 400px;
     margin-top: 0;
     padding: 12px 16px;
     display: flex;
@@ -307,7 +330,7 @@ export default {
     background: var(--background-color);
   }
   .search-modal-input input {
-    width: 292px;
+    width: 100%;
     box-sizing: border-box;
     padding: 0;
     font-weight: 400;
@@ -328,6 +351,69 @@ export default {
     background-color: inherit;
     color: var(--text-sub-color);
     opacity: 0.7;
+  }
+
+  .keyword-list-container {
+    position: relative;
+    width: 500px;
+    margin-top: 12px;
+    padding: 12px 0px 0px 12px;
+    /* background-color: bisque; */
+  }
+
+  .keyword-list-header {
+    font-weight: 600;
+    padding-bottom: 16px;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--text-sub-color);
+  }
+
+  .keyword-list {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .keyword-list a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .keyword-item-wrapper {
+    width: fit-content;
+    max-width: 100%;
+    height: 24px;
+    box-sizing: border-box;
+    margin-right: 8px;
+    margin-bottom: 12px;
+    padding: 3px 10px;
+    display: flex;
+    border: 1px solid rgba(22, 24, 35, 0.12);
+    border-radius: 12px;
+    background: var(--background-color);
+    transition: all 200ms ease 0s;
+    color: var(--text-sub-color);
+  }
+  .keyword-item-wrapper:hover {
+    /* background-color: rgba(53, 66, 136, 0.06); */
+    /* border-color: rgba(22, 24, 35, 0.2); */
+    /* text-decoration: underline; */
+    color: var(--accent-main-color);
+  }
+  .keyword-item-wrapper i {
+    display: flex;
+    align-items: center;
+  }
+
+  .keyword-item-text {
+    padding-left: 6px;
+    align-self: center;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    line-height: 1.4;
   }
 }
 </style>
