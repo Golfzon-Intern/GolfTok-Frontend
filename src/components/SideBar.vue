@@ -187,14 +187,11 @@ export default {
         console.log(error);
       }
     },
-    /* 트랜딩 키워드 정보 받아오는 함수 */
+    /* 트렌딩 키워드 정보 받아오는 함수 */
     async getDiscovery() {
       try {
         const response = await searchApi.getTrendKeyword();
-        this.discoveries = response.data.hasgtagList;
-        console.log("sidebar");
-        console.log(response);
-        console.log(this.discoveries);
+        this.discoveries = response.data.hashtagList;
       } catch (error) {
         console.log(error);
       }

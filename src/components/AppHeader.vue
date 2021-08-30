@@ -112,14 +112,11 @@ export default {
         console.log(error);
       }
     },
-    /* 트랜딩 키워드 정보 받아오는 함수 */
+    /* 트렌딩 키워드 정보 받아오는 함수 */
     async getTrendKeyword() {
       try {
         const response = await searchApi.getTrendKeyword();
-        this.trendKeywords = response.data.hasgtagList;
-        console.log("app header");
-        console.log(response);
-        console.log(this.trendKeywords);
+        this.trendKeywords = response.data.hashtagList;
       } catch (error) {
         console.log(error);
       }
