@@ -126,6 +126,7 @@ export default {
         this.userId
       );
       this.userInfo = response.data.user;
+      console.log(this.userInfo);
     },
     /* 게시물 상세보기 페이지 여는 함수 */
     openDetailPage(postId) {
