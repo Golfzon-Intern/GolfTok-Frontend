@@ -3,24 +3,39 @@
     <div class="side-scroll-wrapper">
       <div class="upper-contents">
         <div class="nav-wrapper">
-          <div class="nav-item" :class="{ navActive: isActive === 0 }" @click="handleNavigation(0)">
+          <div
+            class="nav-item"
+            :class="{ navActive: isActive === 0 }"
+            @click="handleNavigation(0)"
+          >
             <i class="fas fa-home"></i>
             <h2 class="nav-name">For You</h2>
           </div>
-          <div class="nav-item" :class="{ navActive: isActive === 1 }" @click="handleNavigation(1)">
+          <div
+            class="nav-item"
+            :class="{ navActive: isActive === 1 }"
+            @click="handleNavigation(1)"
+          >
             <i class="fas fa-user-friends"></i>
             <h2 class="nav-name">Following</h2>
           </div>
         </div>
         <div v-if="!this.$store.state.auth.userInfo" class="login-wrapper">
-          <span>Log in to follow creators, like videos, and view comments.</span>
+          <span
+            >Log in to follow creators, like videos, and view comments.</span
+          >
           <LoginButton :styleType="1" />
         </div>
         <div class="user-list">
           <div class="user-list-header">
             <span>Suggested accounts</span>
           </div>
-          <a :href="`/profile/${user.userId}`" class="user-item" v-for="(user, index) in recommendations" :key="index">
+          <a
+            :href="`/profile/${user.userId}`"
+            class="user-item"
+            v-for="(user, index) in recommendations"
+            :key="index"
+          >
             <span class="user-item-inner">
               <div class="user-avatar">
                 <b-avatar class="user-pic" :src="user.userIcon" size="2rem" />
@@ -42,7 +57,12 @@
           <div class="user-list-header">
             <span>Following accounts</span>
           </div>
-          <a :href="`/profile/${user.userId}`" class="user-item" v-for="(user, index) in followings" :key="index">
+          <a
+            :href="`/profile/${user.userId}`"
+            class="user-item"
+            v-for="(user, index) in followings"
+            :key="index"
+          >
             <span class="user-item-inner">
               <div class="user-avatar">
                 <b-avatar class="user-pic" :src="user.userIcon" size="2rem" />
@@ -63,10 +83,16 @@
         <div class="discover-list-container">
           <div class="discover-list-header">Discover</div>
           <div class="discover-list">
-            <a :href="`/search/${discovery.hashtagContent}`" v-for="(discovery, index) in discoveries" :key="index">
+            <a
+              :href="`/search/${discovery.hashtagContent}`"
+              v-for="(discovery, index) in discoveries"
+              :key="index"
+            >
               <div class="discover-item-wrapper">
                 <i class="fas fa-hashtag"></i>
-                <span class="discover-item-text">{{ discovery.hashtagContent }}</span>
+                <span class="discover-item-text">{{
+                  discovery.hashtagContent
+                }}</span>
               </div>
             </a>
           </div>
@@ -80,11 +106,11 @@
 </template>
 
 <script>
-import * as friendApi from '@/api/friend';
-import * as searchApi from '@/api/search';
-import EventBus from '@/lib/eventBus';
+import * as friendApi from "@/api/friend";
+import * as searchApi from "@/api/search";
+import EventBus from "@/lib/eventBus";
 
-import LoginButton from '@/components/common/LoginButton.vue';
+import LoginButton from "@/components/common/LoginButton.vue";
 
 export default {
   data() {
@@ -106,10 +132,10 @@ export default {
     this.getFollowing();
     this.getDiscovery();
 
-    EventBus.$on('login-success', () => {
+    EventBus.$on("login-success", () => {
       this.getRecommended();
       this.getFollowing();
-      console.log('login success sidebar');
+      console.log("login success sidebar");
     });
   },
   methods: {
@@ -119,7 +145,7 @@ export default {
         if (this.$store.state.auth.userInfo) {
           this.$router
             .push({
-              name: 'Following',
+              name: "Following",
             })
             .catch((error) => {
               this.$router.go(this.$router.currentRoute);
@@ -131,7 +157,7 @@ export default {
       } else {
         this.$router
           .push({
-            name: 'Home',
+            name: "Home",
           })
           .catch((error) => {
             this.$router.go(this.$router.currentRoute);
@@ -141,7 +167,7 @@ export default {
     },
     /* 로그인 모달 여는 함수 */
     openLoginModal() {
-      this.$emit('openModal', true);
+      this.$emit("openModal", true);
     },
     /* 추천 계정 정보 받아오는 함수 */
     async getRecommended() {
@@ -166,6 +192,9 @@ export default {
       try {
         const response = await searchApi.getTrendKeyword();
         this.discoveries = response.data.hasgtagList;
+        console.log("sidebar");
+        console.log(response);
+        console.log(this.discoveries);
       } catch (error) {
         console.log(error);
       }
@@ -455,7 +484,7 @@ export default {
 .user-list::before,
 .discover-list-container::before,
 .bottom-wrapper::before {
-  content: '';
+  content: "";
   position: absolute;
   height: 1px;
   left: 8px;
