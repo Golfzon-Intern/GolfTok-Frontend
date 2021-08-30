@@ -299,6 +299,7 @@ export default {
         // 부모 인덱스가 있으면 (자식 댓글이라는 의미)
         // 자식 댓글 삭제
         this.comments[parentIndex].children.splice(index, 1);
+        this.comments[parentIndex].childrenCount -= 1;
       } else {
         // 부모 댓글 삭제
         this.comments.splice(index, 1);
