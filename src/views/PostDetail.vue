@@ -281,6 +281,7 @@ export default {
           id: response.data.comment.commentId,
           state: 1,
         };
+        this.replyTo = {};
       } catch (error) {
         console.log(error);
       }
