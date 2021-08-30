@@ -13,15 +13,34 @@
         <header class="contents-header">
           <div class="contents-user-info">
             <div class="user-info-img">
-              <b-avatar class="user-pic" :src="userInfo.userIcon" size="7.5rem" />
+              <b-avatar
+                class="user-pic"
+                :src="userInfo.userIcon"
+                size="7.5rem"
+              />
             </div>
             <div class="user-info-text">
               <h2 class="user-title">{{ userInfo.userName }}</h2>
               <h3 class="user-sub-title">{{ userInfo.userNickname }}</h3>
               <div class="user-follow-container" v-if="!isMine">
-                <FollowButton :targetId="Number(this.$route.params.userId)" v-if="$store.state.auth.userInfo" />
+                <FollowButton
+                  :targetId="Number(this.$route.params.userId)"
+                  v-if="$store.state.auth.userInfo"
+                />
               </div>
             </div>
+          </div>
+          <div class="contents-golf-info">
+            <span class="golf-grade"
+              >등급 - <b>{{ userInfo.userGrade }}</b></span
+            >
+            <span class="golf-handicap"
+              >핸디캡 - <b>{{ userInfo.handicap }}</b></span
+            >
+            <span class="golf-rolmodel"
+              ><b>{{ userInfo.roleModel }}</b
+              >처럼 되려고 노력 중</span
+            >
           </div>
           <div class="contents-count-info">
             <div class="count-wrapper">
@@ -36,22 +55,32 @@
           <h2 class="content-bio-info">{{ userInfo.introductionMessage }}</h2>
         </header>
         <main class="contents-main">
-          <PostList @openPage="openDetailPage" @openLoginModal="toggleModal" :key="userId" />
+          <PostList
+            @openPage="openDetailPage"
+            @openLoginModal="toggleModal"
+            :key="userId"
+          />
         </main>
       </div>
     </div>
-    <LoginModal v-if="isVisibleModal" @close="isVisibleModal = false" :isVisible="isVisibleModal" @closeModal="toggleModal"> </LoginModal>
+    <LoginModal
+      v-if="isVisibleModal"
+      @close="isVisibleModal = false"
+      :isVisible="isVisibleModal"
+      @closeModal="toggleModal"
+    >
+    </LoginModal>
   </div>
 </template>
 
 <script>
-import * as profileApi from '@/api/profile';
+import * as profileApi from "@/api/profile";
 
-import AppHeader from '@/components/AppHeader.vue';
-import SideBar from '@/components/SideBar.vue';
-import LoginModal from '@/components/common/LoginModal.vue';
-import FollowButton from '@/components/common/FollowButton.vue';
-import PostList from '@/components/ProfilePostList.vue';
+import AppHeader from "@/components/AppHeader.vue";
+import SideBar from "@/components/SideBar.vue";
+import LoginModal from "@/components/common/LoginModal.vue";
+import FollowButton from "@/components/common/FollowButton.vue";
+import PostList from "@/components/ProfilePostList.vue";
 
 export default {
   data() {
@@ -77,7 +106,7 @@ export default {
     },
   },
   watch: {
-    '$route.params.userId': {
+    "$route.params.userId": {
       handler: function(value) {
         this.userId = value;
         this.getUserInfo();
@@ -92,13 +121,16 @@ export default {
   methods: {
     /* 프로필 사용자 정보 받아오는 함수 */
     async getUserInfo() {
-      const response = await profileApi.getProfileInfo(this.isMine, this.userId);
+      const response = await profileApi.getProfileInfo(
+        this.isMine,
+        this.userId
+      );
       this.userInfo = response.data.user;
     },
     /* 게시물 상세보기 페이지 여는 함수 */
     openDetailPage(postId) {
       this.$router.push({
-        name: 'PostDetail',
+        name: "PostDetail",
         params: { postId: postId },
       });
     },
@@ -110,8 +142,8 @@ export default {
       // 검색 결과 페이지가 스크롤 되지 않도록 함
       if (this.isVisibleModal) {
         this.styleObj = {
-          position: 'fixed',
-          overflow: 'hidden',
+          position: "fixed",
+          overflow: "hidden",
         };
       } else {
         this.styleObj = {};
@@ -179,6 +211,22 @@ export default {
   height: 25px;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.contents-golf-info {
+  margin-top: 12px;
+  /* background-color: red; */
+}
+.contents-golf-info span {
+  padding: 0 8px;
+  margin-right: 8px;
+  text-align: center;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.8;
+  color: var(--text-sub-color);
+  border-radius: 5px;
+  background-color: var(--accent-sub-color);
 }
 
 .contents-count-info {
