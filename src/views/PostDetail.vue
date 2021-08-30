@@ -258,12 +258,14 @@ export default {
           groupLayer: isChild ? 1 : 0,
         };
         const response = await commentApi.addComment(newObj);
+        console.log(response);
 
         if (isChild) {
           // 추가하려는 댓글이 대댓글(자식 댓글)일 경우
           const newComment = response.data.comment;
 
           this.comments[parentIndex].children.push(newComment);
+          this.comments[parentIndex].childrenCount += 1;
           this.toggleReplyOpen(parentIndex, true);
         } else {
           // 추가하려는 댓글이 댓글(부모 댓글)일 경우

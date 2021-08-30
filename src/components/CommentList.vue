@@ -1,37 +1,70 @@
 <template>
   <div id="parent-comments">
     <transition-group name="list" tag="div">
-      <div class="comment-item" v-for="(comment, index) in comments" :key="comment.commentId">
+      <div
+        class="comment-item"
+        v-for="(comment, index) in comments"
+        :key="comment.commentId"
+      >
         <div class="comment-content">
           <a :href="`/profile/${comment.userId}`" class="comment-avatar">
             <b-avatar class="user-pic" :src="comment.userIcon" size="2.5rem" />
           </a>
           <div class="comment-content-container">
-            <a :href="`/profile/${comment.userId}`" class="user-info">{{ comment.userNickname }}</a>
+            <a :href="`/profile/${comment.userId}`" class="user-info">{{
+              comment.userNickname
+            }}</a>
             <div class="comment-text">
               <span>{{ comment.commentText }}</span>
               <div class="bottom-container">
                 <span class="comment-time">{{ comment.uploadDate }}</span>
-                <span class="reply-btn" @click="clickReplyBtn(comment.userName, comment.commentGroup, index)">reply</span>
+                <span
+                  class="reply-btn"
+                  @click="
+                    clickReplyBtn(comment.userName, comment.commentGroup, index)
+                  "
+                  >reply</span
+                >
               </div>
             </div>
           </div>
           <div class="action-container">
-            <div v-if="loginUser === comment.userName" class="delete-btn" @click="clickDeleteBtn(comment.commentId, null, index)">
+            <div
+              v-if="loginUser === comment.userName"
+              class="delete-btn"
+              @click="clickDeleteBtn(comment.commentId, null, index)"
+            >
               <i class="fas fa-trash"></i>
               <strong>del</strong>
             </div>
-            <LikeButton :targetType="'comment'" :targetId="comment.commentId" :styleType="2" />
+            <LikeButton
+              :targetType="'comment'"
+              :targetId="comment.commentId"
+              :styleType="2"
+            />
           </div>
         </div>
-        <div class="more-contents">
-          <div class="more-btn" v-if="!comment.isReplyOpened" @click="toggleChildList(index, true)">
-            <span class="more-text">View more replies</span>
+        <div class="more-contents" v-if="comment.childrenCount">
+          <div
+            class="more-btn"
+            v-if="!comment.isReplyOpened"
+            @click="toggleChildList(index, true)"
+          >
+            <span class="more-text"
+              >View more replies ({{ comment.childrenCount }})</span
+            >
             <span class="more-icon">
               <i class="fas fa-chevron-down"></i>
             </span>
           </div>
-          <childCommentList v-else :targetOrder="index" :childcomments="comment.children" @clickReplyChild="clickReplyBtn" @clickDelete="clickDeleteBtn" @clickHideList="toggleChildList" />
+          <childCommentList
+            v-else
+            :targetOrder="index"
+            :childcomments="comment.children"
+            @clickReplyChild="clickReplyBtn"
+            @clickDelete="clickDeleteBtn"
+            @clickHideList="toggleChildList"
+          />
         </div>
       </div>
     </transition-group>
@@ -39,8 +72,8 @@
 </template>
 
 <script>
-import LikeButton from '@/components/common/LikeButton.vue';
-import ChildCommentList from '@/components/ChildCommentList.vue';
+import LikeButton from "@/components/common/LikeButton.vue";
+import ChildCommentList from "@/components/ChildCommentList.vue";
 
 export default {
   data() {
@@ -54,15 +87,15 @@ export default {
   methods: {
     /* 자식 댓글 리스트 보이는 여부 설정하는 함수 */
     toggleChildList(index, state) {
-      this.$emit('toggleChildList', index, state);
+      this.$emit("toggleChildList", index, state);
     },
     /* 답글 버튼 눌렀을 때, 호출되는 함수 */
     clickReplyBtn(userName, group, parentIndex) {
-      this.$emit('clickReplyParent', userName, group, parentIndex);
+      this.$emit("clickReplyParent", userName, group, parentIndex);
     },
     /* 삭제 버튼 눌렀을 때, 호출되는 함수 */
     clickDeleteBtn(commentId, parentIndex, index) {
-      this.$emit('clickDeleteBtn', commentId, parentIndex, index);
+      this.$emit("clickDeleteBtn", commentId, parentIndex, index);
     },
   },
   components: {
